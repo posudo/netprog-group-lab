@@ -1,0 +1,344 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Lab3
+{
+    public partial class Bai4 : Form
+    {
+        public Bai4()
+        {
+            InitializeComponent();
+            cr = new ChonRap[10]; // Giả sử có tối đa 10 rạp, điều chỉnh nếu cần thiết
+            for (int i = 0; i < cr.Length; i++)
+            {
+                cr[i] = new ChonRap();
+            }
+            progressBar1.Minimum = 0;
+            progressBar1.Maximum = 100;
+            progressBar1.Step = 1;
+            progressBar1.Value = 0;
+        }
+
+        private void Bai4_Load(object sender, EventArgs e)
+        {
+
+        }
+        public class MovieStatistics
+        {
+            public string MovieName { get; set; }
+            public int TicketsSold { get; set; }
+            public int TotalTickets { get; set; }
+            public int Revenue { get; set; }
+
+            public int TicketsRemaining => TotalTickets - TicketsSold;
+            public double SoldPercentage => (double)TicketsSold / TotalTickets * 100;
+        }
+        [Serializable]
+        public class ThongTin
+        {
+            public string TenPhim { get; set; }
+            public string RapChieu { get; set; }
+            public string GiaVe { get; set; }
+        }
+
+        List<ThongTin> my_list = new List<ThongTin>();
+
+
+        public ThongTin NhapThongTin()
+        {
+            ThongTin tt = new ThongTin();
+            tt.TenPhim = tenPhim_box.Text;
+            tt.RapChieu = rapChieu_box.Text;
+            tt.GiaVe = giaVe_box.Text;
+            return tt;
+        }
+
+        private void ten_phim_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form2_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        public void Luu(ThongTin[] thongtin)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                using (FileStream fs = new FileStream(sfd.FileName, FileMode.Create))
+                {
+                    BinaryFormatter bf = new BinaryFormatter();
+
+                    bf.Serialize(fs, thongtin);
+                }
+            }
+        }
+        private void Save_Click(object sender, EventArgs e)
+        {
+            Luu(my_list.ToArray());
+        }
+        public ThongTin[] DeserializeFile()
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                FileStream fs = new FileStream(ofd.FileName, FileMode.Open);
+                BinaryFormatter bf = new BinaryFormatter();
+
+                ThongTin[] thongtins = (ThongTin[])bf.Deserialize(fs);
+                fs.Close();
+                return thongtins;
+            }
+            return null;
+        }
+        private bool IsCommaSeparated(string input)
+        {
+            string[] parts = input.Split(',');
+
+            return parts.Length > 1 && parts.All(part => !string.IsNullOrWhiteSpace(part));
+        }
+
+        private void Add_Click(object sender, EventArgs e)
+        {
+            if (!IsCommaSeparated(rapChieu_box.Text) && rapChieu_box.Text.Length > 1)
+            {
+                MessageBox.Show("Rạp chiếu là một chuỗi được ngăn bởi dấu phẩy!");
+                giaVe_box.Text = string.Empty;
+                return;
+            }
+
+            string[] a = { tenPhim_box.Text, rapChieu_box.Text, giaVe_box.Text };
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (string.IsNullOrEmpty(a[i]))
+                {
+                    screen.Items.Clear();
+                    MessageBox.Show("You didn't type enough information!");
+                    tenPhim_box.Text = string.Empty;
+                    rapChieu_box.Text = string.Empty;
+                    giaVe_box.Text = string.Empty;
+                    return;
+                }
+                else
+                {
+                    screen.Items.Add(a[i]);
+                }
+            }
+            screen.Items.Add('\n');
+            my_list.Add(NhapThongTin());
+        }
+
+        ThongTin[] global;
+        private void layInfo_dki_Click(object sender, EventArgs e)
+        {
+            ThongTin[] tt = DeserializeFile();
+            phimSelection_cb.Items.Clear();
+            global = tt;
+            foreach (ThongTin t in global)
+            {
+                phimSelection_cb.Items.Add(t.TenPhim);
+            }
+
+        }
+
+        private void phimSelection_cb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+            seatSelect_clb.ClearSelected();
+
+
+            for (int i = 0; i < seatSelect_clb.Items.Count; i++)
+            {
+                seatSelect_clb.SetItemChecked(i, false);
+            }
+
+            giaVeChuan_out.ReadOnly = true;
+            if (phimSelection_cb.SelectedIndex >= 0 && phimSelection_cb.SelectedIndex < global.Length)
+            {
+                giaVeChuan_out.Text = global[phimSelection_cb.SelectedIndex].GiaVe;
+                giaVeChuan_out.Refresh();
+            }
+            string[] rapChieu = global[phimSelection_cb.SelectedIndex].RapChieu.Replace(" ", "").Split(',');
+            chonRap_cb.Items.Clear();
+            foreach (string s in rapChieu)
+            {
+                chonRap_cb.Items.Add(s);
+            }
+        }
+
+        public class ChonRap
+        {
+            public string[] GheDaChon { get; set; }
+
+        }
+        ChonRap[] cr;
+        private void chonRap_cb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (chonRap_cb.SelectedItem == null) return;
+
+            string selectedHall = chonRap_cb.SelectedItem.ToString();
+
+            // Xóa ghế đã chọn trước đó
+            for (int i = 0; i < seatSelect_clb.Items.Count; i++)
+            {
+                seatSelect_clb.SetItemChecked(i, false);
+            }
+
+            // Đánh dấu ghế đã chọn
+            if (cr[chonRap_cb.SelectedIndex] != null && cr[chonRap_cb.SelectedIndex].GheDaChon != null)
+            {
+                foreach (string seat in cr[chonRap_cb.SelectedIndex].GheDaChon)
+                {
+                    int index = seatSelect_clb.Items.IndexOf(seat);
+                    if (index >= 0)
+                    {
+                        seatSelect_clb.SetItemChecked(index, true);
+                    }
+                }
+            }
+        }
+
+        private Dictionary<string, MovieStatistics> movieStatistics = new Dictionary<string, MovieStatistics>();
+        // Đặt vé
+        List<string> selectedSeats = new List<string>();
+        private void datVe_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(yourName.Text))
+            {
+                MessageBox.Show("Vui lòng nhập tên của bạn.");
+                return;
+            }
+
+            if (phimSelection_cb.SelectedItem == null)
+            {
+                MessageBox.Show("Vui lòng chọn một bộ phim.");
+                return;
+            }
+
+            if (chonRap_cb.SelectedItem == null)
+            {
+                MessageBox.Show("Vui lòng chọn một rạp.");
+                return;
+            }
+
+            selectedSeats.Clear();
+            foreach (var item in seatSelect_clb.CheckedItems)
+            {
+                selectedSeats.Add(item.ToString());
+            }
+
+            if (selectedSeats.Count == 0)
+            {
+                MessageBox.Show("Vui lòng chọn ít nhất một ghế.");
+                return;
+            }
+
+            string selectedHall = chonRap_cb.SelectedItem.ToString();
+            string selectedMovie = phimSelection_cb.SelectedItem.ToString();
+            int basePrice = Int32.Parse(giaVeChuan_out.Text);
+            int totalPrice = 0;
+
+            // Tính toán giá vé
+            foreach (string seat in selectedSeats)
+            {
+                if (seat == "A1" || seat == "B1" || seat == "C1" || seat == "A5" || seat == "B5" || seat == "C5")
+                {
+                    totalPrice += basePrice * 1 / 4;
+                }
+                else if (seat == "B2" || seat == "B3" || seat == "B4")
+                {
+                    totalPrice += basePrice * 2;
+                }
+                else
+                {
+                    totalPrice += basePrice;
+                }
+            }
+            if (!movieStatistics.ContainsKey(selectedMovie))
+            {
+                movieStatistics[selectedMovie] = new MovieStatistics
+                {
+                    MovieName = selectedMovie,
+                    TotalTickets = 45 // Giả sử mỗi phim có 45 vé
+                };
+            }
+
+            movieStatistics[selectedMovie].TicketsSold += selectedSeats.Count;
+            movieStatistics[selectedMovie].Revenue += totalPrice;
+
+            string bookingInfo = $"Xác nhận đặt vé:\n\n" +
+                                 $"Tên: {yourName.Text}\n" +
+                                 $"Phim: {selectedMovie}\n" +
+                                 $"Ghế đã chọn: {string.Join(", ", selectedSeats)}\n" +
+                                 $"Tổng tiền: {totalPrice:N0} VND";
+
+            cr[chonRap_cb.SelectedIndex].GheDaChon = selectedSeats.ToArray();
+            MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private async void XuatThongTin_Click(object sender, EventArgs e)
+        {
+            var sortedStatistics = movieStatistics.Values.OrderByDescending(ms => ms.Revenue).ToList();
+            int totalMovies = sortedStatistics.Count;
+
+            SaveFileDialog sfd = new SaveFileDialog();
+
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    using (StreamWriter sw = new StreamWriter(sfd.FileName, false))
+                    {
+                        await sw.WriteLineAsync("Tên phim, Số lượng vé bán ra, Số lượng vé tồn," +
+                            " Tỉ lệ vé bán ra, Doanh thu, Xếp hạng doanh thu phòng vé");
+
+                        for (int i = 0; i < sortedStatistics.Count; i++)
+                        {
+                            var stats = sortedStatistics[i];
+                            await sw.WriteLineAsync($"{stats.MovieName}, {stats.TicketsSold}," +
+                                $" {stats.TicketsRemaining}, {stats.SoldPercentage:F2}%, {stats.Revenue:N0} VND, {i + 1}");
+
+                            // Update ProgressBar on UI thread
+                            int progress = (i + 1) * 100 / totalMovies;
+                            this.Invoke((MethodInvoker)delegate {
+                                progressBar1.Value = progress;
+                            });
+                        }
+                    }
+
+                    MessageBox.Show("Thông tin thống kê đã được xuất ra file thành công.",
+                        "Xuất thông tin", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Có lỗi xảy ra khi xuất file: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    // Reset ProgressBar khi hoàn thành
+                    this.Invoke((MethodInvoker)delegate {
+                        progressBar1.Value = 0;
+                    });
+                }
+            }
+        }
+    }
+
+}
