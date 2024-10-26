@@ -304,7 +304,19 @@ namespace Lab3
                                  $"Tổng tiền: {totalPrice:N0} VND";
 
             cr[chonRap_cb.SelectedIndex].GheDaChon = selectedSeats.ToArray();
-            MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                SaveInfor();
+                UpdateSeatAvailability(global[phimSelection_cb.SelectedIndex].my_seat, true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi: " + ex.Message);
+            }
+            finally
+            {
+                MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void SaveInfor()
@@ -312,6 +324,7 @@ namespace Lab3
             string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
             string query_1 = "INSERT INTO Theaters (TheaterID, Name) VALUES (@TheaterID, @TheaterName)";
             string query_2 = "INSERT INTO Movies (MovieID, Name) VALUES (@MovieID, @MovieName)";
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 SqlCommand cmd_1 = new SqlCommand(query_1, conn);
@@ -327,7 +340,7 @@ namespace Lab3
                     conn.Open();  // Open the connection once
                     cmd_1.ExecuteNonQuery();  // Execute the query
                     cmd_2.ExecuteNonQuery();
-                    MessageBox.Show("Người dùng đã được thêm thành công!");
+                    MessageBox.Show("Thêm thông tin thành công");
                 }
                 catch (Exception ex)
                 {
@@ -339,7 +352,36 @@ namespace Lab3
                 }
             }
         }
-            private async void XuatThongTin_Click(object sender, EventArgs e)
+
+        private void UpdateSeatAvailability(Dictionary<string, bool> seats, bool isOccupied)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "INSERT INTO SeatAvailability (Seats, TheaterID, IsOccupied) VALUES (@Seats, @TheaterID, @IsOccupied)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                foreach (var seat in seats)
+                {
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        if (seat.Value == true)
+                        { 
+                            cmd.Parameters.AddWithValue("@IsOccupied", 1);
+                        }
+                        else
+                        {
+                            cmd.Parameters.AddWithValue("@IsOccupied", 0);
+                        }
+                        cmd.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
+                        cmd.Parameters.AddWithValue("@Seats", seat.Key);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+        }
+
+        private async void XuatThongTin_Click(object sender, EventArgs e)
         {
             var sortedStatistics = movieStatistics.Values.OrderByDescending(ms => ms.Revenue).ToList();
             int totalMovies = sortedStatistics.Count;
