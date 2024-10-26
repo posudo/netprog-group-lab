@@ -8,7 +8,11 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.SqlClient;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Collections;
 
 namespace Lab3
 {
@@ -45,6 +49,12 @@ namespace Lab3
         [Serializable]
         public class ThongTin
         {
+            public Dictionary<string, bool> my_seat = new Dictionary<string, bool>
+            {
+                { "A1", false }, {"A2",false}, {"A3",false}, {"A4",false}, {"A5",false},
+                { "B1", false }, {"B2",false}, {"B3",false}, {"B4",false}, {"B5",false},
+                { "C1", false }, {"C2",false}, {"C3",false}, {"C4",false}, {"C5",false},
+            };
             public string TenPhim { get; set; }
             public string RapChieu { get; set; }
             public string GiaVe { get; set; }
@@ -72,10 +82,6 @@ namespace Lab3
 
         }
 
-        private void Form2_Load(object sender, EventArgs e)
-        {
-
-        }
 
         public void Luu(ThongTin[] thongtin)
         {
@@ -130,7 +136,7 @@ namespace Lab3
                 if (string.IsNullOrEmpty(a[i]))
                 {
                     screen.Items.Clear();
-                    MessageBox.Show("You didn't type enough information!");
+                    MessageBox.Show("Bạn nhập không đủ thông tin!");
                     tenPhim_box.Text = string.Empty;
                     rapChieu_box.Text = string.Empty;
                     giaVe_box.Text = string.Empty;
@@ -244,6 +250,14 @@ namespace Lab3
                 selectedSeats.Add(item.ToString());
             }
 
+            foreach (string item in seatSelect_clb.CheckedItems)
+            {
+                if (seatSelect_clb.CheckedItems.Contains(item) && global[phimSelection_cb.SelectedIndex].my_seat.ContainsKey(item))
+                {
+                    global[phimSelection_cb.SelectedIndex].my_seat[item] = true;
+                }
+            }
+
             if (selectedSeats.Count == 0)
             {
                 MessageBox.Show("Vui lòng chọn ít nhất một ghế.");
@@ -293,7 +307,39 @@ namespace Lab3
             MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private async void XuatThongTin_Click(object sender, EventArgs e)
+        private void SaveInfor()
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query_1 = "INSERT INTO Theaters (TheaterID, Name) VALUES (@TheaterID, @TheaterName)";
+            string query_2 = "INSERT INTO Movies (MovieID, Name) VALUES (@MovieID, @MovieName)";
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                SqlCommand cmd_1 = new SqlCommand(query_1, conn);
+                cmd_1.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
+                cmd_1.Parameters.AddWithValue("@TheaterName", chonRap_cb.SelectedItem);
+
+                SqlCommand cmd_2 = new SqlCommand(query_2, conn);
+                cmd_2.Parameters.AddWithValue("@MovieID", phimSelection_cb.SelectedIndex + 1);
+                cmd_2.Parameters.AddWithValue("@MovieName", phimSelection_cb.SelectedItem);
+
+                try
+                {
+                    conn.Open();  // Open the connection once
+                    cmd_1.ExecuteNonQuery();  // Execute the query
+                    cmd_2.ExecuteNonQuery();
+                    MessageBox.Show("Người dùng đã được thêm thành công!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message);
+                }
+                finally
+                {
+                    conn.Close();  // Close the connection in the finally block to ensure it always gets closed
+                }
+            }
+        }
+            private async void XuatThongTin_Click(object sender, EventArgs e)
         {
             var sortedStatistics = movieStatistics.Values.OrderByDescending(ms => ms.Revenue).ToList();
             int totalMovies = sortedStatistics.Count;
