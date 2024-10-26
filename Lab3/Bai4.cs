@@ -10,6 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
+using System.Collections;
 
 namespace Lab3
 {
@@ -307,9 +310,33 @@ namespace Lab3
         private void SaveInfor()
         {
             string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            string query_1 = "INSERT INTO Theaters (TheaterID, Name) VALUES (@TheaterID, @TheaterName)";
+            string query_2 = "INSERT INTO Movies (MovieID, Name) VALUES (@MovieID, @MovieName)";
+            using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                
+                SqlCommand cmd_1 = new SqlCommand(query_1, conn);
+                cmd_1.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
+                cmd_1.Parameters.AddWithValue("@TheaterName", chonRap_cb.SelectedItem);
+
+                SqlCommand cmd_2 = new SqlCommand(query_2, conn);
+                cmd_2.Parameters.AddWithValue("@MovieID", phimSelection_cb.SelectedIndex + 1);
+                cmd_2.Parameters.AddWithValue("@MovieName", phimSelection_cb.SelectedItem);
+
+                try
+                {
+                    conn.Open();  // Open the connection once
+                    cmd_1.ExecuteNonQuery();  // Execute the query
+                    cmd_2.ExecuteNonQuery();
+                    MessageBox.Show("Người dùng đã được thêm thành công!");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Lỗi: " + ex.Message);
+                }
+                finally
+                {
+                    conn.Close();  // Close the connection in the finally block to ensure it always gets closed
+                }
             }
         }
             private async void XuatThongTin_Click(object sender, EventArgs e)
