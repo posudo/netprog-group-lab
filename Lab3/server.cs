@@ -13,12 +13,12 @@ using System.Windows.Forms;
 
 namespace Lab3
 {
-    public partial class Form2 : Form
+    public partial class server : Form
     {
         private Socket serverSocket;
         private Socket clientSocket;
         private Thread listenThread;
-        public Form2()
+        public server()
         {
             InitializeComponent();
             listenThread = new Thread(StartServer);

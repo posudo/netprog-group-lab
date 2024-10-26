@@ -1,6 +1,6 @@
 ﻿namespace Lab3
 {
-    partial class Form2
+    partial class server
     {
         /// <summary>
         /// Required designer variable.
