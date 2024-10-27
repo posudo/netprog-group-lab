@@ -25,7 +25,7 @@ namespace Lab3
             progressBar1.Maximum = 100;
             progressBar1.Step = 1;
             progressBar1.Value = 0;
-            //seatSelect_clb.ItemCheck += SeatSelect_clb_ItemCheck;
+            seatSelect_clb.ItemCheck += SeatSelect_clb_ItemCheck;
         }
 
         private void Bai4_Load(object sender, EventArgs e)
@@ -255,7 +255,7 @@ namespace Lab3
                                 int index = seatSelect_clb.Items.IndexOf(seat);
                                 if (index >= 0)
                                 {
-                                    seatSelect_clb.SetItemChecked(index, true);
+                                    seatSelect_clb.SetItemChecked(index, false);
                                 }
                             }
                         }
@@ -302,29 +302,65 @@ namespace Lab3
             }
         }
 
-        // Example method to get TheaterID from hall name
-        private int GetTheaterIDFromHallName(string hallName)
-        {
-            return chonRap_cb.Items.IndexOf(hallName) + 1;
-        }
 
 
-        // Event handler to prevent selection of purchased tickets
-        /*private void SeatSelect_clb_ItemCheck(object sender, ItemCheckEventArgs e)
+        // Event xử lý chọn ghế đã được đặt
+        private void SeatSelect_clb_ItemCheck(object sender, ItemCheckEventArgs e)
         {
-            // Check if the seat is already purchased
-            if (ticketStatus[e.Index])
+            string selectedHall = chonRap_cb.SelectedItem?.ToString();
+            if (selectedHall == null) return;
+
+            string seat = seatSelect_clb.Items[e.Index].ToString();
+            bool isSeatOccupied = IsSeatOccupiedInDatabase(selectedHall, seat);
+
+            if (isSeatOccupied)
             {
                 MessageBox.Show("This ticket has already been purchased.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.NewValue = e.CurrentValue; // Prevent check state from changing
+                e.NewValue = e.CurrentValue; // Cancle thay đổi
             }
-        }*/
+        }
+
+        // Check xem ghế đã được đặt chưa
+        private bool IsSeatOccupiedInDatabase(string hall, string seat)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "SELECT IsOccupied FROM SeatAvailability WHERE TheaterID = @TheaterID AND Seats = @Seats";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(hall));
+                        cmd.Parameters.AddWithValue("@Seats", seat);
+
+                        object result = cmd.ExecuteScalar();
+                        if (result != null && Convert.ToBoolean(result))
+                        {
+                            return true;
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+            return false;
+        }
 
 
         private Dictionary<string, MovieStatistics> movieStatistics = new Dictionary<string, MovieStatistics>();
         // Đặt vé
         List<string> selectedSeats = new List<string>();
         int count_error = 0;
+
         private void datVe_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(yourName.Text))
