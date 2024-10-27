@@ -13,14 +13,101 @@ using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 using System.Collections;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading;
 
 namespace Lab3
 {
     public partial class Bai4 : Form
     {
+        IPEndPoint IP;
+        Socket client;
+        void ConnectToServer()
+        {
+            IP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8080);
+            client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+
+            try 
+            {
+                client.Connect(IP);
+            }
+            catch
+            {
+                MessageBox.Show("Không thể kết nối với server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            Thread listen = new Thread(Receive);
+            listen.IsBackground = true;
+            listen.Start();
+        }
+        void Close()
+        {
+            client.Close();
+        }
+
+        void Send()
+        {
+            var bookingInfo = new
+            {
+                Name = yourName.Text,
+                Movie = phimSelection_cb.SelectedItem.ToString(),
+                Hall = chonRap_cb.SelectedItem.ToString(),
+                Seats = selectedSeats,
+                TotalPrice = selectedSeats.Sum(seat =>
+                {
+                    if (seat == "A1" || seat == "B1" || seat == "C1" || seat == "A5" || seat == "B5" || seat == "C5")
+                        return Int32.Parse(giaVeChuan_out.Text) * 1 / 4;
+                    else if (seat == "B2" || seat == "B3" || seat == "B4")
+                        return Int32.Parse(giaVeChuan_out.Text) * 2;
+                    else
+                        return Int32.Parse(giaVeChuan_out.Text);
+                })
+            };
+
+            client.Send(Serialize(bookingInfo));
+        }
+
+        byte[] Serialize(object obj)
+        {
+            MemoryStream stream = new MemoryStream();
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            formatter.Serialize(stream, obj);
+
+            return stream.ToArray();
+        }
+
+        object Deserialize(byte[] data)
+        {
+            MemoryStream stream = new MemoryStream(data);
+            BinaryFormatter formatter = new BinaryFormatter();
+
+            return formatter.Deserialize(stream);
+        }
+
+        void Receive()
+        {
+            try 
+            { 
+                while (true)
+                {
+                    byte[] data = new byte[1024];
+                    client.Receive(data);
+
+                    var response = Deserialize(data);
+                }
+            }
+            catch
+            {
+                Close();
+            }
+        }
         public Bai4()
         {
             InitializeComponent();
+            ConnectToServer();
             progressBar1.Minimum = 0;
             progressBar1.Maximum = 100;
             progressBar1.Step = 1;
@@ -574,6 +661,11 @@ namespace Lab3
             }
         }
 
+        // Đóng kết nối khi form đóng
+        private void Bai4_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Close();
+        }
     }
 
 }

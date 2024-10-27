@@ -39,14 +39,15 @@
             this.screen.TabIndex = 0;
             this.screen.Text = "";
             // 
-            // Form2
+            // server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.screen);
-            this.Name = "Form2";
+            this.Name = "server";
             this.Text = "Form2";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.server_FormClosed);
             this.ResumeLayout(false);
 
         }

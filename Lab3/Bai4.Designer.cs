@@ -481,6 +481,7 @@
             // 
             // Bai4
             // 
+            this.AcceptButton = this.datVe;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1185, 658);
@@ -490,6 +491,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Bai4";
             this.Text = "Bai4";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Bai4_FormClosed);
             this.Load += new System.EventHandler(this.Bai4_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
