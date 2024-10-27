@@ -33,12 +33,15 @@
             this.textBox_send_chat = new System.Windows.Forms.TextBox();
             this.label_participants = new System.Windows.Forms.Label();
             this.button_send = new System.Windows.Forms.Button();
+            this.button_send_files = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // richTextBox_chat
             // 
+            this.richTextBox_chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox_chat.Location = new System.Drawing.Point(12, 12);
             this.richTextBox_chat.Name = "richTextBox_chat";
+            this.richTextBox_chat.ReadOnly = true;
             this.richTextBox_chat.Size = new System.Drawing.Size(467, 501);
             this.richTextBox_chat.TabIndex = 0;
             this.richTextBox_chat.Text = "";
@@ -46,14 +49,14 @@
             // listBox_participants
             // 
             this.listBox_participants.FormattingEnabled = true;
-            this.listBox_participants.Location = new System.Drawing.Point(497, 28);
+            this.listBox_participants.Location = new System.Drawing.Point(497, 25);
             this.listBox_participants.Name = "listBox_participants";
-            this.listBox_participants.Size = new System.Drawing.Size(139, 485);
+            this.listBox_participants.Size = new System.Drawing.Size(139, 433);
             this.listBox_participants.TabIndex = 1;
-            this.listBox_participants.SelectedIndexChanged += new System.EventHandler(this.listBox1_SelectedIndexChanged);
             // 
             // textBox_send_chat
             // 
+            this.textBox_send_chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox_send_chat.Location = new System.Drawing.Point(12, 519);
             this.textBox_send_chat.Multiline = true;
             this.textBox_send_chat.Name = "textBox_send_chat";
@@ -78,12 +81,25 @@
             this.button_send.TabIndex = 4;
             this.button_send.Text = "Send";
             this.button_send.UseVisualStyleBackColor = true;
+            this.button_send.Click += new System.EventHandler(this.button_send_Click);
+            // 
+            // button_send_files
+            // 
+            this.button_send_files.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button_send_files.Location = new System.Drawing.Point(497, 471);
+            this.button_send_files.Name = "button_send_files";
+            this.button_send_files.Size = new System.Drawing.Size(139, 42);
+            this.button_send_files.TabIndex = 5;
+            this.button_send_files.Text = "Send files";
+            this.button_send_files.UseVisualStyleBackColor = true;
+            this.button_send_files.Click += new System.EventHandler(this.button_send_files_Click);
             // 
             // Lab03_Bai05_Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(648, 582);
+            this.Controls.Add(this.button_send_files);
             this.Controls.Add(this.button_send);
             this.Controls.Add(this.label_participants);
             this.Controls.Add(this.textBox_send_chat);
@@ -104,5 +120,6 @@
         private System.Windows.Forms.TextBox textBox_send_chat;
         private System.Windows.Forms.Label label_participants;
         private System.Windows.Forms.Button button_send;
+        private System.Windows.Forms.Button button_send_files;
     }
 }
