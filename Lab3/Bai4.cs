@@ -25,6 +25,7 @@ namespace Lab3
             progressBar1.Maximum = 100;
             progressBar1.Step = 1;
             progressBar1.Value = 0;
+            //seatSelect_clb.ItemCheck += SeatSelect_clb_ItemCheck;
         }
 
         private void Bai4_Load(object sender, EventArgs e)
@@ -233,6 +234,38 @@ namespace Lab3
             {
                 InsertSeatAvailability(my_hall[selectedHall].my_seat);
             }
+
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "SELECT Seats FROM SeatAvailability WHERE TheaterID = @TheaterID AND IsOccupied = 1";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
+
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                string seat = reader["Seats"].ToString();
+                                int index = seatSelect_clb.Items.IndexOf(seat);
+                                if (index >= 0)
+                                {
+                                    seatSelect_clb.SetItemChecked(index, true);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error retrieving seat availability: " + ex.Message);
+                }
+            }
         }
 
         private bool IsHallInDatabase(string hall)
@@ -248,8 +281,8 @@ namespace Lab3
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
                         // Assuming you have a method to get TheaterID from hall name
-                        int theaterID = GetTheaterIDFromHallName(hall);
-                        cmd.Parameters.AddWithValue("@TheaterID", theaterID);
+                        //int theaterID = GetTheaterIDFromHallName(hall);
+                        cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
                         int count = (int)cmd.ExecuteScalar();
                         return count > 0;
                     }
@@ -274,6 +307,18 @@ namespace Lab3
         {
             return chonRap_cb.Items.IndexOf(hallName) + 1;
         }
+
+
+        // Event handler to prevent selection of purchased tickets
+        /*private void SeatSelect_clb_ItemCheck(object sender, ItemCheckEventArgs e)
+        {
+            // Check if the seat is already purchased
+            if (ticketStatus[e.Index])
+            {
+                MessageBox.Show("This ticket has already been purchased.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                e.NewValue = e.CurrentValue; // Prevent check state from changing
+            }
+        }*/
 
 
         private Dictionary<string, MovieStatistics> movieStatistics = new Dictionary<string, MovieStatistics>();
@@ -393,7 +438,7 @@ namespace Lab3
                         using (SqlCommand cmd = new SqlCommand(query, conn))
                         {
                             cmd.Parameters.AddWithValue("@Seats", seat.Key);
-                            cmd.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
+                            cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
                             cmd.Parameters.AddWithValue("@IsOccupied", seat.Value ? 1 : 0);
 
                             await cmd.ExecuteNonQueryAsync();
@@ -411,6 +456,7 @@ namespace Lab3
             }
         }
 
+        // Cập nhật trạng thái ghế đã đặt
         private async Task UpdateSeatAvailabilityAsync(Dictionary<string, bool> seats)
         {
             string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
@@ -428,7 +474,7 @@ namespace Lab3
                             using (SqlCommand cmd = new SqlCommand(query, conn))
                             {
                                 cmd.Parameters.AddWithValue("@Seats", seat.Key);
-                                cmd.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
+                                cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
                                 await cmd.ExecuteNonQueryAsync();
                             }
                         }
@@ -490,6 +536,11 @@ namespace Lab3
                     });
                 }
             }
+        }
+
+        private void seatSelect_clb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 

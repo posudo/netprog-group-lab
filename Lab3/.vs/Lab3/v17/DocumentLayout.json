@@ -42,9 +42,9 @@
               "Title": "Bai4.cs",
               "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs",
               "RelativeDocumentMoniker": "Bai4.cs",
-              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs*",
-              "RelativeToolTip": "Bai4.cs*",
-              "ViewState": "AgIAAC0BAAAAAAAAAAAcwEkBAAA0AAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs",
+              "RelativeToolTip": "Bai4.cs",
+              "ViewState": "AgIAAOAAAAAAAAAAAAAUwAMBAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-24T07:18:08.744Z",
               "IsPinned": true,
@@ -56,12 +56,20 @@
               "Title": "Bai4.cs [Design]",
               "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs",
               "RelativeDocumentMoniker": "Bai4.cs",
-              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs [Design]*",
-              "RelativeToolTip": "Bai4.cs [Design]*",
+              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs [Design]",
+              "RelativeToolTip": "Bai4.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-24T07:17:55.837Z",
               "IsPinned": true,
               "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
@@ -110,14 +118,6 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-24T07:09:59.572Z"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             }
           ]
         }
