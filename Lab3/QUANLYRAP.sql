@@ -7,18 +7,11 @@ CREATE TABLE Theaters (
 );
 
 
-CREATE TABLE Movies (
-    MovieID INT PRIMARY KEY,
-    Name VARCHAR(30) NOT NULL
-);
-
-
 CREATE TABLE SeatAvailability (
     Seats CHAR(2),
     TheaterID INT,
     IsOccupied BIT,
     PRIMARY KEY (Seats, TheaterID),
-    FOREIGN KEY (TheaterID) REFERENCES Theaters(TheaterID)
+    FOREIGN KEY (TheaterID) REFERENCES Theaters(TheaterID),
 );
 
-	

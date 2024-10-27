@@ -21,11 +21,6 @@ namespace Lab3
         public Bai4()
         {
             InitializeComponent();
-            cr = new ChonRap[10]; // Giả sử có tối đa 10 rạp, điều chỉnh nếu cần thiết
-            for (int i = 0; i < cr.Length; i++)
-            {
-                cr[i] = new ChonRap();
-            }
             progressBar1.Minimum = 0;
             progressBar1.Maximum = 100;
             progressBar1.Step = 1;
@@ -49,29 +44,23 @@ namespace Lab3
         [Serializable]
         public class ThongTin
         {
+            
+            public string TenPhim { get; set; }
+            public string RapChieu { get; set; }
+            public string GiaVe { get; set; }
+        }
+
+        public class Hall
+        {
             public Dictionary<string, bool> my_seat = new Dictionary<string, bool>
             {
                 { "A1", false }, {"A2",false}, {"A3",false}, {"A4",false}, {"A5",false},
                 { "B1", false }, {"B2",false}, {"B3",false}, {"B4",false}, {"B5",false},
                 { "C1", false }, {"C2",false}, {"C3",false}, {"C4",false}, {"C5",false},
             };
-            public string TenPhim { get; set; }
-            public string RapChieu { get; set; }
-            public string GiaVe { get; set; }
         }
-
         List<ThongTin> my_list = new List<ThongTin>();
-
-
-        public ThongTin NhapThongTin()
-        {
-            ThongTin tt = new ThongTin();
-            tt.TenPhim = tenPhim_box.Text;
-            tt.RapChieu = rapChieu_box.Text;
-            tt.GiaVe = giaVe_box.Text;
-            return tt;
-        }
-
+        Dictionary<string, Hall> my_hall = new Dictionary<string, Hall>();
         private void ten_phim_Click(object sender, EventArgs e)
         {
 
@@ -130,7 +119,41 @@ namespace Lab3
                 return;
             }
 
+            if (!System.Text.RegularExpressions.Regex.IsMatch(giaVe_box.Text, @"^[1-9]\d*$"))
+            {
+                MessageBox.Show("Giá vé phải là một số không bắt đầu bằng 0 và không chứa ký tự.");
+                giaVe_box.Text = string.Empty;
+                return;
+            }
+
+            string[] rap_phim = rapChieu_box.Text.Replace(" ", "").Split(',');
+            string ten_phim = tenPhim_box.Text.Replace(" ", "");
+            string gia_ve = giaVe_box.Text.Replace(" ", "");
+
+            foreach (ThongTin t in my_list)
+            {
+                if (ten_phim == t.TenPhim.Replace(" ", ""))
+                {
+                    MessageBox.Show("Tên phim đã tồn tại!");
+                    tenPhim_box.Text = string.Empty;
+                    giaVe_box.Text = string.Empty;
+                    rapChieu_box.Text = string.Empty;
+                    return;
+                }
+
+                if (rap_phim.SequenceEqual(t.RapChieu.Replace(" ", "").Split(',')))
+                {
+                    MessageBox.Show("Rạp chiếu đã tồn tại!");
+                    tenPhim_box.Text = string.Empty;
+                    giaVe_box.Text = string.Empty;
+                    rapChieu_box.Text = string.Empty;
+                    return;
+                }
+            }
+
             string[] a = { tenPhim_box.Text, rapChieu_box.Text, giaVe_box.Text };
+            ThongTin b = new ThongTin();
+
             for (int i = 0; i < a.Length; i++)
             {
                 if (string.IsNullOrEmpty(a[i]))
@@ -144,11 +167,14 @@ namespace Lab3
                 }
                 else
                 {
+                    b.TenPhim = tenPhim_box.Text;
+                    b.RapChieu = rapChieu_box.Text;
+                    b.GiaVe = giaVe_box.Text;
                     screen.Items.Add(a[i]);
                 }
             }
             screen.Items.Add('\n');
-            my_list.Add(NhapThongTin());
+            my_list.Add(b);
         }
 
         ThongTin[] global;
@@ -185,16 +211,11 @@ namespace Lab3
             chonRap_cb.Items.Clear();
             foreach (string s in rapChieu)
             {
+                my_hall[s] = new Hall();
                 chonRap_cb.Items.Add(s);
             }
         }
 
-        public class ChonRap
-        {
-            public string[] GheDaChon { get; set; }
-
-        }
-        ChonRap[] cr;
         private void chonRap_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (chonRap_cb.SelectedItem == null) return;
@@ -207,23 +228,58 @@ namespace Lab3
                 seatSelect_clb.SetItemChecked(i, false);
             }
 
-            // Đánh dấu ghế đã chọn
-            if (cr[chonRap_cb.SelectedIndex] != null && cr[chonRap_cb.SelectedIndex].GheDaChon != null)
+            // Chỉ thêm rạp nếu dữ liệu chưa có trong database
+            if (!IsHallInDatabase(selectedHall))
             {
-                foreach (string seat in cr[chonRap_cb.SelectedIndex].GheDaChon)
+                InsertSeatAvailability(my_hall[selectedHall].my_seat);
+            }
+        }
+
+        private bool IsHallInDatabase(string hall)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "SELECT COUNT(*) FROM SeatAvailability WHERE TheaterID = @TheaterID";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
                 {
-                    int index = seatSelect_clb.Items.IndexOf(seat);
-                    if (index >= 0)
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
-                        seatSelect_clb.SetItemChecked(index, true);
+                        // Assuming you have a method to get TheaterID from hall name
+                        int theaterID = GetTheaterIDFromHallName(hall);
+                        cmd.Parameters.AddWithValue("@TheaterID", theaterID);
+                        int count = (int)cmd.ExecuteScalar();
+                        return count > 0;
                     }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                    // Log the error
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                    // Log the error
+                    return false;
                 }
             }
         }
 
+        // Example method to get TheaterID from hall name
+        private int GetTheaterIDFromHallName(string hallName)
+        {
+            return chonRap_cb.Items.IndexOf(hallName) + 1;
+        }
+
+
         private Dictionary<string, MovieStatistics> movieStatistics = new Dictionary<string, MovieStatistics>();
         // Đặt vé
         List<string> selectedSeats = new List<string>();
+        int count_error = 0;
         private void datVe_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(yourName.Text))
@@ -248,15 +304,12 @@ namespace Lab3
             foreach (var item in seatSelect_clb.CheckedItems)
             {
                 selectedSeats.Add(item.ToString());
-            }
-
-            foreach (string item in seatSelect_clb.CheckedItems)
-            {
-                if (seatSelect_clb.CheckedItems.Contains(item) && global[phimSelection_cb.SelectedIndex].my_seat.ContainsKey(item))
+                if (seatSelect_clb.CheckedItems.Contains(item) && my_hall[chonRap_cb.SelectedItem.ToString()].my_seat.ContainsKey(item.ToString()))
                 {
-                    global[phimSelection_cb.SelectedIndex].my_seat[item] = true;
+                    my_hall[chonRap_cb.SelectedItem.ToString()].my_seat[item.ToString()] = true;
                 }
             }
+
 
             if (selectedSeats.Count == 0)
             {
@@ -290,7 +343,7 @@ namespace Lab3
                 movieStatistics[selectedMovie] = new MovieStatistics
                 {
                     MovieName = selectedMovie,
-                    TotalTickets = 45 // Giả sử mỗi phim có 45 vé
+                    TotalTickets = 15 * global[phimSelection_cb.SelectedIndex].RapChieu.Replace(" ", "").Split(',').Length
                 };
             }
 
@@ -303,80 +356,91 @@ namespace Lab3
                                  $"Ghế đã chọn: {string.Join(", ", selectedSeats)}\n" +
                                  $"Tổng tiền: {totalPrice:N0} VND";
 
-            cr[chonRap_cb.SelectedIndex].GheDaChon = selectedSeats.ToArray();
             try
             {
-                SaveInfor();
-                UpdateSeatAvailability(global[phimSelection_cb.SelectedIndex].my_seat, true);
+                UpdateSeatAvailabilityAsync(my_hall[selectedHall].my_seat);
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Lỗi: " + ex.Message);
+                count_error += 1;
             }
-            finally
+
+            if (count_error == 0)
             {
                 MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-        }
-
-        private void SaveInfor()
-        {
-            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
-            string query_1 = "INSERT INTO Theaters (TheaterID, Name) VALUES (@TheaterID, @TheaterName)";
-            string query_2 = "INSERT INTO Movies (MovieID, Name) VALUES (@MovieID, @MovieName)";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            else
             {
-                SqlCommand cmd_1 = new SqlCommand(query_1, conn);
-                cmd_1.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
-                cmd_1.Parameters.AddWithValue("@TheaterName", chonRap_cb.SelectedItem);
-
-                SqlCommand cmd_2 = new SqlCommand(query_2, conn);
-                cmd_2.Parameters.AddWithValue("@MovieID", phimSelection_cb.SelectedIndex + 1);
-                cmd_2.Parameters.AddWithValue("@MovieName", phimSelection_cb.SelectedItem);
-
-                try
-                {
-                    conn.Open();  // Open the connection once
-                    cmd_1.ExecuteNonQuery();  // Execute the query
-                    cmd_2.ExecuteNonQuery();
-                    MessageBox.Show("Thêm thông tin thành công");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi: " + ex.Message);
-                }
-                finally
-                {
-                    conn.Close();  // Close the connection in the finally block to ensure it always gets closed
-                }
+                return;
             }
+
         }
 
-        private void UpdateSeatAvailability(Dictionary<string, bool> seats, bool isOccupied)
+        //Thêm thông tin ghế và rạp vào database
+        private async void InsertSeatAvailability(Dictionary<string, bool> seats)
         {
             string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
             string query = "INSERT INTO SeatAvailability (Seats, TheaterID, IsOccupied) VALUES (@Seats, @TheaterID, @IsOccupied)";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                conn.Open();
-                foreach (var seat in seats)
+                try
                 {
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    await conn.OpenAsync();
+                    foreach (var seat in seats)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Seats", seat.Key);
+                            cmd.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
+                            cmd.Parameters.AddWithValue("@IsOccupied", seat.Value ? 1 : 0);
+
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
+
+        private async Task UpdateSeatAvailabilityAsync(Dictionary<string, bool> seats)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "UPDATE SeatAvailability SET IsOccupied = 1 WHERE Seats = @Seats AND TheaterID = @TheaterID AND IsOccupied = 0";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+                    foreach (var seat in seats)
                     {
                         if (seat.Value == true)
-                        { 
-                            cmd.Parameters.AddWithValue("@IsOccupied", 1);
-                        }
-                        else
                         {
-                            cmd.Parameters.AddWithValue("@IsOccupied", 0);
+                            using (SqlCommand cmd = new SqlCommand(query, conn))
+                            {
+                                cmd.Parameters.AddWithValue("@Seats", seat.Key);
+                                cmd.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
+                                await cmd.ExecuteNonQueryAsync();
+                            }
                         }
-                        cmd.Parameters.AddWithValue("@TheaterID", chonRap_cb.SelectedIndex + 1);
-                        cmd.Parameters.AddWithValue("@Seats", seat.Key);
-                        cmd.ExecuteNonQuery();
                     }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
                 }
             }
         }
