@@ -574,10 +574,6 @@ namespace Lab3
             }
         }
 
-        private void seatSelect_clb_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-        }
     }
 
 }

@@ -478,7 +478,6 @@
             this.seatSelect_clb.ScrollAlwaysVisible = true;
             this.seatSelect_clb.Size = new System.Drawing.Size(360, 144);
             this.seatSelect_clb.TabIndex = 17;
-            this.seatSelect_clb.SelectedIndexChanged += new System.EventHandler(this.seatSelect_clb_SelectedIndexChanged);
             // 
             // Bai4
             // 
