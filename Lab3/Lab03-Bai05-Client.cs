@@ -14,15 +14,15 @@ using System.IO;
 
 namespace Lab3
 {
-    public partial class Lab03_Bai05_Server : Form
+    public partial class Lab03_Bai05_Client : Form
     {
         private List<ClientInfo> connectedClients = new List<ClientInfo>();
-        public Lab03_Bai05_Server()
+        public Lab03_Bai05_Client()
         {
             InitializeComponent();
         }
 
-        private void Lab03_Bai05_Server_Load(object sender, EventArgs e)
+        private void Lab03_Bai05_Client_Load(object sender, EventArgs e)
         {
             CheckForIllegalCrossThreadCalls = false;
             Thread serverThread = new Thread(new ThreadStart(StartUnsafeThread));
@@ -92,7 +92,7 @@ namespace Lab3
                         {
                             byte[] imageBytes = new byte[bytesReceived - 1];
                             Array.Copy(recv, 1, imageBytes, 0, bytesReceived - 1);
-                            BroadcastImage(username,imageBytes);
+                            BroadcastImage(username, imageBytes);
                         }
                     }
                 }
@@ -102,40 +102,40 @@ namespace Lab3
                     break;
                 }
             }
-                lock (connectedClients)
-                {
-                    connectedClients.Remove(clientInfo);
-                }
-                clientSocket.Close();
-        }  
-private void BroadcastMessage(string username, string message)
-{
+            lock (connectedClients)
+            {
+                connectedClients.Remove(clientInfo);
+            }
+            clientSocket.Close();
+        }
+        private void BroadcastMessage(string username, string message)
+        {
             string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
             string formattedMessage = $"{timestamp} {username}:\n{message}\n";
-    byte[] messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
-    byte[] messageToSend = new byte[messageBytes.Length + 1];
-    messageToSend[0] = 0; 
-    Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
+            byte[] messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
+            byte[] messageToSend = new byte[messageBytes.Length + 1];
+            messageToSend[0] = 0;
+            Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
 
-    lock (connectedClients)
-    {
-        foreach (var clientInfo in connectedClients)
-        {
-            if (clientInfo.ClientSocket.Connected)
+            lock (connectedClients)
             {
-                try
+                foreach (var clientInfo in connectedClients)
                 {
-                    clientInfo.ClientSocket.Send(messageToSend); 
-                }
-                catch (SocketException ex)
-                {
-                    MessageBox.Show($"Error sending message to client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (clientInfo.ClientSocket.Connected)
+                    {
+                        try
+                        {
+                            clientInfo.ClientSocket.Send(messageToSend);
+                        }
+                        catch (SocketException ex)
+                        {
+                            MessageBox.Show($"Error sending message to client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
                 }
             }
+            richTextBox_chat.AppendText(formattedMessage);
         }
-    }    
-    richTextBox_chat.AppendText(formattedMessage);
-}
         private void BroadcastImage(string username, byte[] imageBytes)
         {
             string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
@@ -153,10 +153,10 @@ private void BroadcastMessage(string username, string message)
                             int totalLength = 2 + usernameBytes.Length + timestampBytes.Length + imageBytes.Length;
                             byte[] messageToSend = new byte[totalLength];
 
-                            messageToSend[0] = 1; 
-                            messageToSend[1] = (byte)usernameBytes.Length; 
+                            messageToSend[0] = 1;
+                            messageToSend[1] = (byte)usernameBytes.Length;
 
-                            Array.Copy(usernameBytes, 0, messageToSend, 2, usernameBytes.Length);                   
+                            Array.Copy(usernameBytes, 0, messageToSend, 2, usernameBytes.Length);
                             Array.Copy(timestampBytes, 0, messageToSend, 2 + usernameBytes.Length, timestampBytes.Length);
                             Array.Copy(imageBytes, 0, messageToSend, 2 + usernameBytes.Length + timestampBytes.Length, imageBytes.Length);
 
@@ -179,7 +179,6 @@ private void BroadcastMessage(string username, string message)
             {
                 string chat_text = textBox_send_chat.Text;
                 BroadcastMessage("Server", chat_text);
-                textBox_send_chat.Text = "";
             }
             catch (Exception ex)
             {
@@ -238,14 +237,44 @@ private void BroadcastMessage(string username, string message)
         {
             if (e.KeyCode == Keys.Enter)
             {
-                if(e.Shift)
+                if (e.Shift)
                 {
                     return;
-                }    
+                }
                 e.SuppressKeyPress = true;
                 button_send.PerformClick();
                 textBox_send_chat.Text = "";
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void richTextBox_chat_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
