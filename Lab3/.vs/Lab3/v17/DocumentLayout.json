@@ -3,7 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|c:\\users\\tung\\downloads\\ltmcp\\lab3\\23521744_23521782_23521650\\lab3\\bai4.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|c:\\users\\tung\\downloads\\ltmcp\\lab3\\23521744_23521782_23521650\\lab3\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\bai4.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:bai4.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -15,36 +19,44 @@
       "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:bai4.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:server.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|c:\\users\\tung\\downloads\\ltmcp\\lab3\\23521744_23521782_23521650\\lab3\\lab4_bai3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:lab4_bai3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|c:\\users\\tung\\downloads\\ltmcp\\lab3\\23521744_23521782_23521650\\lab3\\lab4_bai3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:lab4_bai3.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|c:\\users\\tung\\downloads\\ltmcp\\lab3\\23521744_23521782_23521650\\lab3\\lab4_bai3.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EE3972A4-CEE9-4AEA-8C2C-EBC0FC95F0FE}|Lab3.csproj|solutionrelative:lab4_bai3.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
-      "VerticalTabListWidth": 293,
+      "VerticalTabListWidth": 253,
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Bai4.cs",
               "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs",
               "RelativeDocumentMoniker": "Bai4.cs",
               "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs",
               "RelativeToolTip": "Bai4.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAABcAAABCAAAAAAAAAA==",
+              "ViewState": "AgIAADoAAAAAAAAAAAAcwHoAAAA2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-24T07:18:08.744Z",
               "IsPinned": true,
@@ -52,7 +64,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "Bai4.cs [Design]",
               "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.cs",
               "RelativeDocumentMoniker": "Bai4.cs",
@@ -60,6 +72,33 @@
               "RelativeToolTip": "Bai4.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-24T07:17:55.837Z",
+              "IsPinned": true,
+              "EditorCaption": " [Design]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "server.cs",
+              "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs",
+              "RelativeDocumentMoniker": "server.cs",
+              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs",
+              "RelativeToolTip": "server.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAewG0AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-26T03:10:48.478Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "server.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs",
+              "RelativeDocumentMoniker": "server.cs",
+              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs [Design]",
+              "RelativeToolTip": "server.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-26T03:10:15.822Z",
               "IsPinned": true,
               "EditorCaption": " [Design]"
             },
@@ -73,53 +112,67 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "server.cs",
-              "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs",
-              "RelativeDocumentMoniker": "server.cs",
-              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs",
-              "RelativeToolTip": "server.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAAABUAAAAMAAAAAAAAAA==",
+              "DocumentIndex": 8,
+              "Title": "Lab4_Bai3.Designer.cs",
+              "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Lab4_Bai3.Designer.cs",
+              "RelativeDocumentMoniker": "Lab4_Bai3.Designer.cs",
+              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Lab4_Bai3.Designer.cs",
+              "RelativeToolTip": "Lab4_Bai3.Designer.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADYAAABMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T03:10:48.478Z",
+              "WhenOpened": "2024-10-28T07:00:44.303Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "server.cs [Design]",
-              "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs",
-              "RelativeDocumentMoniker": "server.cs",
-              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\server.cs [Design]",
-              "RelativeToolTip": "server.cs [Design]",
+              "DocumentIndex": 5,
+              "Title": "Lab4_Bai3.cs",
+              "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Lab4_Bai3.cs",
+              "RelativeDocumentMoniker": "Lab4_Bai3.cs",
+              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Lab4_Bai3.cs",
+              "RelativeToolTip": "Lab4_Bai3.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-26T03:10:15.822Z",
+              "WhenOpened": "2024-10-28T02:29:26.429Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "Lab4_Bai3.cs [Design]",
+              "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Lab4_Bai3.cs",
+              "RelativeDocumentMoniker": "Lab4_Bai3.cs",
+              "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Lab4_Bai3.cs [Design]",
+              "RelativeToolTip": "Lab4_Bai3.cs [Design]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-28T02:29:22.209Z",
               "EditorCaption": " [Design]"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "Bai4.Designer.cs",
               "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.Designer.cs",
               "RelativeDocumentMoniker": "Bai4.Designer.cs",
               "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Bai4.Designer.cs",
               "RelativeToolTip": "Bai4.Designer.cs",
-              "ViewState": "AgIAAM8BAAAAAAAAAAAAAO4BAAAOAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-24T07:19:46.421Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Program.cs",
               "RelativeDocumentMoniker": "Program.cs",
               "ToolTip": "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab3\\Program.cs",
               "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAkAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAtAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-10-24T07:09:59.572Z"
+              "WhenOpened": "2024-10-24T07:09:59.572Z",
+              "EditorCaption": ""
             }
           ]
         }

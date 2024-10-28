@@ -28,16 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.screen = new System.Windows.Forms.RichTextBox();
+            this.screen = new System.Windows.Forms.ListView();
             this.SuspendLayout();
             // 
             // screen
             // 
-            this.screen.Location = new System.Drawing.Point(159, 70);
+            this.screen.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.screen.HideSelection = false;
+            this.screen.Location = new System.Drawing.Point(73, 66);
             this.screen.Name = "screen";
-            this.screen.Size = new System.Drawing.Size(484, 278);
+            this.screen.Size = new System.Drawing.Size(654, 291);
             this.screen.TabIndex = 0;
-            this.screen.Text = "";
+            this.screen.UseCompatibleStateImageBehavior = false;
             // 
             // server
             // 
@@ -54,6 +56,6 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox screen;
+        private System.Windows.Forms.ListView screen;
     }
 }

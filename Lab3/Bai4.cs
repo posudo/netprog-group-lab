@@ -16,58 +16,78 @@ using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Runtime.InteropServices;
+using Newtonsoft.Json;
+using System.Runtime.Serialization;
 
 namespace Lab3
 {
     public partial class Bai4 : Form
     {
+        [Serializable]
+        public class MovieTicket
+        {
+            public string Name { get; set; }
+            public string Movie { get; set; }
+            public string Hall { get; set; }
+            public List<string> Seats { get; set; }
+            public int TotalPrice { get; set; }
+        }
+
+        private List<Thread> threads = new List<Thread>();
+        private CancellationTokenSource cancellationTokenSource;
         IPEndPoint IP;
         Socket client;
         void ConnectToServer()
         {
-            IP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8080);
+            IP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9999);
             client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
 
-            try 
+            try
             {
                 client.Connect(IP);
             }
-            catch
+            catch (SocketException ex)
             {
-                MessageBox.Show("Không thể kết nối với server!", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Không thể kết nối với server! Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
-            Thread listen = new Thread(Receive);
+            Thread listen = new Thread(() => Receive(cancellationTokenSource.Token));
             listen.IsBackground = true;
             listen.Start();
+            threads.Add(listen);
         }
-        void Close()
+        void CloseConnection()
         {
             client.Close();
         }
 
-        void Send()
+        void Send_datVe()
         {
-            var bookingInfo = new
+            var bookingInfo = new MovieTicket
             {
                 Name = yourName.Text,
-                Movie = phimSelection_cb.SelectedItem.ToString(),
-                Hall = chonRap_cb.SelectedItem.ToString(),
+                Movie = phimSelection_cb.SelectedItem?.ToString(),
+                Hall = chonRap_cb.SelectedItem?.ToString(),
                 Seats = selectedSeats,
                 TotalPrice = selectedSeats.Sum(seat =>
                 {
+                    int basePrice = Int32.Parse(giaVeChuan_out.Text);
                     if (seat == "A1" || seat == "B1" || seat == "C1" || seat == "A5" || seat == "B5" || seat == "C5")
-                        return Int32.Parse(giaVeChuan_out.Text) * 1 / 4;
+                        return basePrice / 4;
                     else if (seat == "B2" || seat == "B3" || seat == "B4")
-                        return Int32.Parse(giaVeChuan_out.Text) * 2;
+                        return basePrice * 2;
                     else
-                        return Int32.Parse(giaVeChuan_out.Text);
+                        return basePrice;
                 })
             };
 
-            client.Send(Serialize(bookingInfo));
+
+            string json = JsonConvert.SerializeObject(bookingInfo);
+            client.Send(Encoding.UTF8.GetBytes(json));
         }
+
 
         byte[] Serialize(object obj)
         {
@@ -81,29 +101,63 @@ namespace Lab3
 
         object Deserialize(byte[] data)
         {
-            MemoryStream stream = new MemoryStream(data);
-            BinaryFormatter formatter = new BinaryFormatter();
-
-            return formatter.Deserialize(stream);
-        }
-
-        void Receive()
-        {
-            try 
-            { 
-                while (true)
+            try
+            {
+                using (MemoryStream stream = new MemoryStream(data))
                 {
-                    byte[] data = new byte[1024];
-                    client.Receive(data);
-
-                    var response = Deserialize(data);
+                    BinaryFormatter formatter = new BinaryFormatter();
+                    return formatter.Deserialize(stream);
                 }
             }
-            catch
+            catch (SerializationException ex)
             {
-                Close();
+                MessageBox.Show($"Deserialization error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
             }
         }
+
+        void Receive(CancellationToken token)
+        {
+            try
+            {
+                while (!token.IsCancellationRequested)
+                {
+                    byte[] data = new byte[1024];
+                    int receivedBytes = client.Receive(data);
+
+                    if (receivedBytes > 0)
+                    {
+                        var response = Deserialize(data.Take(receivedBytes).ToArray());
+                    }
+                }
+            }
+            // SocketException: Client disconnected
+            catch (SocketException ex)
+            {
+                MessageBox.Show($"Socket error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action(() => this.Close()));
+                }
+                else
+                {
+                    this.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action(() => this.Close()));
+                }
+                else
+                {
+                    this.Close();
+                }
+            }
+        }
+
         public Bai4()
         {
             InitializeComponent();
@@ -113,6 +167,7 @@ namespace Lab3
             progressBar1.Step = 1;
             progressBar1.Value = 0;
             seatSelect_clb.ItemCheck += SeatSelect_clb_ItemCheck;
+            cancellationTokenSource = new CancellationTokenSource();
         }
 
         private void Bai4_Load(object sender, EventArgs e)
@@ -149,16 +204,6 @@ namespace Lab3
         }
         List<ThongTin> my_list = new List<ThongTin>();
         Dictionary<string, Hall> my_hall = new Dictionary<string, Hall>();
-        private void ten_phim_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
 
         public void Luu(ThongTin[] thongtin)
         {
@@ -173,10 +218,12 @@ namespace Lab3
                 }
             }
         }
+
         private void Save_Click(object sender, EventArgs e)
         {
             Luu(my_list.ToArray());
         }
+
         public ThongTin[] DeserializeFile()
         {
             OpenFileDialog ofd = new OpenFileDialog();
@@ -536,6 +583,7 @@ namespace Lab3
 
             if (count_error == 0)
             {
+                Send_datVe();
                 MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
@@ -664,7 +712,18 @@ namespace Lab3
         // Đóng kết nối khi form đóng
         private void Bai4_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Close();
+            cancellationTokenSource.Cancel();
+            CloseConnection();
+
+            // Kiểm tra nếu có threads chạy nền
+
+            foreach (var thread in threads)
+            {
+                if (thread.IsAlive)
+                {
+                    MessageBox.Show($"Thread {thread.ManagedThreadId} is still running.");
+                }
+            }
         }
     }
 

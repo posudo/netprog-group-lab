@@ -85,7 +85,6 @@
             this.ten_phim.Size = new System.Drawing.Size(77, 19);
             this.ten_phim.TabIndex = 3;
             this.ten_phim.Text = "Tên phim:";
-            this.ten_phim.Click += new System.EventHandler(this.ten_phim_Click);
             // 
             // chon_rap
             // 
@@ -126,7 +125,6 @@
             this.giaVe_box.Name = "giaVe_box";
             this.giaVe_box.Size = new System.Drawing.Size(148, 27);
             this.giaVe_box.TabIndex = 7;
-            this.giaVe_box.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // groupBox1
             // 
@@ -166,7 +164,7 @@
             this.screen.ItemHeight = 19;
             this.screen.Location = new System.Drawing.Point(28, 234);
             this.screen.Name = "screen";
-            this.screen.Size = new System.Drawing.Size(267, 308);
+            this.screen.Size = new System.Drawing.Size(267, 289);
             this.screen.TabIndex = 9;
             // 
             // Save
@@ -476,7 +474,7 @@
             this.seatSelect_clb.MultiColumn = true;
             this.seatSelect_clb.Name = "seatSelect_clb";
             this.seatSelect_clb.ScrollAlwaysVisible = true;
-            this.seatSelect_clb.Size = new System.Drawing.Size(360, 144);
+            this.seatSelect_clb.Size = new System.Drawing.Size(361, 144);
             this.seatSelect_clb.TabIndex = 17;
             // 
             // Bai4
@@ -484,7 +482,7 @@
             this.AcceptButton = this.datVe;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1185, 658);
+            this.ClientSize = new System.Drawing.Size(1275, 677);
             this.Controls.Add(this.Register);
             this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
