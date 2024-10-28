@@ -88,17 +88,6 @@ namespace Lab3
             client.Send(Encoding.UTF8.GetBytes(json));
         }
 
-
-        byte[] Serialize(object obj)
-        {
-            MemoryStream stream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-
-            formatter.Serialize(stream, obj);
-
-            return stream.ToArray();
-        }
-
         object Deserialize(byte[] data)
         {
             try
@@ -570,17 +559,6 @@ namespace Lab3
                                  $"Phim: {selectedMovie}\n" +
                                  $"Ghế đã chọn: {string.Join(", ", selectedSeats)}\n" +
                                  $"Tổng tiền: {totalPrice:N0} VND";
-
-            try
-            {
-                UpdateSeatAvailabilityAsync(my_hall[selectedHall].my_seat);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi: " + ex.Message);
-                count_error += 1;
-            }
-
             if (count_error == 0)
             {
                 Send_datVe();

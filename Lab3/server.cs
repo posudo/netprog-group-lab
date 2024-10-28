@@ -15,6 +15,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using static Lab3.Bai4;
+using System.Data.SqlClient;
 
 namespace Lab3
 {
@@ -32,6 +33,7 @@ namespace Lab3
             screen.Columns.Add("Movie", 150);
             screen.Columns.Add("Hall", 50);
             screen.Columns.Add("Seats ", 200);
+            screen.Columns.Add("Total Price", 150);
         }
         public server()
         {
@@ -93,8 +95,10 @@ namespace Lab3
 
                         if (ticketInfo != null)
                         {
+                            UpdateSeatAvailabilityAsync(ticketInfo);
+
                             // Construct a message string based on the MovieTicket properties
-                            string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|{string.Join(",", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
+                            string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
 
                             // Create a ListViewItem for the ListView control
                             ListViewItem item = new ListViewItem(message.Split('|'));
@@ -118,7 +122,37 @@ namespace Lab3
                 }
             }
         }
+        private async Task UpdateSeatAvailabilityAsync(MovieTicket data)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "UPDATE SeatAvailability SET IsOccupied = 1 WHERE Seats = @Seats AND TheaterID = @TheaterID AND IsOccupied = 0";
 
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+                    foreach (string seat in data.Seats)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Seats", seat);
+                            // Corrected line
+                            cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(data.Hall));
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
 
 
         private void ProcessClientMessage(string message, Socket client)
