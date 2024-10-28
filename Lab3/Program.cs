@@ -17,7 +17,17 @@ namespace Lab3
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Bai4());
+            //Lab03_Bai05_Client client = new Lab03_Bai05_Client();
+            //Lab03_Bai05_Server server = new Lab03_Bai05_Server();
+
+            //server.Show();
+            //client.Show();
+            
+
+            Application.Run(new Lab03_Bai05_Server());
+
+
+           
         }
     }
 }

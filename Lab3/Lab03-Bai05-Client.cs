@@ -12,11 +12,16 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 
+
 namespace Lab3
 {
     public partial class Lab03_Bai05_Client : Form
     {
         private List<ClientInfo> connectedClients = new List<ClientInfo>();
+        private Socket clientSocket;
+        Thread receiveThread;
+        private string privateChatTarget = null;
+
         public Lab03_Bai05_Client()
         {
             InitializeComponent();
@@ -24,9 +29,7 @@ namespace Lab3
 
         private void Lab03_Bai05_Client_Load(object sender, EventArgs e)
         {
-            CheckForIllegalCrossThreadCalls = false;
-            Thread serverThread = new Thread(new ThreadStart(StartUnsafeThread));
-            serverThread.Start();
+            
             this.textBox_send_chat.KeyDown += new KeyEventHandler(textBox_send_chat_KeyDown);
         }
         public class ClientInfo
@@ -40,149 +43,68 @@ namespace Lab3
                 Username = username;
             }
         }
-        void StartUnsafeThread()
+
+        private void SendMessage(string username, string message)
         {
-            Socket listenerSocket = new Socket(
-                AddressFamily.InterNetwork,
-                SocketType.Stream,
-                ProtocolType.Tcp
-            );
+            string formattedMessage;
+            byte[] messageBytes;
+            byte[] messageToSend;
 
-            IPEndPoint ipepServer = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 8080);
-            listenerSocket.Bind(ipepServer);
-            listenerSocket.Listen(-1);
-
-            while (true)
+            if (message == "0") // Disconnect message
             {
-                Socket clientSocket = listenerSocket.Accept();
-                Thread clientThread = new Thread(() => HandleClient(clientSocket));
-                clientThread.Start();
+                formattedMessage = $"{username}";
+                messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
+                messageToSend = new byte[messageBytes.Length + 1];
+                messageToSend[0] = 3; // Header for disconnect
+       
             }
-        }
-        private void HandleClient(Socket clientSocket)
-        {
-            byte[] recv = new byte[1024];
-            int bytesReceived;
-            string username = "Unknown";
-            ClientInfo clientInfo = null;
-
-            while (clientSocket.Connected)
+            else if (message == "1") // Other specific message if needed
             {
-                try
-                {
-
-                    bytesReceived = clientSocket.Receive(recv);
-                    if (bytesReceived > 0)
-                    {
-                        byte header = recv[0];
-                        if (header == 2)
-                        {
-                            username = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
-                            clientInfo = new ClientInfo(clientSocket, username);
-                            connectedClients.Add(clientInfo);
-                            listBox_participants.Items.Add(username);
-                            BroadcastMessage("Server", $"{username} has joined the chat.");
-                        }
-                        if (header == 0)
-                        {
-                            string text = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
-                            BroadcastMessage(username, text);
-                        }
-                        else if (header == 1)
-                        {
-                            byte[] imageBytes = new byte[bytesReceived - 1];
-                            Array.Copy(recv, 1, imageBytes, 0, bytesReceived - 1);
-                            BroadcastImage(username, imageBytes);
-                        }
-                    }
-                }
-                catch (SocketException ex)
-                {
-                    MessageBox.Show($"Error: {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    break;
-                }
+                formattedMessage = $"{username}";
+                messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
+                messageToSend = new byte[messageBytes.Length + 1];
+                messageToSend[0] = 2;
             }
-            lock (connectedClients)
+            else
             {
-                connectedClients.Remove(clientInfo);
+                string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+                 formattedMessage = $"\n{timestamp} {username}:\n{message}";
+                messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
+                messageToSend = new byte[messageBytes.Length + 1];
+                messageToSend[0] = 0; 
             }
-            clientSocket.Close();
-        }
-        private void BroadcastMessage(string username, string message)
-        {
-            string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
-            string formattedMessage = $"{timestamp} {username}:\n{message}\n";
-            byte[] messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
-            byte[] messageToSend = new byte[messageBytes.Length + 1];
-            messageToSend[0] = 0;
             Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
-
-            lock (connectedClients)
-            {
-                foreach (var clientInfo in connectedClients)
-                {
-                    if (clientInfo.ClientSocket.Connected)
-                    {
-                        try
-                        {
-                            clientInfo.ClientSocket.Send(messageToSend);
-                        }
-                        catch (SocketException ex)
-                        {
-                            MessageBox.Show($"Error sending message to client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-            }
-            richTextBox_chat.AppendText(formattedMessage);
-        }
-        private void BroadcastImage(string username, byte[] imageBytes)
-        {
-            string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
-            lock (connectedClients)
-            {
-                foreach (var clientInfo in connectedClients)
-                {
-                    if (clientInfo.ClientSocket.Connected)
-                    {
-                        try
-                        {
-                            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
-                            byte[] timestampBytes = Encoding.UTF8.GetBytes(timestamp);
-
-                            int totalLength = 2 + usernameBytes.Length + timestampBytes.Length + imageBytes.Length;
-                            byte[] messageToSend = new byte[totalLength];
-
-                            messageToSend[0] = 1;
-                            messageToSend[1] = (byte)usernameBytes.Length;
-
-                            Array.Copy(usernameBytes, 0, messageToSend, 2, usernameBytes.Length);
-                            Array.Copy(timestampBytes, 0, messageToSend, 2 + usernameBytes.Length, timestampBytes.Length);
-                            Array.Copy(imageBytes, 0, messageToSend, 2 + usernameBytes.Length + timestampBytes.Length, imageBytes.Length);
-
-                            clientInfo.ClientSocket.Send(messageToSend);
-                        }
-                        catch (SocketException ex)
-                        {
-                            MessageBox.Show($"Error sending image to client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                }
-            }
-            richTextBox_chat.AppendText($"{timestamp} {username}:\n");
-            InsertImageToChatBox(imageBytes);
-            richTextBox_chat.AppendText("\n");
-        }
-        private void button_send_Click(object sender, EventArgs e)
-        {
             try
             {
-                string chat_text = textBox_send_chat.Text;
-                BroadcastMessage("Server", chat_text);
+                clientSocket.Send(messageToSend);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error sending chat: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void SendImage(string username, byte[] imageBytes)
+        {
+
+                if (clientSocket.Connected)
+                {
+                    try
+                    {
+                        clientSocket.Send(imageBytes);
+                    }
+                    catch (SocketException ex)
+                    {
+                        MessageBox.Show($"Error sending image to client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+           
+        }
+        private void button_send_Click(object sender, EventArgs e)
+        {
+            if (textBox_send_chat.Text != "")
+            {
+                SendMessage(textBox_username.Text, textBox_send_chat.Text);
+                textBox_send_chat.Text = "";
             }
         }
 
@@ -190,14 +112,14 @@ namespace Lab3
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Filter = "Text files (*.txt)|*.txt|Image files (*.png;*.jpeg)|*.png;*.jpeg";
+                openFileDialog.Filter = "Text files (*.txt)|*.txt|Image files (*.jpeg;*.jpg;*.png;*.gif)|*.jpeg;*.jpg;*.png;*.gif";
                 openFileDialog.Multiselect = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     foreach (string filePath in openFileDialog.FileNames)
                     {
-                        string fileExtension = Path.GetExtension(filePath);
+                        string fileExtension = Path.GetExtension(filePath).ToLower();
 
                         if (fileExtension == ".txt")
                         {
@@ -205,10 +127,10 @@ namespace Lab3
                             using (StreamReader reader = new StreamReader(fs))
                             {
                                 string textContent = reader.ReadToEnd();
-                                BroadcastMessage("Server", textContent);
+                                //clientSocket.Send(textContent);
                             }
                         }
-                        else if (fileExtension == ".png" || fileExtension == ".jpeg")
+                        else if (fileExtension == ".png" || fileExtension == ".jpeg" || fileExtension == ".jpg" || fileExtension == ".gif")
                         {
                             byte[] imageBytes;
                             using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -216,7 +138,7 @@ namespace Lab3
                                 imageBytes = new byte[fs.Length];
                                 fs.Read(imageBytes, 0, imageBytes.Length);
                             }
-                            BroadcastImage("Server", imageBytes);
+                            SendImage(textBox_username.Text, imageBytes);
                         }
                     }
                 }
@@ -224,6 +146,12 @@ namespace Lab3
         }
         private void InsertImageToChatBox(byte[] imageBytes)
         {
+            if (richTextBox_chat.InvokeRequired)
+            {
+         
+                richTextBox_chat.Invoke(new Action<byte[]>(InsertImageToChatBox), imageBytes);
+                return;
+            }
             using (MemoryStream ms = new MemoryStream(imageBytes))
             {
                 Image image = Image.FromStream(ms);
@@ -247,34 +175,151 @@ namespace Lab3
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void ReceiveData()
         {
+      
+            byte[] recvBuffer = new byte[1024 * 5000];
+            bool check_connect = true;
+            while (clientSocket!=null)
+            {
+                try
+                {
+                    int bytesReceived = clientSocket.Receive(recvBuffer);
+            
 
+                    if (bytesReceived > 0)
+                    {
+
+                        byte header = recvBuffer[0];
+                        if (header == 4)
+                        {
+                            check_connect = false;
+                            string message = Encoding.UTF8.GetString(recvBuffer, 1, bytesReceived - 1);
+                            richTextBox_chat.Invoke(new Action(() =>
+                            {
+                                richTextBox_chat.AppendText(message);
+                                button_disconnect.PerformClick();
+                            }));
+                        }
+                        if (check_connect)
+                       {     check_connect = false;
+                            MessageBox.Show("Connected to server!", "Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+
+                        if (header == 5)
+                        {
+                            string participants = Encoding.UTF8.GetString(recvBuffer, 1, bytesReceived - 1);
+                            UpdateParticipantList(participants);
+                        }
+                        else if (header == 0) 
+                        {
+                           string message = Encoding.UTF8.GetString(recvBuffer, 1, bytesReceived - 1);
+                         richTextBox_chat.AppendText(message);
+                        }
+                        else 
+                        {
+                            richTextBox_chat.AppendText("\n");
+                            InsertImageToChatBox(recvBuffer);
+                           
+                        }
+                        
+                    }
+                   
+
+
+                }
+                catch (SocketException ex)
+                {
+                    MessageBox.Show($"Connection error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    break;
+                }
+                
+            }
         }
 
-        private void richTextBox_chat_TextChanged(object sender, EventArgs e)
+        private void button_connect_Click(object sender, EventArgs e)
         {
+            try
+            {
+                clientSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                clientSocket.Connect("127.0.0.1", 8080);
 
+                
+                receiveThread = new Thread(ReceiveData);
+                receiveThread.Start();
+               
+                if (textBox_username.Text == "") textBox_username.Text = "Unknown";
+                SendMessage(textBox_username.Text, "1");
+
+
+                
+                button_connect.Enabled = false;
+                textBox_username.ReadOnly = true;
+                button_disconnect.Enabled = true;
+                button_send.Enabled = true;
+                button_send_files.Enabled = true;
+                button_private_chat.Enabled = true;
+                textBox_send_chat.ReadOnly = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error connecting to server: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
-        private void button1_Click_1(object sender, EventArgs e)
+        private void button_disconnect_Click(object sender, EventArgs e)
         {
+            if (clientSocket != null && clientSocket.Connected)
+            {
+                receiveThread.Abort();
+        SendMessage(textBox_username.Text, "0");
+                clientSocket.Shutdown(SocketShutdown.Both);
+                clientSocket.Close();
+                
+                clientSocket = null; 
+                MessageBox.Show("Disconnected from server.", "Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                // Update UI
+                button_connect.Enabled = true;
+                textBox_username.ReadOnly = false;
+                button_disconnect.Enabled = false;
+                button_send.Enabled = false;
+                button_send_files.Enabled = false;
+                button_private_chat.Enabled = false;
+                textBox_send_chat.ReadOnly = true;
+
+          
+            }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void UpdateParticipantList(string participants)
         {
+            if (listBox_participants.InvokeRequired)
+            {
+                listBox_participants.Invoke(new Action<string>(UpdateParticipantList), participants);
+                return;
+            }
 
+            listBox_participants.Items.Clear();
+            string[] usernames = participants.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string username in usernames)
+            {
+                listBox_participants.Items.Add(username);
+            }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private void button_private_chat_Click(object sender, EventArgs e)
         {
-
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-
+            if (listBox_participants.SelectedItem != null)
+            {
+                privateChatTarget = listBox_participants.SelectedItem.ToString();
+                richTextBox_chat.AppendText($"Private chat with {privateChatTarget} starts now, send >exit to exit:\n");
+                SendMessage(privateChatTarget, "private");
+            }
+            else
+            {
+                MessageBox.Show("Please select a participant to chat with.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
     }
 }

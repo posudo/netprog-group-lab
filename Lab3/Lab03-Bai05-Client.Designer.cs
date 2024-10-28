@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.richTextBox_chat = new System.Windows.Forms.RichTextBox();
             this.listBox_participants = new System.Windows.Forms.ListBox();
             this.textBox_send_chat = new System.Windows.Forms.TextBox();
             this.label_participants = new System.Windows.Forms.Label();
@@ -39,18 +38,8 @@
             this.button_connect = new System.Windows.Forms.Button();
             this.label_username = new System.Windows.Forms.Label();
             this.button_disconnect = new System.Windows.Forms.Button();
+            this.richTextBox_chat = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
-            // 
-            // richTextBox_chat
-            // 
-            this.richTextBox_chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox_chat.Location = new System.Drawing.Point(12, 12);
-            this.richTextBox_chat.Name = "richTextBox_chat";
-            this.richTextBox_chat.ReadOnly = true;
-            this.richTextBox_chat.Size = new System.Drawing.Size(467, 459);
-            this.richTextBox_chat.TabIndex = 0;
-            this.richTextBox_chat.Text = "";
-            this.richTextBox_chat.TextChanged += new System.EventHandler(this.richTextBox_chat_TextChanged);
             // 
             // listBox_participants
             // 
@@ -66,6 +55,7 @@
             this.textBox_send_chat.Location = new System.Drawing.Point(12, 519);
             this.textBox_send_chat.Multiline = true;
             this.textBox_send_chat.Name = "textBox_send_chat";
+            this.textBox_send_chat.ReadOnly = true;
             this.textBox_send_chat.Size = new System.Drawing.Size(467, 42);
             this.textBox_send_chat.TabIndex = 2;
             // 
@@ -80,6 +70,7 @@
             // 
             // button_send
             // 
+            this.button_send.Enabled = false;
             this.button_send.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_send.Location = new System.Drawing.Point(497, 519);
             this.button_send.Name = "button_send";
@@ -91,6 +82,7 @@
             // 
             // button_send_files
             // 
+            this.button_send_files.Enabled = false;
             this.button_send_files.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_send_files.Location = new System.Drawing.Point(497, 471);
             this.button_send_files.Name = "button_send_files";
@@ -102,6 +94,7 @@
             // 
             // button_private_chat
             // 
+            this.button_private_chat.Enabled = false;
             this.button_private_chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_private_chat.Location = new System.Drawing.Point(497, 425);
             this.button_private_chat.Name = "button_private_chat";
@@ -109,7 +102,7 @@
             this.button_private_chat.TabIndex = 6;
             this.button_private_chat.Text = "Private chat";
             this.button_private_chat.UseVisualStyleBackColor = true;
-            this.button_private_chat.Click += new System.EventHandler(this.button1_Click);
+            this.button_private_chat.Click += new System.EventHandler(this.button_private_chat_Click);
             // 
             // textBox_username
             // 
@@ -117,7 +110,7 @@
             this.textBox_username.Name = "textBox_username";
             this.textBox_username.Size = new System.Drawing.Size(130, 20);
             this.textBox_username.TabIndex = 7;
-            this.textBox_username.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.textBox_username.Text = "Unknown";
             // 
             // button_connect
             // 
@@ -129,7 +122,7 @@
             this.button_connect.TabIndex = 8;
             this.button_connect.Text = "CONNECT!";
             this.button_connect.UseVisualStyleBackColor = true;
-            this.button_connect.Click += new System.EventHandler(this.button1_Click_1);
+            this.button_connect.Click += new System.EventHandler(this.button_connect_Click);
             // 
             // label_username
             // 
@@ -139,10 +132,10 @@
             this.label_username.Size = new System.Drawing.Size(55, 13);
             this.label_username.TabIndex = 9;
             this.label_username.Text = "Username";
-            this.label_username.Click += new System.EventHandler(this.label1_Click);
             // 
             // button_disconnect
             // 
+            this.button_disconnect.Enabled = false;
             this.button_disconnect.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_disconnect.ForeColor = System.Drawing.Color.Red;
             this.button_disconnect.Location = new System.Drawing.Point(375, 477);
@@ -151,7 +144,17 @@
             this.button_disconnect.TabIndex = 10;
             this.button_disconnect.Text = "DISCONNECT!";
             this.button_disconnect.UseVisualStyleBackColor = true;
-            this.button_disconnect.Click += new System.EventHandler(this.button2_Click);
+            this.button_disconnect.Click += new System.EventHandler(this.button_disconnect_Click);
+            // 
+            // richTextBox_chat
+            // 
+            this.richTextBox_chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox_chat.Location = new System.Drawing.Point(12, 12);
+            this.richTextBox_chat.Name = "richTextBox_chat";
+            this.richTextBox_chat.ReadOnly = true;
+            this.richTextBox_chat.Size = new System.Drawing.Size(467, 459);
+            this.richTextBox_chat.TabIndex = 0;
+            this.richTextBox_chat.Text = "";
             // 
             // Lab03_Bai05_Client
             // 
@@ -178,8 +181,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.RichTextBox richTextBox_chat;
         private System.Windows.Forms.ListBox listBox_participants;
         private System.Windows.Forms.TextBox textBox_send_chat;
         private System.Windows.Forms.Label label_participants;
@@ -190,5 +191,6 @@
         private System.Windows.Forms.Button button_connect;
         private System.Windows.Forms.Label label_username;
         private System.Windows.Forms.Button button_disconnect;
+        private System.Windows.Forms.RichTextBox richTextBox_chat;
     }
 }

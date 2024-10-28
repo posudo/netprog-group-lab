@@ -34,6 +34,7 @@
             this.label_participants = new System.Windows.Forms.Label();
             this.button_send = new System.Windows.Forms.Button();
             this.button_send_files = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // richTextBox_chat
@@ -53,6 +54,7 @@
             this.listBox_participants.Name = "listBox_participants";
             this.listBox_participants.Size = new System.Drawing.Size(139, 433);
             this.listBox_participants.TabIndex = 1;
+            
             // 
             // textBox_send_chat
             // 
@@ -94,11 +96,23 @@
             this.button_send_files.UseVisualStyleBackColor = true;
             this.button_send_files.Click += new System.EventHandler(this.button_send_files_Click);
             // 
+            // button1
+            // 
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button1.Location = new System.Drawing.Point(497, 174);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(139, 42);
+            this.button1.TabIndex = 6;
+            this.button1.Text = "Send";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Lab03_Bai05_Server
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(648, 582);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.button_send_files);
             this.Controls.Add(this.button_send);
             this.Controls.Add(this.label_participants);
@@ -121,5 +135,6 @@
         private System.Windows.Forms.Label label_participants;
         private System.Windows.Forms.Button button_send;
         private System.Windows.Forms.Button button_send_files;
+        private System.Windows.Forms.Button button1;
     }
 }

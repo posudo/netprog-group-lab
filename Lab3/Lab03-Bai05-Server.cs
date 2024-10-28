@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Security.Cryptography;
 
 namespace Lab3
 {
@@ -40,6 +41,18 @@ namespace Lab3
                 Username = username;
             }
         }
+        bool check_username(ClientInfo sus_client,List<ClientInfo> connectedClients)
+        {
+            foreach(var client_info in connectedClients)
+            {
+                if(client_info.Username == sus_client.Username && client_info.ClientSocket!=sus_client.ClientSocket)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
         void StartUnsafeThread()
         {
             Socket listenerSocket = new Socket(
@@ -61,38 +74,63 @@ namespace Lab3
         }
         private void HandleClient(Socket clientSocket)
         {
-            byte[] recv = new byte[1024];
+            byte[] recv = new byte[1024*5000];
             int bytesReceived;
             string username = "Unknown";
+            bool remove_username = true;
             ClientInfo clientInfo = null;
 
-            while (clientSocket.Connected)
+            while (true)
             {
                 try
                 {
-
                     bytesReceived = clientSocket.Receive(recv);
                     if (bytesReceived > 0)
                     {
                         byte header = recv[0];
-                        if (header == 2)
+                        if (header == 3)
+                        {
+                            username = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
+                            Array.Clear(recv, 0, recv.Length);
+                            if (check_username(clientInfo, connectedClients))
+                            {
+                                remove_username = false;
+                                break;
+                                
+                            }
+
+
+                            BroadcastMessage("", $"\n{username} has left the chat.");
+                            
+                            break; 
+                        }
+                    
+                        else if (header == 2)
                         {
                             username = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
                             clientInfo = new ClientInfo(clientSocket, username);
                             connectedClients.Add(clientInfo);
+                            if (check_username(clientInfo, connectedClients))
+                            {
+                                UsernameError("Username already be used.\n", clientInfo);
+                                continue;
+                            }
                             listBox_participants.Items.Add(username);
-                            BroadcastMessage("Server", $"{username} has joined the chat.");
+                            UpdateParticipantList();
+                            BroadcastMessage("", $"\n{username} has joined the chat.");
+                           
+                            Array.Clear(recv, 0, recv.Length);
                         }
-                        if (header == 0)
+                        else if (header == 0)
                         {
                             string text = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
-                            BroadcastMessage(username, text);
+                            BroadcastMessage("",text);
+                            Array.Clear(recv, 0, recv.Length);
                         }
-                        else if (header == 1)
-                        {
-                            byte[] imageBytes = new byte[bytesReceived - 1];
-                            Array.Copy(recv, 1, imageBytes, 0, bytesReceived - 1);
-                            BroadcastImage(username,imageBytes);
+                        else
+                        { 
+                            BroadcastImage(username, recv);
+                            Array.Clear(recv, 0, recv.Length);
                         }
                     }
                 }
@@ -102,23 +140,43 @@ namespace Lab3
                     break;
                 }
             }
-                lock (connectedClients)
-                {
-                    connectedClients.Remove(clientInfo);
-                }
+
+            // Cleanup after disconnect
+            if (clientInfo != null)
+            {
+                if(remove_username)
+                { listBox_participants.Items.Remove(clientInfo.Username); }
+                connectedClients.Remove(clientInfo);
+                UpdateParticipantList();
                 clientSocket.Close();
+            }
         }  
-private void BroadcastMessage(string username, string message)
+
+        private void UsernameError(string message,ClientInfo error_client)
+        {
+
+            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+            byte[] messageToSend = new byte[messageBytes.Length + 1];
+            messageToSend[0] = 4;
+            Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
+            error_client.ClientSocket.Send(messageToSend);
+        }
+    
+        private void BroadcastMessage(string username, string message)
 {
-            string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
-            string formattedMessage = $"{timestamp} {username}:\n{message}\n";
+            string formattedMessage;
+            if (username == "Server"||message=="")
+            {
+                string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+                formattedMessage = $"\n{timestamp} {username}:\n{message}";
+            }
+            else formattedMessage = $"{message}"; 
     byte[] messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
     byte[] messageToSend = new byte[messageBytes.Length + 1];
     messageToSend[0] = 0; 
     Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
 
-    lock (connectedClients)
-    {
+    
         foreach (var clientInfo in connectedClients)
         {
             if (clientInfo.ClientSocket.Connected)
@@ -133,34 +191,19 @@ private void BroadcastMessage(string username, string message)
                 }
             }
         }
-    }    
+       
     richTextBox_chat.AppendText(formattedMessage);
 }
         private void BroadcastImage(string username, byte[] imageBytes)
         {
-            string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
-            lock (connectedClients)
-            {
-                foreach (var clientInfo in connectedClients)
+           
+            foreach (var clientInfo in connectedClients)
                 {
                     if (clientInfo.ClientSocket.Connected)
                     {
                         try
                         {
-                            byte[] usernameBytes = Encoding.UTF8.GetBytes(username);
-                            byte[] timestampBytes = Encoding.UTF8.GetBytes(timestamp);
-
-                            int totalLength = 2 + usernameBytes.Length + timestampBytes.Length + imageBytes.Length;
-                            byte[] messageToSend = new byte[totalLength];
-
-                            messageToSend[0] = 1; 
-                            messageToSend[1] = (byte)usernameBytes.Length; 
-
-                            Array.Copy(usernameBytes, 0, messageToSend, 2, usernameBytes.Length);                   
-                            Array.Copy(timestampBytes, 0, messageToSend, 2 + usernameBytes.Length, timestampBytes.Length);
-                            Array.Copy(imageBytes, 0, messageToSend, 2 + usernameBytes.Length + timestampBytes.Length, imageBytes.Length);
-
-                            clientInfo.ClientSocket.Send(messageToSend);
+                            clientInfo.ClientSocket.Send(imageBytes);
                         }
                         catch (SocketException ex)
                         {
@@ -168,22 +211,27 @@ private void BroadcastMessage(string username, string message)
                         }
                     }
                 }
-            }
-            richTextBox_chat.AppendText($"{timestamp} {username}:\n");
-            InsertImageToChatBox(imageBytes);
+
+
+
             richTextBox_chat.AppendText("\n");
+            InsertImageToChatBox(imageBytes);
+      BroadcastMessage(username, "");
         }
         private void button_send_Click(object sender, EventArgs e)
         {
-            try
+            if (textBox_send_chat.Text != "")
             {
-                string chat_text = textBox_send_chat.Text;
-                BroadcastMessage("Server", chat_text);
-                textBox_send_chat.Text = "";
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error sending chat: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try
+                {
+                    string chat_text = textBox_send_chat.Text;
+                    BroadcastMessage("Server", chat_text);
+                    textBox_send_chat.Text = "";
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error sending chat: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
 
@@ -191,14 +239,14 @@ private void BroadcastMessage(string username, string message)
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
-                openFileDialog.Filter = "Text files (*.txt)|*.txt|Image files (*.png;*.jpeg)|*.png;*.jpeg";
+                openFileDialog.Filter = "Text files (*.txt)|*.txt|Image files (*.jpeg;*.jpg;*.png;*.gif)|*.jpeg;*.jpg;*.png;*.gif";
                 openFileDialog.Multiselect = true;
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     foreach (string filePath in openFileDialog.FileNames)
                     {
-                        string fileExtension = Path.GetExtension(filePath);
+                        string fileExtension = Path.GetExtension(filePath).ToLower();
 
                         if (fileExtension == ".txt")
                         {
@@ -209,7 +257,7 @@ private void BroadcastMessage(string username, string message)
                                 BroadcastMessage("Server", textContent);
                             }
                         }
-                        else if (fileExtension == ".png" || fileExtension == ".jpeg")
+                        else if (fileExtension == ".png" || fileExtension == ".jpeg" || fileExtension == ".jpg" || fileExtension == ".gif")
                         {
                             byte[] imageBytes;
                             using (FileStream fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
@@ -225,10 +273,21 @@ private void BroadcastMessage(string username, string message)
         }
         private void InsertImageToChatBox(byte[] imageBytes)
         {
+            if (richTextBox_chat.InvokeRequired)
+            {
+
+                richTextBox_chat.Invoke(new Action<byte[]>(InsertImageToChatBox), imageBytes);
+                return;
+            }
             using (MemoryStream ms = new MemoryStream(imageBytes))
             {
                 Image image = Image.FromStream(ms);
                 Clipboard.SetImage(image);
+
+                richTextBox_chat.SelectionStart = richTextBox_chat.TextLength;
+                richTextBox_chat.SelectionLength = 0;
+
+
                 richTextBox_chat.ReadOnly = false;
                 richTextBox_chat.Paste();
                 richTextBox_chat.ReadOnly = true;
@@ -247,5 +306,45 @@ private void BroadcastMessage(string username, string message)
                 textBox_send_chat.Text = "";
             }
         }
+
+        private void UpdateParticipantList()
+        {
+            StringBuilder participants = new StringBuilder();
+            foreach (var clientInfo in connectedClients)
+            {
+                participants.AppendLine(clientInfo.Username);
+            }
+
+            byte[] messageBytes = Encoding.UTF8.GetBytes(participants.ToString());
+            byte[] messageToSend = new byte[messageBytes.Length + 1];
+            messageToSend[0] = 5; // Header for participant list
+            Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
+
+            foreach (var clientInfo in connectedClients)
+            {
+                if (clientInfo.ClientSocket.Connected)
+                {
+                    try
+                    {
+                        clientInfo.ClientSocket.Send(messageToSend);
+                    }
+                    catch (SocketException ex)
+                    {
+                        MessageBox.Show($"Error sending participant list to client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Lab03_Bai05_Client client = new Lab03_Bai05_Client();
+            client.Show();
+
+        }
+
+        
     }
 }

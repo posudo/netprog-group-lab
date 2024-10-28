@@ -9,3 +9,16 @@ C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.CoreCompileInputs.cache
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.exe
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.pdb
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.AssemblyReference.cache
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Bai4.resources
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Form1.resources
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Lab03_Bai05_Client.resources
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Lab03_Bai05_Server.resources
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Properties.Resources.resources
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.GenerateResource.cache
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.CoreCompileInputs.cache
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.exe
+F:\Source\repos\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.pdb
+F:\Source\repos\23521744_23521782_23521650\Lab3\bin\Debug\Lab3.exe.config
+F:\Source\repos\23521744_23521782_23521650\Lab3\bin\Debug\Lab3.exe
+F:\Source\repos\23521744_23521782_23521650\Lab3\bin\Debug\Lab3.pdb
