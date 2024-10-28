@@ -52,7 +52,8 @@ namespace Lab3
             }
             catch (SocketException ex)
             {
-                MessageBox.Show($"Không thể kết nối với server! Lỗi: {ex.Message}", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Không thể kết nối với server! Lỗi: {ex.Message}", 
+                    "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -66,21 +67,30 @@ namespace Lab3
             client.Close();
         }
 
-        void Send_ThongTin()
+        private void Send_ThongTin()
         {
-            var AddInfo = new MovieTicket
+            if (chonRap_cb.InvokeRequired)
             {
-                Name = "null",
-                Movie = "null",
-                Hall = chonRap_cb.SelectedItem.ToString(),
-                Seats = new List<string> {"A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5", "C1", "C2", "C3", "C4", "C5"},
-                IsInitialInfo = true,
-                IsOccupied = false,
-                TotalPrice = 0
-            };
-            string json = JsonConvert.SerializeObject(AddInfo);
-            client.Send(Encoding.UTF8.GetBytes(json));
+                chonRap_cb.Invoke(new Action(Send_ThongTin));
+            }
+            else
+            {
+                var AddInfo = new MovieTicket
+                {
+                    Name = "null",
+                    Movie = "null",
+                    Hall = chonRap_cb.SelectedItem.ToString(),
+                    Seats = new List<string> { "A1", "A2", "A3", "A4", "A5", "B1", "B2", 
+                        "B3", "B4", "B5", "C1", "C2", "C3", "C4", "C5" },
+                    IsInitialInfo = true,
+                    IsOccupied = false,
+                    TotalPrice = 0
+                };
+                string json = JsonConvert.SerializeObject(AddInfo);
+                client.Send(Encoding.UTF8.GetBytes(json));
+            }
         }
+
         void Send_datVe()
         {
             var bookingInfo = new MovieTicket
@@ -179,10 +189,6 @@ namespace Lab3
             cancellationTokenSource = new CancellationTokenSource();
         }
 
-        private void Bai4_Load(object sender, EventArgs e)
-        {
-
-        }
         public class MovieStatistics
         {
             public string MovieName { get; set; }
@@ -193,6 +199,7 @@ namespace Lab3
             public int TicketsRemaining => TotalTickets - TicketsSold;
             public double SoldPercentage => (double)TicketsSold / TotalTickets * 100;
         }
+
         [Serializable]
         public class ThongTin
         {
@@ -360,7 +367,7 @@ namespace Lab3
             }
         }
 
-        private void chonRap_cb_SelectedIndexChanged(object sender, EventArgs e)
+        private async void chonRap_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (chonRap_cb.SelectedItem == null) return;
 
@@ -372,112 +379,8 @@ namespace Lab3
                 seatSelect_clb.SetItemChecked(i, false);
             }
 
-            // Chỉ thêm rạp nếu dữ liệu chưa có trong database
-            if (!IsHallInDatabase(selectedHall))
-            {
-                Send_ThongTin();
-            }
-
-            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
-            string query = "SELECT Seats FROM SeatAvailability WHERE TheaterID = @TheaterID AND IsOccupied = 1";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
-
-                        using (SqlDataReader reader = cmd.ExecuteReader())
-                        {
-                            while (reader.Read())
-                            {
-                                string seat = reader["Seats"].ToString();
-                                int index = seatSelect_clb.Items.IndexOf(seat);
-                                if (index >= 0)
-                                {
-                                    seatSelect_clb.SetItemChecked(index, false);
-                                }
-                            }
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error retrieving seat availability: " + ex.Message);
-                }
-            }
+            await Task.Run(() => Send_ThongTin());
         }
-
-        private async void InsertSeatAvailability(Dictionary<string, bool> my_seat)
-        {
-            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
-            string query = "INSERT INTO SeatAvailability (Seats, TheaterID, IsOccupied) VALUES (@Seats, @TheaterID, @IsOccupied)";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    await conn.OpenAsync();
-                    foreach (var seat in my_seat)
-                    {
-                        using (SqlCommand cmd = new SqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@Seats", seat.Key);
-                            cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
-                            cmd.Parameters.AddWithValue("@IsOccupied", seat.Value ? 1 : 0);
-
-                            await cmd.ExecuteNonQueryAsync();
-                        }
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Database error: " + ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
-
-        private bool IsHallInDatabase(string hall)
-        {
-            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
-            string query = "SELECT COUNT(*) FROM SeatAvailability WHERE TheaterID = @TheaterID";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(query, conn))
-                    {
-                        // Assuming you have a method to get TheaterID from hall name
-                        //int theaterID = GetTheaterIDFromHallName(hall);
-                        cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
-                        int count = (int)cmd.ExecuteScalar();
-                        return count > 0;
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Database error: " + ex.Message);
-                    // Log the error
-                    return false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                    // Log the error
-                    return false;
-                }
-            }
-        }
-
 
 
         // Event xử lý chọn ghế đã được đặt
@@ -492,7 +395,7 @@ namespace Lab3
             if (isSeatOccupied)
             {
                 MessageBox.Show("This ticket has already been purchased.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                e.NewValue = e.CurrentValue; // Cancle thay đổi
+                e.NewValue = CheckState.Unchecked; // Cancle thay đổi
             }
         }
 
@@ -562,7 +465,8 @@ namespace Lab3
             {
                 selectedSeats.Add(item.ToString());
 
-                if (seatSelect_clb.CheckedItems.Contains(item) && my_hall[chonRap_cb.SelectedItem.ToString()].my_seat.ContainsKey(item.ToString()))
+                if (seatSelect_clb.CheckedItems.Contains(item) && 
+                    my_hall[chonRap_cb.SelectedItem.ToString()].my_seat.ContainsKey(item.ToString()))
                 {
                     my_hall[chonRap_cb.SelectedItem.ToString()].my_seat[item.ToString()] = true;
                 }

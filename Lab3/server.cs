@@ -97,14 +97,16 @@ namespace Lab3
                         {
                             if (ticketInfo.IsInitialInfo == true)
                             {
-                                // Insert seat availability information into the database
-                                InsertSeatAvailability(ticketInfo);
+                                if (!IsHallInDatabase(ticketInfo))
+                                    InsertSeatAvailability(ticketInfo);
                             }
-                            else
+                            
+                            if (ticketInfo.IsInitialInfo == false)
                             {
                                 UpdateSeatAvailability(ticketInfo);
 
-                                string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
+                                string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|" +
+                                    $"{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
                                 // Create a ListViewItem for the ListView control
                                 ListViewItem item = new ListViewItem(message.Split('|'));
 
@@ -130,6 +132,39 @@ namespace Lab3
             }
         }
 
+        private bool IsHallInDatabase(MovieTicket data)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "SELECT COUNT(*) FROM SeatAvailability WHERE TheaterID = @TheaterID";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        // Assuming you have a method to get TheaterID from hall name
+                        //int theaterID = GetTheaterIDFromHallName(hall);
+                        cmd.Parameters.AddWithValue("@TheaterID", data.Hall);
+                        int count = (int)cmd.ExecuteScalar();
+                        return count > 0;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                    // Log the error
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                    // Log the error
+                    return false;
+                }
+            }
+        }
 
         private async void InsertSeatAvailability(MovieTicket data)
         {
@@ -163,7 +198,7 @@ namespace Lab3
                 }
             }
         }
-        private void UpdateSeatAvailability(MovieTicket data)
+        private async void UpdateSeatAvailability(MovieTicket data)
         {
             string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
             string query = "UPDATE SeatAvailability SET IsOccupied = 1 WHERE Seats = @Seats AND TheaterID = @TheaterID AND IsOccupied = 0";
@@ -172,16 +207,15 @@ namespace Lab3
             {
                 try
                 {
-                    conn.OpenAsync();
+                    await conn.OpenAsync();
 
                     foreach (string seat in data.Seats)
                     {
                         using (SqlCommand cmd = new SqlCommand(query, conn))
                         {
                             cmd.Parameters.AddWithValue("@Seats", seat);
-                            // Corrected line
                             cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(data.Hall));
-                            cmd.ExecuteNonQueryAsync();
+                            await cmd.ExecuteNonQueryAsync();
                         }
                     }
                 }
@@ -197,27 +231,6 @@ namespace Lab3
         }
 
 
-        private void ProcessClientMessage(string message, Socket client)
-        {
-            // Process the received message
-            // Example: Broadcast the message to other clients
-            foreach (Socket item in clientList)
-            {
-                if (item != null && item != client)
-                {
-                    item.Send(Serialize(message));
-                }
-            }
-        }
-
-        private byte[] Serialize(object obj)
-        {
-            MemoryStream stream = new MemoryStream();
-            BinaryFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(stream, obj);
-            return stream.ToArray();
-        }
-
         private object Deserialize(byte[] data)
         {
             try
@@ -232,7 +245,7 @@ namespace Lab3
             }
         }
 
-
+        
         // Close connection when form is closed
         private void server_FormClosed(object sender, FormClosedEventArgs e)
         {
@@ -246,5 +259,6 @@ namespace Lab3
 
             listenThread.Join(); // Wait for the listen thread to complete
         }
+
     }
 }

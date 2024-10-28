@@ -490,7 +490,6 @@
             this.Name = "Bai4";
             this.Text = "Bai4";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Bai4_FormClosed);
-            this.Load += new System.EventHandler(this.Bai4_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.Register.ResumeLayout(false);

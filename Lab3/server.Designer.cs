@@ -48,7 +48,7 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.screen);
             this.Name = "server";
-            this.Text = "Form2";
+            this.Text = "server";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.server_FormClosed);
             this.ResumeLayout(false);
 
