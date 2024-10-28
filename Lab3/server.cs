@@ -95,28 +95,26 @@ namespace Lab3
 
                         if (ticketInfo != null)
                         {
-                            if (ticketInfo.IsInitialInfo)
+                            if (ticketInfo.IsInitialInfo == true)
                             {
                                 // Insert seat availability information into the database
                                 InsertSeatAvailability(ticketInfo);
                             }
                             else
                             {
-                                // Update seat availability asynchronously
-                                UpdateSeatAvailabilityAsync(ticketInfo);
+                                UpdateSeatAvailability(ticketInfo);
+
+                                string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
+                                // Create a ListViewItem for the ListView control
+                                ListViewItem item = new ListViewItem(message.Split('|'));
+
+                                // Update the ListView on the UI thread
+                                screen.Invoke((MethodInvoker)(() =>
+                                {
+                                    screen.Items.Add(item);
+                                }));
                             }
 
-                            // Construct a message string based on the MovieTicket properties
-                            string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
-
-                            // Create a ListViewItem for the ListView control
-                            ListViewItem item = new ListViewItem(message.Split('|'));
-
-                            // Update the ListView on the UI thread
-                            screen.Invoke((MethodInvoker)(() =>
-                            {
-                                screen.Items.Add(item);
-                            }));
                         }
                     }
                 }
@@ -143,12 +141,12 @@ namespace Lab3
                 try
                 {
                     await conn.OpenAsync();
-                    foreach (var seat in data.Seats)
+                    foreach (string seat in data.Seats)
                     {
                         using (SqlCommand cmd = new SqlCommand(query, conn))
                         {
                             cmd.Parameters.AddWithValue("@Seats", seat);
-                            cmd.Parameters.AddWithValue("@TheaterID", data.Hall);
+                            cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(data.Hall));
                             cmd.Parameters.AddWithValue("@IsOccupied", data.IsOccupied ? 1 : 0);
 
                             await cmd.ExecuteNonQueryAsync();
@@ -165,7 +163,7 @@ namespace Lab3
                 }
             }
         }
-        private async Task UpdateSeatAvailabilityAsync(MovieTicket data)
+        private void UpdateSeatAvailability(MovieTicket data)
         {
             string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
             string query = "UPDATE SeatAvailability SET IsOccupied = 1 WHERE Seats = @Seats AND TheaterID = @TheaterID AND IsOccupied = 0";
@@ -174,7 +172,8 @@ namespace Lab3
             {
                 try
                 {
-                    await conn.OpenAsync();
+                    conn.OpenAsync();
+
                     foreach (string seat in data.Seats)
                     {
                         using (SqlCommand cmd = new SqlCommand(query, conn))
@@ -182,7 +181,7 @@ namespace Lab3
                             cmd.Parameters.AddWithValue("@Seats", seat);
                             // Corrected line
                             cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(data.Hall));
-                            await cmd.ExecuteNonQueryAsync();
+                            cmd.ExecuteNonQueryAsync();
                         }
                     }
                 }

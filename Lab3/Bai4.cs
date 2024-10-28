@@ -70,15 +70,15 @@ namespace Lab3
         {
             var AddInfo = new MovieTicket
             {
-                Name = null,
-                Movie = null,
-                Hall = selectedHall,
+                Name = "null",
+                Movie = "null",
+                Hall = chonRap_cb.SelectedItem.ToString(),
                 Seats = new List<string> {"A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5", "C1", "C2", "C3", "C4", "C5"},
                 IsInitialInfo = true,
                 IsOccupied = false,
                 TotalPrice = 0
             };
-            string json = JsonConvert.SerializeObject(my_hall[selectedHall].my_seat);
+            string json = JsonConvert.SerializeObject(AddInfo);
             client.Send(Encoding.UTF8.GetBytes(json));
         }
         void Send_datVe()
@@ -360,13 +360,11 @@ namespace Lab3
             }
         }
 
-        string selectedHall = "";
-
         private void chonRap_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (chonRap_cb.SelectedItem == null) return;
 
-            selectedHall = chonRap_cb.SelectedItem.ToString();
+            string selectedHall = chonRap_cb.SelectedItem.ToString();
 
             // Xóa ghế đã chọn trước đó
             for (int i = 0; i < seatSelect_clb.Items.Count; i++)
@@ -409,6 +407,39 @@ namespace Lab3
                 catch (Exception ex)
                 {
                     MessageBox.Show("Error retrieving seat availability: " + ex.Message);
+                }
+            }
+        }
+
+        private async void InsertSeatAvailability(Dictionary<string, bool> my_seat)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "INSERT INTO SeatAvailability (Seats, TheaterID, IsOccupied) VALUES (@Seats, @TheaterID, @IsOccupied)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+                    foreach (var seat in my_seat)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Seats", seat.Key);
+                            cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
+                            cmd.Parameters.AddWithValue("@IsOccupied", seat.Value ? 1 : 0);
+
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
                 }
             }
         }
@@ -502,9 +533,9 @@ namespace Lab3
 
 
         private Dictionary<string, MovieStatistics> movieStatistics = new Dictionary<string, MovieStatistics>();
-        // Đặt vé
+
+
         List<string> selectedSeats = new List<string>();
-        int count_error = 0;
 
         private void datVe_Click(object sender, EventArgs e)
         {
@@ -530,6 +561,7 @@ namespace Lab3
             foreach (var item in seatSelect_clb.CheckedItems)
             {
                 selectedSeats.Add(item.ToString());
+
                 if (seatSelect_clb.CheckedItems.Contains(item) && my_hall[chonRap_cb.SelectedItem.ToString()].my_seat.ContainsKey(item.ToString()))
                 {
                     my_hall[chonRap_cb.SelectedItem.ToString()].my_seat[item.ToString()] = true;
@@ -581,15 +613,8 @@ namespace Lab3
                                  $"Phim: {selectedMovie}\n" +
                                  $"Ghế đã chọn: {string.Join(", ", selectedSeats)}\n" +
                                  $"Tổng tiền: {totalPrice:N0} VND";
-            if (count_error == 0)
-            {
-                Send_datVe();
-                MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            else
-            {
-                return;
-            }
+            Send_datVe();
+            MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
 
