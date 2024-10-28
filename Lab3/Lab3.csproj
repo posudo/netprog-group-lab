@@ -82,6 +82,18 @@
     <Compile Include="server.Designer.cs">
       <DependentUpon>server.cs</DependentUpon>
     </Compile>
+    <Compile Include="Lab03-Bai05-Client.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lab03-Bai05-Client.Designer.cs">
+      <DependentUpon>Lab03-Bai05-Client.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Lab03-Bai05-Server.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Lab03-Bai05-Server.Designer.cs">
+      <DependentUpon>Lab03-Bai05-Server.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Bai3.resx">
@@ -95,6 +107,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lab03-Bai05-Client.resx">
+      <DependentUpon>Lab03-Bai05-Client.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Lab03-Bai05-Server.resx">
+      <DependentUpon>Lab03-Bai05-Server.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Server Bai3.resx">
       <DependentUpon>Server Bai3.cs</DependentUpon>
