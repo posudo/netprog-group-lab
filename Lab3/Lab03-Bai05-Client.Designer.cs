@@ -98,9 +98,9 @@
             this.button_private_chat.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button_private_chat.Location = new System.Drawing.Point(497, 425);
             this.button_private_chat.Name = "button_private_chat";
-            this.button_private_chat.Size = new System.Drawing.Size(139, 42);
+            this.button_private_chat.Size = new System.Drawing.Size(139, 40);
             this.button_private_chat.TabIndex = 6;
-            this.button_private_chat.Text = "Private chat";
+            this.button_private_chat.Text = "PM";
             this.button_private_chat.UseVisualStyleBackColor = true;
             this.button_private_chat.Click += new System.EventHandler(this.button_private_chat_Click);
             // 

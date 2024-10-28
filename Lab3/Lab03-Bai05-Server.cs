@@ -41,7 +41,7 @@ namespace Lab3
                 Username = username;
             }
         }
-        bool check_username(ClientInfo sus_client,List<ClientInfo> connectedClients)
+        bool check_username(ClientInfo sus_client)
         {
             foreach(var client_info in connectedClients)
             {
@@ -50,7 +50,6 @@ namespace Lab3
                     return true;
                 }
             }
-
             return false;
         }
         void StartUnsafeThread()
@@ -92,25 +91,20 @@ namespace Lab3
                         {
                             username = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
                             Array.Clear(recv, 0, recv.Length);
-                            if (check_username(clientInfo, connectedClients))
+                            if (check_username(clientInfo))
                             {
                                 remove_username = false;
                                 break;
-                                
                             }
-
-
                             BroadcastMessage("", $"\n{username} has left the chat.");
-                            
                             break; 
                         }
-                    
                         else if (header == 2)
                         {
                             username = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
                             clientInfo = new ClientInfo(clientSocket, username);
                             connectedClients.Add(clientInfo);
-                            if (check_username(clientInfo, connectedClients))
+                            if (check_username(clientInfo))
                             {
                                 UsernameError("Username already be used.\n", clientInfo);
                                 continue;
@@ -121,6 +115,34 @@ namespace Lab3
                            
                             Array.Clear(recv, 0, recv.Length);
                         }
+                        else if (header == 7)
+                        {
+                            string text = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
+                            string[] parts = text.Split(new char[] { ';' }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                            if (parts.Length == 2)
+                            {
+                                string targetUsername = parts[0];
+                                string privateMessage = parts[1];
+                                SendPrivateChat(targetUsername, privateMessage);
+                            }
+
+                            Array.Clear(recv, 0, recv.Length);
+                        }
+                        else if (header == 6)
+                        {
+                            string text = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
+                            string[] parts = text.Split(new char[] { ';' }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                            if (parts.Length == 2)
+                            {
+                                string targetUsername = parts[0];
+                                string privateMessage = parts[1];
+                                SendPrivateChat(targetUsername, privateMessage);
+                            }
+
+                            Array.Clear(recv, 0, recv.Length);
+                        }    
                         else if (header == 0)
                         {
                             string text = Encoding.UTF8.GetString(recv, 1, bytesReceived - 1);
@@ -140,8 +162,6 @@ namespace Lab3
                     break;
                 }
             }
-
-            // Cleanup after disconnect
             if (clientInfo != null)
             {
                 if(remove_username)
@@ -151,7 +171,6 @@ namespace Lab3
                 clientSocket.Close();
             }
         }  
-
         private void UsernameError(string message,ClientInfo error_client)
         {
 
@@ -161,7 +180,6 @@ namespace Lab3
             Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
             error_client.ClientSocket.Send(messageToSend);
         }
-    
         private void BroadcastMessage(string username, string message)
 {
             string formattedMessage;
@@ -287,7 +305,6 @@ namespace Lab3
                 richTextBox_chat.SelectionStart = richTextBox_chat.TextLength;
                 richTextBox_chat.SelectionLength = 0;
 
-
                 richTextBox_chat.ReadOnly = false;
                 richTextBox_chat.Paste();
                 richTextBox_chat.ReadOnly = true;
@@ -317,7 +334,7 @@ namespace Lab3
 
             byte[] messageBytes = Encoding.UTF8.GetBytes(participants.ToString());
             byte[] messageToSend = new byte[messageBytes.Length + 1];
-            messageToSend[0] = 5; // Header for participant list
+            messageToSend[0] = 5;
             Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
 
             foreach (var clientInfo in connectedClients)
@@ -335,16 +352,33 @@ namespace Lab3
                 }
             }
         }
-
-
-
         private void button1_Click(object sender, EventArgs e)
         {
             Lab03_Bai05_Client client = new Lab03_Bai05_Client();
             client.Show();
 
         }
+        private void SendPrivateChat(string target, string message)
+        {
+            target = target.Trim();
+            foreach (var client in connectedClients)
+            {
+           
 
-        
+                if (string.Equals(client.Username, target, StringComparison.OrdinalIgnoreCase))
+                {
+                    byte[] messageBytes = Encoding.UTF8.GetBytes(message);
+                    byte[] messageToSend = new byte[messageBytes.Length + 1];
+                    messageToSend[0] = 6;
+                    Array.Copy(messageBytes, 0, messageToSend, 1, messageBytes.Length);
+
+                    client.ClientSocket.Send(messageToSend);
+
+         
+                    return;
+                }
+            }
+        }
+
     }
 }

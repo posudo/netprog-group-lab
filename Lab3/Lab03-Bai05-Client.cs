@@ -21,6 +21,7 @@ namespace Lab3
         private Socket clientSocket;
         Thread receiveThread;
         private string privateChatTarget = null;
+        private string private_message;
 
         public Lab03_Bai05_Client()
         {
@@ -31,6 +32,13 @@ namespace Lab3
         {
             
             this.textBox_send_chat.KeyDown += new KeyEventHandler(textBox_send_chat_KeyDown);
+            this.FormClosing += Lab03_Bai05_Client_FormClosing;
+        }
+        private void Lab03_Bai05_Client_FormClosing(object sender, FormClosingEventArgs e)
+        {
+           
+                button_disconnect.PerformClick();
+            
         }
         public class ClientInfo
         {
@@ -49,25 +57,34 @@ namespace Lab3
             string formattedMessage;
             byte[] messageBytes;
             byte[] messageToSend;
-
-            if (message == "0") // Disconnect message
+            string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+            if (message == "0") 
             {
                 formattedMessage = $"{username}";
                 messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
                 messageToSend = new byte[messageBytes.Length + 1];
-                messageToSend[0] = 3; // Header for disconnect
+                messageToSend[0] = 3; 
        
             }
-            else if (message == "1") // Other specific message if needed
+            else if (message == "1") 
             {
                 formattedMessage = $"{username}";
                 messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
                 messageToSend = new byte[messageBytes.Length + 1];
                 messageToSend[0] = 2;
             }
+            else if (message=="2") 
+            {
+                private_message = $"{privateChatTarget};\n<private> {timestamp} {username}:\n{textBox_send_chat.Text}";
+                textBox_send_chat.Clear();
+                formattedMessage = $"{private_message}";
+                messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
+                messageToSend = new byte[messageBytes.Length + 1];
+                messageToSend[0] = 6;
+            }
             else
             {
-                string timestamp = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+           
                  formattedMessage = $"\n{timestamp} {username}:\n{message}";
                 messageBytes = Encoding.UTF8.GetBytes(formattedMessage);
                 messageToSend = new byte[messageBytes.Length + 1];
@@ -97,7 +114,6 @@ namespace Lab3
                         MessageBox.Show($"Error sending image to client: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-           
         }
         private void button_send_Click(object sender, EventArgs e)
         {
@@ -127,7 +143,9 @@ namespace Lab3
                             using (StreamReader reader = new StreamReader(fs))
                             {
                                 string textContent = reader.ReadToEnd();
-                                //clientSocket.Send(textContent);
+                                SendMessage(textBox_username.Text, textContent);
+                                   
+
                             }
                         }
                         else if (fileExtension == ".png" || fileExtension == ".jpeg" || fileExtension == ".jpg" || fileExtension == ".gif")
@@ -211,7 +229,12 @@ namespace Lab3
                             string participants = Encoding.UTF8.GetString(recvBuffer, 1, bytesReceived - 1);
                             UpdateParticipantList(participants);
                         }
-                        else if (header == 0) 
+                        else if (header == 6)
+                        {
+                            string message = Encoding.UTF8.GetString(recvBuffer, 1, bytesReceived - 1);
+                            richTextBox_chat.AppendText(message);
+                        }
+                        else if (header == 0 ||header==6) 
                         {
                            string message = Encoding.UTF8.GetString(recvBuffer, 1, bytesReceived - 1);
                          richTextBox_chat.AppendText(message);
@@ -223,9 +246,7 @@ namespace Lab3
                            
                         }
                         
-                    }
-                   
-
+                    }               
 
                 }
                 catch (SocketException ex)
@@ -248,8 +269,8 @@ namespace Lab3
                 receiveThread = new Thread(ReceiveData);
                 receiveThread.Start();
                
-                if (textBox_username.Text == "") textBox_username.Text = "Unknown";
-                SendMessage(textBox_username.Text, "1");
+                if (textBox_username.Text.Trim()== "") textBox_username.Text = "Unknown";
+                SendMessage(textBox_username.Text.Trim(), "1");
 
 
                 
@@ -260,6 +281,7 @@ namespace Lab3
                 button_send_files.Enabled = true;
                 button_private_chat.Enabled = true;
                 textBox_send_chat.ReadOnly = false;
+                
             }
             catch (Exception ex)
             {
@@ -278,8 +300,6 @@ namespace Lab3
                 
                 clientSocket = null; 
                 MessageBox.Show("Disconnected from server.", "Connection", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // Update UI
                 button_connect.Enabled = true;
                 textBox_username.ReadOnly = false;
                 button_disconnect.Enabled = false;
@@ -287,8 +307,6 @@ namespace Lab3
                 button_send_files.Enabled = false;
                 button_private_chat.Enabled = false;
                 textBox_send_chat.ReadOnly = true;
-
-          
             }
         }
 
@@ -310,16 +328,20 @@ namespace Lab3
 
         private void button_private_chat_Click(object sender, EventArgs e)
         {
-            if (listBox_participants.SelectedItem != null)
+          
+            
+            if (listBox_participants.SelectedItem != null&&textBox_send_chat.Text!="")
             {
                 privateChatTarget = listBox_participants.SelectedItem.ToString();
-                richTextBox_chat.AppendText($"Private chat with {privateChatTarget} starts now, send >exit to exit:\n");
-                SendMessage(privateChatTarget, "private");
+             
+                SendMessage(textBox_username.Text, "2");
+                MessageBox.Show("Sent the message privately!", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show("Please select a participant to chat with.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Please write message and select a participant to chat with.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+        
     }
 }
