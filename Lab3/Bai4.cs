@@ -32,12 +32,15 @@ namespace Lab3
             public string Hall { get; set; }
             public List<string> Seats { get; set; }
             public int TotalPrice { get; set; }
+            public bool IsInitialInfo { get; set; }
+            public bool IsOccupied { get; set; }
         }
 
         private List<Thread> threads = new List<Thread>();
         private CancellationTokenSource cancellationTokenSource;
         IPEndPoint IP;
         Socket client;
+
         void ConnectToServer()
         {
             IP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 9999);
@@ -63,6 +66,21 @@ namespace Lab3
             client.Close();
         }
 
+        void Send_ThongTin()
+        {
+            var AddInfo = new MovieTicket
+            {
+                Name = null,
+                Movie = null,
+                Hall = selectedHall,
+                Seats = new List<string> {"A1", "A2", "A3", "A4", "A5", "B1", "B2", "B3", "B4", "B5", "C1", "C2", "C3", "C4", "C5"},
+                IsInitialInfo = true,
+                IsOccupied = false,
+                TotalPrice = 0
+            };
+            string json = JsonConvert.SerializeObject(my_hall[selectedHall].my_seat);
+            client.Send(Encoding.UTF8.GetBytes(json));
+        }
         void Send_datVe()
         {
             var bookingInfo = new MovieTicket
@@ -71,6 +89,8 @@ namespace Lab3
                 Movie = phimSelection_cb.SelectedItem?.ToString(),
                 Hall = chonRap_cb.SelectedItem?.ToString(),
                 Seats = selectedSeats,
+                IsInitialInfo = false,
+                IsOccupied = true,
                 TotalPrice = selectedSeats.Sum(seat =>
                 {
                     int basePrice = Int32.Parse(giaVeChuan_out.Text);
@@ -340,11 +360,13 @@ namespace Lab3
             }
         }
 
+        string selectedHall = "";
+
         private void chonRap_cb_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (chonRap_cb.SelectedItem == null) return;
 
-            string selectedHall = chonRap_cb.SelectedItem.ToString();
+            selectedHall = chonRap_cb.SelectedItem.ToString();
 
             // Xóa ghế đã chọn trước đó
             for (int i = 0; i < seatSelect_clb.Items.Count; i++)
@@ -355,7 +377,7 @@ namespace Lab3
             // Chỉ thêm rạp nếu dữ liệu chưa có trong database
             if (!IsHallInDatabase(selectedHall))
             {
-                InsertSeatAvailability(my_hall[selectedHall].my_seat);
+                Send_ThongTin();
             }
 
             string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
@@ -569,75 +591,6 @@ namespace Lab3
                 return;
             }
 
-        }
-
-        //Thêm thông tin ghế và rạp vào database
-        private async void InsertSeatAvailability(Dictionary<string, bool> seats)
-        {
-            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
-            string query = "INSERT INTO SeatAvailability (Seats, TheaterID, IsOccupied) VALUES (@Seats, @TheaterID, @IsOccupied)";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    await conn.OpenAsync();
-                    foreach (var seat in seats)
-                    {
-                        using (SqlCommand cmd = new SqlCommand(query, conn))
-                        {
-                            cmd.Parameters.AddWithValue("@Seats", seat.Key);
-                            cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
-                            cmd.Parameters.AddWithValue("@IsOccupied", seat.Value ? 1 : 0);
-
-                            await cmd.ExecuteNonQueryAsync();
-                        }
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Database error: " + ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
-        }
-
-        // Cập nhật trạng thái ghế đã đặt
-        private async Task UpdateSeatAvailabilityAsync(Dictionary<string, bool> seats)
-        {
-            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
-            string query = "UPDATE SeatAvailability SET IsOccupied = 1 WHERE Seats = @Seats AND TheaterID = @TheaterID AND IsOccupied = 0";
-
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            {
-                try
-                {
-                    await conn.OpenAsync();
-                    foreach (var seat in seats)
-                    {
-                        if (seat.Value == true)
-                        {
-                            using (SqlCommand cmd = new SqlCommand(query, conn))
-                            {
-                                cmd.Parameters.AddWithValue("@Seats", seat.Key);
-                                cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(chonRap_cb.SelectedItem.ToString()));
-                                await cmd.ExecuteNonQueryAsync();
-                            }
-                        }
-                    }
-                }
-                catch (SqlException ex)
-                {
-                    MessageBox.Show("Database error: " + ex.Message);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error: " + ex.Message);
-                }
-            }
         }
 
         private async void XuatThongTin_Click(object sender, EventArgs e)

@@ -90,12 +90,21 @@ namespace Lab3
                     int receivedBytes = client.Receive(data);
                     if (receivedBytes > 0)
                     {
-                        // Deserialize the data to a MovieTicket object to void casting exception
+                        // Deserialize the data to a MovieTicket object to avoid casting exception
                         var ticketInfo = Deserialize(data) as MovieTicket;
 
                         if (ticketInfo != null)
                         {
-                            UpdateSeatAvailabilityAsync(ticketInfo);
+                            if (ticketInfo.IsInitialInfo)
+                            {
+                                // Insert seat availability information into the database
+                                InsertSeatAvailability(ticketInfo);
+                            }
+                            else
+                            {
+                                // Update seat availability asynchronously
+                                UpdateSeatAvailabilityAsync(ticketInfo);
+                            }
 
                             // Construct a message string based on the MovieTicket properties
                             string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
@@ -119,6 +128,40 @@ namespace Lab3
                     clientList.Remove(client);
                     client.Close();
                     MessageBox.Show("Client disconnected: " + ex.Message);
+                }
+            }
+        }
+
+
+        private async void InsertSeatAvailability(MovieTicket data)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "INSERT INTO SeatAvailability (Seats, TheaterID, IsOccupied) VALUES (@Seats, @TheaterID, @IsOccupied)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+                    foreach (var seat in data.Seats)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Seats", seat);
+                            cmd.Parameters.AddWithValue("@TheaterID", data.Hall);
+                            cmd.Parameters.AddWithValue("@IsOccupied", data.IsOccupied ? 1 : 0);
+
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
                 }
             }
         }
