@@ -46,6 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bai3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Bai3.Designer.cs">
+      <DependentUpon>Bai3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Client Bai3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Client Bai3.Designer.cs">
+      <DependentUpon>Client Bai3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +70,12 @@
     <Compile Include="Bai4.Designer.cs">
       <DependentUpon>Bai4.cs</DependentUpon>
     </Compile>
+    <Compile Include="Server Bai3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Server Bai3.Designer.cs">
+      <DependentUpon>Server Bai3.cs</DependentUpon>
+    </Compile>
     <Compile Include="server.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -66,11 +84,20 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Bai3.resx">
+      <DependentUpon>Bai3.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Bai4.resx">
       <DependentUpon>Bai4.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Client Bai3.resx">
+      <DependentUpon>Client Bai3.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Server Bai3.resx">
+      <DependentUpon>Server Bai3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="server.resx">
       <DependentUpon>server.cs</DependentUpon>
