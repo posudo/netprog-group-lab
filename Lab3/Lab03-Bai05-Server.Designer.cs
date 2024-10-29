@@ -104,7 +104,7 @@
             this.button_client.TabIndex = 6;
             this.button_client.Text = "Client";
             this.button_client.UseVisualStyleBackColor = true;
-            this.button_client.Click += new System.EventHandler(this.button1_Click);
+            this.button_client.Click += new System.EventHandler(this.button_Client_Click);
             // 
             // Lab03_Bai05_Server
             // 
