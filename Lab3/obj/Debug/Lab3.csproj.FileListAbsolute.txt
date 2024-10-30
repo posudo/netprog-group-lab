@@ -3,7 +3,6 @@ C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\bin\Debug\Lab
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\bin\Debug\Lab3.pdb
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.AssemblyReference.cache
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Bai4.resources
-C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Form1.resources
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Properties.Resources.resources
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.GenerateResource.cache
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.CoreCompileInputs.cache
@@ -14,7 +13,6 @@ C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\bin\Debug\Lab3.exe
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\bin\Debug\Lab3.pdb
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.AssemblyReference.cache
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Bai4.resources
-C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Form1.resources
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.server.resources
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Properties.Resources.resources
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.GenerateResource.cache
@@ -24,3 +22,18 @@ C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.pdb
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Bai3.resources
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Client_Bai3.resources
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Server_Bai3.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\bin\Debug\Newtonsoft.Json.dll
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\bin\Debug\Newtonsoft.Json.xml
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Bai3.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Client_Bai3.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Lab03_Bai05_Client.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Lab03_Bai05_Server.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Server_Bai3.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.server.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.Up2Date
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Lab03_Bai05_Client.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Lab03_Bai05_Server.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.Up2Date
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Formdieuhuongcs.resources

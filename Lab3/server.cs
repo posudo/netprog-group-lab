@@ -10,68 +10,255 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Runtime.Serialization;
+using Newtonsoft.Json;
+using static Lab3.Bai4;
+using System.Data.SqlClient;
 
 namespace Lab3
 {
     public partial class server : Form
     {
         private Socket serverSocket;
-        private Socket clientSocket;
+        private List<Socket> clientList;
         private Thread listenThread;
+        private CancellationTokenSource cancellationTokenSource;
+
+        private void SetUp_listView()
+        {
+            screen.View = View.Details;
+            screen.Columns.Add("Name", 100);
+            screen.Columns.Add("Movie", 150);
+            screen.Columns.Add("Hall", 50);
+            screen.Columns.Add("Seats ", 200);
+            screen.Columns.Add("Total Price", 150);
+        }
         public server()
         {
             InitializeComponent();
-            listenThread = new Thread(StartServer);
+            clientList = new List<Socket>();
+            cancellationTokenSource = new CancellationTokenSource();
+            listenThread = new Thread(() => StartServer(cancellationTokenSource.Token));
             listenThread.IsBackground = true;
             listenThread.Start();
+            SetUp_listView();
         }
-        private void StartServer()
+
+        private void StartServer(CancellationToken token)
+        {
+            IPEndPoint IP = new IPEndPoint(IPAddress.Any, 9999);
+            serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+            serverSocket.Bind(IP);
+
+            Thread listen = new Thread(() =>
+            {
+                try
+                {
+                    while (!token.IsCancellationRequested)
+                    {
+                        serverSocket.Listen(100);
+                        Socket client = serverSocket.Accept();
+                        clientList.Add(client);
+                        Thread receiveThread = new Thread(() => Receive(client, token));
+                        receiveThread.IsBackground = true;
+                        receiveThread.Start();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (!token.IsCancellationRequested)
+                    {
+                        MessageBox.Show("Server error: " + ex.Message);
+                        IP = new IPEndPoint(IPAddress.Any, 9999);
+                        serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.IP);
+                    }
+                }
+            });
+            listen.IsBackground = true;
+            listen.Start();
+        }
+
+        private void Receive(Socket client, CancellationToken token)
         {
             try
             {
-                // Tạo socket server
-                serverSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-
-                // Gán địa chỉ và cổng cho socket
-                IPEndPoint endPoint = new IPEndPoint(IPAddress.Any, 8080);
-                serverSocket.Bind(endPoint);
-
-                // Chuyển socket vào chế độ lắng nghe
-                serverSocket.Listen(10); // Chờ tối đa 10 client cùng lúc
-
-                // Cập nhật UI để thông báo server đã sẵn sàng
-                Invoke(new Action(() =>
+                while (!token.IsCancellationRequested)
                 {
-                    screen.AppendText("Server đang lắng nghe trên cổng 8080...\n");
-                }));
+                    byte[] data = new byte[1024 * 5000];
+                    int receivedBytes = client.Receive(data);
+                    if (receivedBytes > 0)
+                    {
+                        // Deserialize the data to a MovieTicket object to avoid casting exception
+                        var ticketInfo = Deserialize(data) as MovieTicket;
 
-                // Chấp nhận kết nối từ client
-                clientSocket = serverSocket.Accept();
+                        if (ticketInfo != null)
+                        {
+                            if (ticketInfo.IsInitialInfo == true)
+                            {
+                                if (!IsHallInDatabase(ticketInfo))
+                                    InsertSeatAvailability(ticketInfo);
+                            }
+                            
+                            if (ticketInfo.IsInitialInfo == false)
+                            {
+                                UpdateSeatAvailability(ticketInfo);
 
-                // Cập nhật UI để thông báo đã kết nối với client
-                Invoke(new Action(() =>
-                {
-                    screen.AppendText("Kết nối với client thành công!\n");
-                }));
+                                string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|" +
+                                    $"{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
+                                // Create a ListViewItem for the ListView control
+                                ListViewItem item = new ListViewItem(message.Split('|'));
 
-                // Xử lý dữ liệu từ client
-                while (true)
-                {
-                    byte[] buffer = new byte[1024];
-                    int received = clientSocket.Receive(buffer);
-                    string text = Encoding.ASCII.GetString(buffer, 0, received);
+                                // Update the ListView on the UI thread
+                                screen.Invoke((MethodInvoker)(() =>
+                                {
+                                    screen.Items.Add(item);
+                                }));
+                            }
 
-
+                        }
+                    }
                 }
             }
             catch (Exception ex)
             {
-                // Hiển thị lỗi nếu có
-                Invoke(new Action(() =>
+                if (!token.IsCancellationRequested)
                 {
-                    screen.AppendText("Lỗi: " + ex.Message + "\n");
-                }));
+                    clientList.Remove(client);
+                    client.Close();
+                    MessageBox.Show("Client disconnected: " + ex.Message);
+                }
             }
         }
+
+        private bool IsHallInDatabase(MovieTicket data)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "SELECT COUNT(*) FROM SeatAvailability WHERE TheaterID = @TheaterID";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        // Assuming you have a method to get TheaterID from hall name
+                        //int theaterID = GetTheaterIDFromHallName(hall);
+                        cmd.Parameters.AddWithValue("@TheaterID", data.Hall);
+                        int count = (int)cmd.ExecuteScalar();
+                        return count > 0;
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                    // Log the error
+                    return false;
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                    // Log the error
+                    return false;
+                }
+            }
+        }
+
+        private async void InsertSeatAvailability(MovieTicket data)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "INSERT INTO SeatAvailability (Seats, TheaterID, IsOccupied) VALUES (@Seats, @TheaterID, @IsOccupied)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+                    foreach (string seat in data.Seats)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Seats", seat);
+                            cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(data.Hall));
+                            cmd.Parameters.AddWithValue("@IsOccupied", data.IsOccupied ? 1 : 0);
+
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
+        private async void UpdateSeatAvailability(MovieTicket data)
+        {
+            string connectionString = "Data Source=localhost\\SQLEXPRESS;Database=QUANLYRAP;Integrated Security=True";
+            string query = "UPDATE SeatAvailability SET IsOccupied = 1 WHERE Seats = @Seats AND TheaterID = @TheaterID AND IsOccupied = 0";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    await conn.OpenAsync();
+
+                    foreach (string seat in data.Seats)
+                    {
+                        using (SqlCommand cmd = new SqlCommand(query, conn))
+                        {
+                            cmd.Parameters.AddWithValue("@Seats", seat);
+                            cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(data.Hall));
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Database error: " + ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error: " + ex.Message);
+                }
+            }
+        }
+
+
+        private object Deserialize(byte[] data)
+        {
+            try
+            {
+                string json = Encoding.UTF8.GetString(data).TrimEnd('\0'); // Convert byte array to JSON string
+                return JsonConvert.DeserializeObject<MovieTicket>(json);   // Deserialize JSON to MovieTicket object
+            }
+            catch (JsonException ex)
+            {
+                MessageBox.Show($"Deserialization error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return null;
+            }
+        }
+
+        
+        // Close connection when form is closed
+        private void server_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            cancellationTokenSource.Cancel();
+
+            foreach (Socket client in clientList)
+            {
+                client.Close();
+            }
+            serverSocket.Close();
+
+            listenThread.Join(); // Wait for the listen thread to complete
+        }
+
     }
 }

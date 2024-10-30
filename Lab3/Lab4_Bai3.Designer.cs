@@ -1,6 +1,6 @@
 ﻿namespace Lab3
 {
-    partial class Form1
+    partial class Lab4_Bai3
     {
         /// <summary>
         /// Required designer variable.
@@ -41,6 +41,7 @@
             this.client.TabIndex = 0;
             this.client.Text = "Client";
             this.client.UseVisualStyleBackColor = true;
+            this.client.Click += new System.EventHandler(this.client_Click);
             // 
             // server
             // 
@@ -51,6 +52,7 @@
             this.server.TabIndex = 1;
             this.server.Text = "Server";
             this.server.UseVisualStyleBackColor = true;
+            this.server.Click += new System.EventHandler(this.server_Click);
             // 
             // Form1
             // 
@@ -59,8 +61,8 @@
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.server);
             this.Controls.Add(this.client);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "Lab3_Bai4";
+            this.Text = "Lab3_Bai4";
             this.ResumeLayout(false);
 
         }
