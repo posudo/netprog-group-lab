@@ -37,3 +37,5 @@ C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Lab03_Bai0
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Lab03_Bai05_Server.resources
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.csproj.Up2Date
 C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Formdieuhuongcs.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.DieuHuong_Bai4.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab3\obj\Debug\Lab3.Formdieuhuongcs.resources

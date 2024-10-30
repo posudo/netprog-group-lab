@@ -67,6 +67,12 @@
     <Compile Include="Bai4.Designer.cs">
       <DependentUpon>Bai4.cs</DependentUpon>
     </Compile>
+    <Compile Include="DieuHuong_Bai4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DieuHuong_Bai4.Designer.cs">
+      <DependentUpon>DieuHuong_Bai4.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formdieuhuongcs.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +113,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Client Bai3.resx">
       <DependentUpon>Client Bai3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DieuHuong_Bai4.resx">
+      <DependentUpon>DieuHuong_Bai4.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formdieuhuongcs.resx">
       <DependentUpon>Formdieuhuongcs.cs</DependentUpon>

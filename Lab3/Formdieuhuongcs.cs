@@ -30,7 +30,7 @@ namespace Lab3
 
         private void btnBai4_Click(object sender, EventArgs e)
         {
-            Bai4 bai4 = new Bai4();
+            DieuHuong_Bai4 bai4 = new DieuHuong_Bai4();
             bai4.Show();
         }
 
