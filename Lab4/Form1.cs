@@ -103,11 +103,19 @@ namespace Lab4
         }
 
         string savepath = "C:\\Users\\tung\\Downloads\\LTMCP";
-        private void Down_File_Click(object sender, EventArgs e)
+        private async void Down_File_Click(object sender, EventArgs e)
         {
-            WebClient myClient = new WebClient();
-            Stream response = myClient.OpenRead(URL.Text);
-            myClient.DownloadFile(URL.Text, savepath);
+            string url = URL.Text;
+            if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            {
+                string htmlContent = await httpClient.GetStringAsync(url);
+                File.WriteAllText("download.html", htmlContent);
+                MessageBox.Show("Download completed!");
+            }
+            else
+            {
+                MessageBox.Show("Invalid URL");
+            }
         }
 
         private void Reload_Click(object sender, EventArgs e)

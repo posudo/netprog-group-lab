@@ -21,8 +21,8 @@ namespace Lab3
 {
     public partial class server : Form
     {
-        private Socket serverSocket;
-        private List<Socket> clientList;
+        Socket serverSocket;
+        List<Socket> clientList;
         private Thread listenThread;
         private CancellationTokenSource cancellationTokenSource;
 
@@ -95,13 +95,13 @@ namespace Lab3
 
                         if (ticketInfo != null)
                         {
-                            if (ticketInfo.IsInitialInfo == true)
+                            if (ticketInfo.Sign == 1)
                             {
                                 if (!IsHallInDatabase(ticketInfo))
                                     InsertSeatAvailability(ticketInfo);
                             }
                             
-                            if (ticketInfo.IsInitialInfo == false)
+                            if (ticketInfo.Sign == 2)
                             {
                                 UpdateSeatAvailability(ticketInfo);
 
@@ -115,6 +115,22 @@ namespace Lab3
                                 {
                                     screen.Items.Add(item);
                                 }));
+                            }
+
+                            if(ticketInfo.Sign == 3)
+                            {
+                                if (ticketInfo.Sign == 3) // Sign 3 means seat selection update
+                                {
+                                    // Broadcast the seat selection to all clients except the sender
+                                    foreach (Socket otherClient in clientList)
+                                    {
+                                        if (otherClient != client) // Don't send back to the sender
+                                        {
+                                            string json = JsonConvert.SerializeObject(ticketInfo);
+                                            otherClient.Send(Encoding.UTF8.GetBytes(json));
+                                        }
+                                    }
+                                }
                             }
 
                         }
@@ -131,6 +147,7 @@ namespace Lab3
                 }
             }
         }
+        
 
         private bool IsHallInDatabase(MovieTicket data)
         {
@@ -182,7 +199,7 @@ namespace Lab3
                         {
                             cmd.Parameters.AddWithValue("@Seats", seat);
                             cmd.Parameters.AddWithValue("@TheaterID", Int32.Parse(data.Hall));
-                            cmd.Parameters.AddWithValue("@IsOccupied", data.IsOccupied ? 1 : 0);
+                            cmd.Parameters.AddWithValue("@IsOccupied", 0);
 
                             await cmd.ExecuteNonQueryAsync();
                         }

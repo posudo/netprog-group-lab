@@ -19,6 +19,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using System.Runtime.Serialization;
+using System.Collections.Concurrent;
 
 namespace Lab3
 {
@@ -32,8 +33,7 @@ namespace Lab3
             public string Hall { get; set; }
             public List<string> Seats { get; set; }
             public int TotalPrice { get; set; }
-            public bool IsInitialInfo { get; set; }
-            public bool IsOccupied { get; set; }
+            public int Sign { get; set; }
         }
 
         private List<Thread> threads = new List<Thread>();
@@ -82,8 +82,7 @@ namespace Lab3
                     Hall = chonRap_cb.SelectedItem.ToString(),
                     Seats = new List<string> { "A1", "A2", "A3", "A4", "A5", "B1", "B2", 
                         "B3", "B4", "B5", "C1", "C2", "C3", "C4", "C5" },
-                    IsInitialInfo = true,
-                    IsOccupied = false,
+                    Sign = 1,
                     TotalPrice = 0
                 };
                 string json = JsonConvert.SerializeObject(AddInfo);
@@ -99,8 +98,7 @@ namespace Lab3
                 Movie = phimSelection_cb.SelectedItem?.ToString(),
                 Hall = chonRap_cb.SelectedItem?.ToString(),
                 Seats = selectedSeats,
-                IsInitialInfo = false,
-                IsOccupied = true,
+                Sign = 2,
                 TotalPrice = selectedSeats.Sum(seat =>
                 {
                     int basePrice = Int32.Parse(giaVeChuan_out.Text);
@@ -122,13 +120,10 @@ namespace Lab3
         {
             try
             {
-                using (MemoryStream stream = new MemoryStream(data))
-                {
-                    BinaryFormatter formatter = new BinaryFormatter();
-                    return formatter.Deserialize(stream);
-                }
+                string json = Encoding.UTF8.GetString(data).TrimEnd('\0'); // Convert byte array to JSON string
+                return JsonConvert.DeserializeObject<MovieTicket>(json);   // Deserialize JSON to MovieTicket object
             }
-            catch (SerializationException ex)
+            catch (JsonException ex)
             {
                 MessageBox.Show($"Deserialization error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return null;
@@ -146,7 +141,29 @@ namespace Lab3
 
                     if (receivedBytes > 0)
                     {
-                        var response = Deserialize(data.Take(receivedBytes).ToArray());
+                        var information = Deserialize(data) as MovieTicket;
+                        if (information != null && information.Sign == 3)
+                        {
+                            // Need to use Invoke since we're updating UI from a different thread
+                            this.Invoke((MethodInvoker)delegate
+                            {
+                                foreach (var seat in information.Seats)
+                                {
+                                    int index = seatSelect_clb.Items.IndexOf(seat);
+                                    if (index != -1)  // Make sure the seat exists in the list
+                                    {
+                                        if (seatSelect_clb.CheckedItems.Contains(seat))
+                                        {
+                                            seatSelect_clb.SetItemChecked(index, false);
+                                            // Uncheck the seat if it was selected by current client
+                                            MessageBox.Show($"Ghế {seat} đã được đặt bởi người khác.",
+                                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                                        }
+
+                                    }
+                                }
+                            });
+                        }
                     }
                 }
             }
@@ -334,9 +351,15 @@ namespace Lab3
             ThongTin[] tt = DeserializeFile();
             phimSelection_cb.Items.Clear();
             global = tt;
-            foreach (ThongTin t in global)
+            try {
+                foreach (ThongTin t in global)
+                {
+                    phimSelection_cb.Items.Add(t.TenPhim);
+                }
+            }
+            catch(Exception ex)
             {
-                phimSelection_cb.Items.Add(t.TenPhim);
+                MessageBox.Show("Error: " + ex.Message);
             }
 
         }
@@ -518,6 +541,7 @@ namespace Lab3
                                  $"Ghế đã chọn: {string.Join(", ", selectedSeats)}\n" +
                                  $"Tổng tiền: {totalPrice:N0} VND";
             Send_datVe();
+
             MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
         }
@@ -583,6 +607,66 @@ namespace Lab3
                 {
                     MessageBox.Show($"Thread {thread.ManagedThreadId} is still running.");
                 }
+            }
+        }
+        private List<string> strings = new List<string>();
+
+        private async void seatSelect_clb_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                foreach (var item in seatSelect_clb.Items)
+                {
+                    string seat = item.ToString();
+                    if (seatSelect_clb.CheckedItems.Contains(item))
+                    {
+                        if (!strings.Contains(seat))
+                        {
+                            strings.Add(seat);
+                        }
+                    }
+                    else
+                    {
+                        if (strings.Contains(seat))
+                        {
+                            strings.Remove(seat);
+                        }
+                    }
+                }
+                SendCheckedSeats(); 
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error updating seat selection: {ex.Message}");
+            }
+        }
+
+        private async void SendCheckedSeats()
+        {
+            try
+            {
+                var ticketInfo = new MovieTicket
+                {
+                    Name = "null",
+                    Movie = "null",
+                    Hall = chonRap_cb.SelectedItem?.ToString() ?? string.Empty,
+                    Seats = strings.ToList(),
+                    Sign = 3,
+                    TotalPrice = 0
+                };
+
+                string json = JsonConvert.SerializeObject(ticketInfo);
+                byte[] data = Encoding.UTF8.GetBytes(json);
+
+                await Task.Run(() =>
+                {
+                    client.Send(data);
+                });
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error sending seat updates: {ex.Message}");
             }
         }
     }
