@@ -2,7 +2,6 @@ C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debu
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debug\Bai4.exe
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debug\Bai4.pdb
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.csproj.AssemblyReference.cache
-C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.Form1.resources
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.Properties.Resources.resources
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.csproj.GenerateResource.cache
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.csproj.CoreCompileInputs.cache
@@ -50,3 +49,5 @@ C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debu
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debug\Microsoft.Web.WebView2.Wpf.xml
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debug\Newtonsoft.Json.dll
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debug\Newtonsoft.Json.xml
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.Browser.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.Main.resources

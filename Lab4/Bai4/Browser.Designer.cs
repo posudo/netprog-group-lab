@@ -1,6 +1,6 @@
 ﻿namespace Bai4
 {
-    partial class Form1
+    partial class Browser
     {
         /// <summary>
         /// Required designer variable.
@@ -28,34 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.SuspendLayout();
             // 
-            // listView1
+            // webBrowser1
             // 
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(134, 74);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(558, 280);
-            this.listView1.TabIndex = 0;
-            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(800, 450);
+            this.webBrowser1.TabIndex = 0;
+            this.webBrowser1.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser1_DocumentCompleted);
             // 
-            // Form1
+            // Browser
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.listView1);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load_1);
+            this.Controls.Add(this.webBrowser1);
+            this.Name = "Browser";
+            this.Text = "Browser";
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }
-
