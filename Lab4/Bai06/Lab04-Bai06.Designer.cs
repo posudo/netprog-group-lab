@@ -31,7 +31,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tbURL = new System.Windows.Forms.TextBox();
             this.tbToken = new System.Windows.Forms.TextBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.rtbShow = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -61,13 +61,14 @@
             this.tbToken.Size = new System.Drawing.Size(216, 20);
             this.tbToken.TabIndex = 2;
             // 
-            // richTextBox1
+            // rtbShow
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(12, 64);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(388, 201);
-            this.richTextBox1.TabIndex = 3;
-            this.richTextBox1.Text = "";
+            this.rtbShow.Location = new System.Drawing.Point(12, 64);
+            this.rtbShow.Name = "rtbShow";
+            this.rtbShow.ReadOnly = true;
+            this.rtbShow.Size = new System.Drawing.Size(388, 201);
+            this.rtbShow.TabIndex = 3;
+            this.rtbShow.Text = "";
             // 
             // label1
             // 
@@ -94,7 +95,7 @@
             this.ClientSize = new System.Drawing.Size(412, 276);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.rtbShow);
             this.Controls.Add(this.tbToken);
             this.Controls.Add(this.tbURL);
             this.Controls.Add(this.button1);
@@ -110,7 +111,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.TextBox tbURL;
         private System.Windows.Forms.TextBox tbToken;
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox rtbShow;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
     }
