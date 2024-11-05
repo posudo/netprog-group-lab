@@ -36,16 +36,20 @@ namespace Bai06
             httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwt);
 
             using HttpResponseMessage response = await httpClient.GetAsync("api/v1/user/me");
+            if(response.IsSuccessStatusCode)
+            {
+                var res = await response.Content.ReadAsStringAsync();
+                JObject userInfo = JObject.Parse(res);
 
+                rtbShow.Text = userInfo.ToString();
 
-
-
-
-
+            }
+            else
+            {
+                MessageBox.Show("Error: " + response.ReasonPhrase);
+            }
 
         }
-
-
 
     }
 }
