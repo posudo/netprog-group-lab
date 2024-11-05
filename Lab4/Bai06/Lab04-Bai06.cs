@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -22,6 +23,27 @@ namespace Bai06
         {
             BaseAddress = new Uri(@"https://nt106.uitiot.vn")
         };
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            GetUserInfo();
+        }
+
+        private async void GetUserInfo()
+        {
+            string jwt = tbToken.Text;
+
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", jwt);
+
+            using HttpResponseMessage response = await httpClient.GetAsync("api/v1/user/me");
+
+
+
+
+
+
+
+        }
 
 
 
