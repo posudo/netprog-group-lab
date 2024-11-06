@@ -1,0 +1,48 @@
+C:\Users\Triet\source\repos\web server\bin\Debug\runtimes\win-x86\native\WebView2Loader.dll
+C:\Users\Triet\source\repos\web server\bin\Debug\runtimes\win-x64\native\WebView2Loader.dll
+C:\Users\Triet\source\repos\web server\bin\Debug\runtimes\win-arm64\native\WebView2Loader.dll
+C:\Users\Triet\source\repos\web server\bin\Debug\web server.exe.config
+C:\Users\Triet\source\repos\web server\bin\Debug\web server.exe
+C:\Users\Triet\source\repos\web server\bin\Debug\web server.pdb
+C:\Users\Triet\source\repos\web server\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Triet\source\repos\web server\bin\Debug\Microsoft.Web.WebView2.Core.dll
+C:\Users\Triet\source\repos\web server\bin\Debug\Microsoft.Web.WebView2.WinForms.dll
+C:\Users\Triet\source\repos\web server\bin\Debug\Microsoft.Web.WebView2.Wpf.dll
+C:\Users\Triet\source\repos\web server\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Triet\source\repos\web server\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Triet\source\repos\web server\bin\Debug\Microsoft.Web.WebView2.Core.xml
+C:\Users\Triet\source\repos\web server\bin\Debug\Microsoft.Web.WebView2.WinForms.xml
+C:\Users\Triet\source\repos\web server\bin\Debug\Microsoft.Web.WebView2.Wpf.xml
+C:\Users\Triet\source\repos\web server\obj\Debug\Bai3.csproj.AssemblyReference.cache
+C:\Users\Triet\source\repos\web server\obj\Debug\web_server.Form3.resources
+C:\Users\Triet\source\repos\web server\obj\Debug\web_server.Properties.Resources.resources
+C:\Users\Triet\source\repos\web server\obj\Debug\Bai3.csproj.GenerateResource.cache
+C:\Users\Triet\source\repos\web server\obj\Debug\Bai3.csproj.CoreCompileInputs.cache
+C:\Users\Triet\source\repos\web server\obj\Debug\Bai3.csproj.Up2Date
+C:\Users\Triet\source\repos\web server\obj\Debug\web server.exe
+C:\Users\Triet\source\repos\web server\obj\Debug\web server.pdb
+C:\Users\Triet\source\repos\web server\obj\Debug\web_server.Lab04_Bai03_ViewSource.resources
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\runtimes\win-x86\native\WebView2Loader.dll
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\runtimes\win-x64\native\WebView2Loader.dll
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\runtimes\win-arm64\native\WebView2Loader.dll
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\web server.exe.config
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\web server.exe
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\web server.pdb
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\HtmlAgilityPack.dll
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\Microsoft.Web.WebView2.Core.dll
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\Microsoft.Web.WebView2.WinForms.dll
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\Microsoft.Web.WebView2.Wpf.dll
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\HtmlAgilityPack.xml
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\Microsoft.Web.WebView2.Core.xml
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\Microsoft.Web.WebView2.WinForms.xml
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\Microsoft.Web.WebView2.Wpf.xml
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\Bai3.csproj.AssemblyReference.cache
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\web_server.Lab04_Bai03_ViewSource.resources
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\web_server.Form3.resources
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\web_server.Properties.Resources.resources
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\Bai3.csproj.GenerateResource.cache
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\Bai3.csproj.CoreCompileInputs.cache
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\Bai3.csproj.Up2Date
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\web server.exe
+C:\Users\Triet\source\repos\23521744_23521782_23521650\Lab4\Bai03\obj\Debug\web server.pdb
