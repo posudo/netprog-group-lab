@@ -51,3 +51,4 @@ C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debu
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\bin\Debug\Newtonsoft.Json.xml
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.Browser.resources
 C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.Main.resources
+C:\Users\tung\Downloads\LTMCP\Lab3\23521744_23521782_23521650\Lab4\Bai4\obj\Debug\Bai4.MovieItemControl.resources

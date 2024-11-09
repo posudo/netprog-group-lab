@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 
 namespace Bai4
 {
@@ -42,11 +43,15 @@ namespace Bai4
 
         private void MovieURI_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(new ProcessStartInfo
+            using (var browser = new Browser(Link))
             {
-                FileName = Link,
-                UseShellExecute = true
-            });
+                browser.ShowDialog();
+            }
+            //System.Diagnostics.Process.Start(new ProcessStartInfo
+            //{
+            //    FileName = Link,
+            //    UseShellExecute = true
+            //});
         }
     }
 }

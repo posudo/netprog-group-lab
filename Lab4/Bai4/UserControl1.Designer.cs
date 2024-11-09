@@ -49,7 +49,7 @@
             this.MovieTitle.ForeColor = System.Drawing.Color.Tomato;
             this.MovieTitle.Location = new System.Drawing.Point(143, 15);
             this.MovieTitle.Name = "MovieTitle";
-            this.MovieTitle.Size = new System.Drawing.Size(169, 23);
+            this.MovieTitle.Size = new System.Drawing.Size(450, 23);
             this.MovieTitle.TabIndex = 1;
             this.MovieTitle.Text = "Movie Title";
             this.MovieTitle.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -59,7 +59,7 @@
             this.MovieURI.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MovieURI.Location = new System.Drawing.Point(143, 73);
             this.MovieURI.Name = "MovieURI";
-            this.MovieURI.Size = new System.Drawing.Size(320, 23);
+            this.MovieURI.Size = new System.Drawing.Size(450, 23);
             this.MovieURI.TabIndex = 2;
             this.MovieURI.Text = "URI";
             this.MovieURI.Click += new System.EventHandler(this.MovieURI_Click);
@@ -72,7 +72,7 @@
             this.Controls.Add(this.MovieTitle);
             this.Controls.Add(this.Poster);
             this.Name = "MovieItemControl";
-            this.Size = new System.Drawing.Size(727, 126);
+            this.Size = new System.Drawing.Size(700, 127);
             this.Load += new System.EventHandler(this.MovieItemControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Poster)).EndInit();
             this.ResumeLayout(false);
