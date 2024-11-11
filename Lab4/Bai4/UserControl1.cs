@@ -19,9 +19,6 @@ namespace Bai4
             InitializeComponent();
         }
 
-        private void MovieItemControl_Load(object sender, EventArgs e)
-        {
-        }
 
         public string Title
         {
@@ -47,11 +44,6 @@ namespace Bai4
             {
                 browser.ShowDialog();
             }
-            //System.Diagnostics.Process.Start(new ProcessStartInfo
-            //{
-            //    FileName = Link,
-            //    UseShellExecute = true
-            //});
         }
     }
 }

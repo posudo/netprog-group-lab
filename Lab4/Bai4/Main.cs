@@ -13,7 +13,6 @@ using AngleSharp;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using Newtonsoft.Json;
-using System.Threading.Tasks;
 using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.IO;
@@ -38,19 +37,15 @@ namespace Bai4
             public string Title { get; set; }
             public string Url { get; set; }
             public string ImageUrl { get; set; }
-            public string Summary { get; set; }
         }
 
         private List<Movie> movies = new List<Movie>();
 
-        private async void Form1_Load_1(object sender, EventArgs e)
-        {
-        }
         private async void LoadMovieData()
         {
             string url = "https://betacinemas.vn/phim.htm";
             var web = new HtmlWeb();
-            var doc = web.Load(url);
+            var doc = await Task.Run(() => web.Load(url));
 
             // Parse the HTML to find movie data
             var movieNodes = doc.DocumentNode.SelectNodes("//div[contains(@class, 'col-lg-4')]");
@@ -84,10 +79,18 @@ namespace Bai4
                 progress++;
                 progressBar1.Value = progress;
             }
-            string filepath = "C:\\Users\\tung\\Downloads\\LTMCP\\Lab3\\23521744_23521782_23521650\\Lab4\\Bai4\\movies.json";
+            string filepath = "C:\\Users\\tung\\Downloads\\LTMCP\\Nhom\\23521744_23521782_23521650\\Lab4\\Bai4\\movies.json";
             string localPath = "C:\\Users\\tung\\Downloads\\LTMCP";
-            // Save to JSON
-            //File.WriteAllText(filepath, JsonConvert.SerializeObject(movies));
+
+            // Check if the file already exists before saving to JSON
+            if (!File.Exists(filepath))
+            {
+                await Task.Run(() => File.WriteAllText(filepath, JsonConvert.SerializeObject(movies)));
+            }
+            else
+            {
+                Console.WriteLine("File already exists");
+            }
 
             // Load movies into ListBox
             foreach (var movie in movies)
@@ -111,7 +114,7 @@ namespace Bai4
                             try
                             {
                                 // Download the file
-                                client.DownloadFile(movie.ImageUrl, fileName);
+                                await client.DownloadFileTaskAsync(new Uri(movie.ImageUrl), fileName);
 
                                 // Load the image into the movie item
                                 movieItem.PosterImage = Image.FromFile(fileName);

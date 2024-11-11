@@ -73,7 +73,6 @@
             this.Controls.Add(this.Poster);
             this.Name = "MovieItemControl";
             this.Size = new System.Drawing.Size(700, 127);
-            this.Load += new System.EventHandler(this.MovieItemControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Poster)).EndInit();
             this.ResumeLayout(false);
 

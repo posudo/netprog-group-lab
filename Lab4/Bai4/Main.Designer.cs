@@ -69,7 +69,6 @@
             this.Controls.Add(this.progressBar1);
             this.Name = "Main";
             this.Text = "Main";
-            this.Load += new System.EventHandler(this.Form1_Load_1);
             this.ResumeLayout(false);
             this.PerformLayout();
 

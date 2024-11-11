@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net.Http;
 using HtmlAgilityPack;
 using AngleSharp;
 using OpenQA.Selenium;
