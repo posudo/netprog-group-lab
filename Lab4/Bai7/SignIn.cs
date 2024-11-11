@@ -23,7 +23,7 @@ namespace Bai7
         {
             BaseAddress = new Uri("https://nt106.uitiot.vn") // Đặt địa chỉ cơ sở cho HttpClient
         };
-        private string accessToken; // Khai báo biến để lưu token
+
         private async void btnLogin_Click(object sender, EventArgs e)
         {
             string username = txbUsername.Text; // Lấy tên đăng nhập
@@ -32,6 +32,7 @@ namespace Bai7
             // Gọi hàm đăng nhập
             await LoginAsync(username, password);
         }
+        private string accessToken; // Khai báo biến để lưu token
         private async Task LoginAsync(string username, string password)
         {
             try

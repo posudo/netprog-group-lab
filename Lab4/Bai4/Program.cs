@@ -1,9 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using HtmlAgilityPack;
+using AngleSharp;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using HtmlDocument = HtmlAgilityPack.HtmlDocument;
 namespace Bai4
 {
     internal static class Program
@@ -16,7 +21,7 @@ namespace Bai4
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Main());
         }
     }
 }
