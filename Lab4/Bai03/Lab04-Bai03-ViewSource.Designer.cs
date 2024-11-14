@@ -33,18 +33,21 @@
             // 
             // rtbShow
             // 
-            this.rtbShow.Location = new System.Drawing.Point(12, 12);
+            this.rtbShow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.rtbShow.Location = new System.Drawing.Point(0, 0);
+            this.rtbShow.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.rtbShow.Name = "rtbShow";
-            this.rtbShow.Size = new System.Drawing.Size(776, 426);
+            this.rtbShow.Size = new System.Drawing.Size(600, 366);
             this.rtbShow.TabIndex = 0;
             this.rtbShow.Text = "";
             // 
             // Lab04_Bai03_ViewSource
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(600, 366);
             this.Controls.Add(this.rtbShow);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Lab04_Bai03_ViewSource";
             this.Text = "Lab04_Bai03_ViewSource";
             this.ResumeLayout(false);

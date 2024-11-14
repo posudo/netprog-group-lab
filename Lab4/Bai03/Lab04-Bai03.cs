@@ -25,6 +25,22 @@ namespace web_server
         {
             InitializeComponent();
             this.Resize += Form3_Resize;
+            webShow.NavigationCompleted += WebShow_NavigationCompleted;
+            textBox_url.KeyDown += textBox_url_KeyDown;
+        }
+        private void textBox_url_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter) 
+            {
+                button_load_Click(sender, e); 
+                e.SuppressKeyPress = true;
+            }
+        }
+        private void WebShow_NavigationCompleted(object sender, CoreWebView2NavigationCompletedEventArgs e)
+        {
+            
+            textBox_url.Text = webShow.CoreWebView2.Source;
+            url = webShow.CoreWebView2.Source;
         }
         private void Form3_Resize(object sender, EventArgs e)
         {
@@ -44,8 +60,11 @@ namespace web_server
         private void button_files_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(url)) return;
+            progressBar1.Show();
             string file = "web.html";
             downHTML(url, file);
+            progressBar1.Hide();
+            MessageBox.Show("Tải file 'web.html' thành công! Bạn có thể kiểm tra file trong thư mục của ứng dụng.");
         }
         private void button_load_Click(object sender, EventArgs e)
         {
@@ -61,8 +80,7 @@ namespace web_server
             { url = input; }
             else
             {
-                if (input.StartsWith("http")) url = input;
-                url = "https://www.google.com/search?q=" + Uri.EscapeDataString(input);
+                url = "https://www.google.com/search?q=" + input;
             }
             webShow.CoreWebView2.Navigate(url);
         }
@@ -76,6 +94,11 @@ namespace web_server
         private async void button_resources_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(url)) return;
+            if(url.StartsWith("https://www.google.com/search?"))
+            {
+                MessageBox.Show("Không thể download hình từ google search! Bạn vui lòng download thủ công nhé.");
+                return;
+            }    
 
             string htmlContent = await new WebClient().DownloadStringTaskAsync(url);
 
@@ -85,6 +108,7 @@ namespace web_server
             var imageNodes = doc.DocumentNode.SelectNodes("//img");
             if (imageNodes != null)
             {
+                progressBar1.Show();
                 string directoryPath = Path.Combine(Environment.CurrentDirectory, "images");
                 if (!Directory.Exists(directoryPath))
                 {
@@ -95,6 +119,7 @@ namespace web_server
                     string imgUrl = img.GetAttributeValue("src", null);
                     if (imgUrl != null)
                     {
+                        imgUrl = CleanImageUrl(imgUrl);
                         if (!imgUrl.StartsWith("http"))
                         {
                             Uri baseUri = new Uri(url);
@@ -118,28 +143,31 @@ namespace web_server
                         }
                     }
                 }
+                progressBar1.Hide();
+                MessageBox.Show("Tải tất cả hình từ web thành công! Bạn có thể kiểm tra hình trong thư mục images của ứng dụng.");
             }
+        }
+        private string CleanImageUrl(string url)
+        {
+            string pattern = @"(.+\.(jpg|jpeg|png|gif|bmp))";
+            var match = System.Text.RegularExpressions.Regex.Match(url, pattern, System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+
+            return match.Success ? match.Value : url;
         }
 
         private async void button_view_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(url)) return;
-
-            try
-            {
-                using (WebClient client = new WebClient())
+            progressBar1.Show();
+             using (WebClient client = new WebClient())
                 {
                     string htmlContent = await client.DownloadStringTaskAsync(url);
 
                     Lab04_Bai03_ViewSource viewerForm = new Lab04_Bai03_ViewSource();
-                    viewerForm.SetHtmlContent(htmlContent); 
+                    viewerForm.SetHtmlContent(htmlContent);
+                    progressBar1.Hide();
                     viewerForm.ShowDialog(); 
                 }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error loading HTML: {ex.Message}");
-            }
         }
     }
 }
