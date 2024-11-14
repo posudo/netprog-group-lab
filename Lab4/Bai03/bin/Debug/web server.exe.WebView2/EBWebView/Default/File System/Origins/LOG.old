@@ -1,0 +1,5 @@
+2024/11/14-19:24:27.351 4a78 Log #3: 3 ops saved to Table #4 OK
+2024/11/14-19:24:27.352 4a78 Archiving F:\Source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\web server.exe.WebView2\EBWebView\Default\File System\Origins/000003.log: OK
+2024/11/14-19:24:27.353 4a78 Table #4: 3 entries OK
+2024/11/14-19:24:27.354 4a78 Archiving F:\Source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\web server.exe.WebView2\EBWebView\Default\File System\Origins/MANIFEST-000001: OK
+2024/11/14-19:24:27.538 4a78 **** Repaired leveldb F:\Source\repos\23521744_23521782_23521650\Lab4\Bai03\bin\Debug\web server.exe.WebView2\EBWebView\Default\File System\Origins; recovered 1 files; 174 bytes. Some data may have been lost. ****
