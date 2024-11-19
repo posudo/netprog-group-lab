@@ -1,0 +1,16 @@
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\bin\Debug\Bai7.exe.config
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\bin\Debug\Bai7.exe
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\bin\Debug\Bai7.pdb
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.csproj.AssemblyReference.cache
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.AddDish.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.HeThong.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.Properties.Resources.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.SignIn.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.SignUp.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.csproj.GenerateResource.cache
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.csproj.Up2Date
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.exe
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab4\Bai7\obj\Debug\Bai7.pdb
