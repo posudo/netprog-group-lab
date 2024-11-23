@@ -56,11 +56,7 @@ namespace Bai6
                     item.SubItems.Add(message.From.ToString());
                     item.SubItems.Add(message.Date.ToString("dd/MM/yyyy HH:mm:ss"));
 
-                    lvMails.Invoke((MethodInvoker)delegate
-                    {
-                        lvMails.Items.Add(item);
-                    });
-
+                    lvMails.Items.Add(item);
                     count++;
                 }
 
@@ -84,6 +80,43 @@ namespace Bai6
             }
         }
         private void btDangXuat_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (client_imap != null)
+                {
+
+                    client_imap.Disconnect(true);
+                    client_imap.Dispose();
+                    client_imap = null;
+                }
+                if (client_smtp != null)
+                {
+
+                    client_smtp.Disconnect(true);
+                    client_smtp.Dispose();
+                    client_smtp = null;
+                }
+                MessageBox.Show("Đăng xuất thành công");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to log out: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            lvMails.Items.Clear();
+            btDangNhap.Visible = true;
+            btGuiMail.Visible = false;
+            btRefresh.Visible = false;
+            tbTaiKhoan.ReadOnly = false;
+            tbMatKhau.ReadOnly = false;
+            tbIMAP.ReadOnly = false;
+            tbSMTP.ReadOnly = false;
+            nudPort1.ReadOnly = false;
+            nudPort2.ReadOnly = false;
+        }
+
+        private void btRefresh_Click(object sender, EventArgs e)
         {
 
         }
