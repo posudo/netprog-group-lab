@@ -39,43 +39,53 @@
             this.tbTaiKhoan = new System.Windows.Forms.TextBox();
             this.tbMatKhau = new System.Windows.Forms.TextBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.nudPort1 = new System.Windows.Forms.NumericUpDown();
+            this.tbIMAP = new System.Windows.Forms.TextBox();
+            this.tbSMTP = new System.Windows.Forms.TextBox();
+            this.nudPort2 = new System.Windows.Forms.NumericUpDown();
             this.lvMails = new System.Windows.Forms.ListView();
+            this.btDangNhap = new System.Windows.Forms.Button();
+            this.btGuiMail = new System.Windows.Forms.Button();
+            this.btDangXuat = new System.Windows.Forms.Button();
+            this.btRefresh = new System.Windows.Forms.Button();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.gbDangNhap.SuspendLayout();
             this.gbCaiDat.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPort1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPort2)).BeginInit();
             this.SuspendLayout();
             // 
             // gbDangNhap
             // 
+            this.gbDangNhap.Controls.Add(this.btRefresh);
+            this.gbDangNhap.Controls.Add(this.btGuiMail);
+            this.gbDangNhap.Controls.Add(this.btDangNhap);
             this.gbDangNhap.Controls.Add(this.tbMatKhau);
             this.gbDangNhap.Controls.Add(this.tbTaiKhoan);
             this.gbDangNhap.Controls.Add(this.lbMatKhau);
             this.gbDangNhap.Controls.Add(this.lbTaiKhoan);
+            this.gbDangNhap.Controls.Add(this.btDangXuat);
             this.gbDangNhap.Location = new System.Drawing.Point(12, 12);
             this.gbDangNhap.Name = "gbDangNhap";
-            this.gbDangNhap.Size = new System.Drawing.Size(245, 100);
+            this.gbDangNhap.Size = new System.Drawing.Size(245, 105);
             this.gbDangNhap.TabIndex = 0;
             this.gbDangNhap.TabStop = false;
             this.gbDangNhap.Text = "Đăng nhập";
             // 
             // gbCaiDat
             // 
+            this.gbCaiDat.Controls.Add(this.progressBar1);
             this.gbCaiDat.Controls.Add(this.lbPort1);
-            this.gbCaiDat.Controls.Add(this.numericUpDown2);
-            this.gbCaiDat.Controls.Add(this.textBox2);
+            this.gbCaiDat.Controls.Add(this.nudPort2);
+            this.gbCaiDat.Controls.Add(this.tbSMTP);
             this.gbCaiDat.Controls.Add(this.lbSMTP);
-            this.gbCaiDat.Controls.Add(this.numericUpDown1);
-            this.gbCaiDat.Controls.Add(this.textBox1);
+            this.gbCaiDat.Controls.Add(this.nudPort1);
+            this.gbCaiDat.Controls.Add(this.tbIMAP);
             this.gbCaiDat.Controls.Add(this.lbIMAP);
             this.gbCaiDat.Controls.Add(this.lbPort2);
             this.gbCaiDat.Location = new System.Drawing.Point(263, 12);
             this.gbCaiDat.Name = "gbCaiDat";
-            this.gbCaiDat.Size = new System.Drawing.Size(444, 100);
+            this.gbCaiDat.Size = new System.Drawing.Size(444, 105);
             this.gbCaiDat.TabIndex = 1;
             this.gbCaiDat.TabStop = false;
             this.gbCaiDat.Text = "Cài đặt";
@@ -149,42 +159,122 @@
             this.tbMatKhau.Size = new System.Drawing.Size(163, 20);
             this.tbMatKhau.TabIndex = 10;
             // 
-            // numericUpDown1
+            // nudPort1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(45, 48);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(163, 20);
-            this.numericUpDown1.TabIndex = 9;
+            this.nudPort1.Location = new System.Drawing.Point(45, 48);
+            this.nudPort1.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.nudPort1.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudPort1.Name = "nudPort1";
+            this.nudPort1.Size = new System.Drawing.Size(163, 20);
+            this.nudPort1.TabIndex = 9;
+            this.nudPort1.Value = new decimal(new int[] {
+            993,
+            0,
+            0,
+            0});
             // 
-            // textBox1
+            // tbIMAP
             // 
-            this.textBox1.Location = new System.Drawing.Point(45, 22);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(163, 20);
-            this.textBox1.TabIndex = 11;
+            this.tbIMAP.Location = new System.Drawing.Point(45, 22);
+            this.tbIMAP.Name = "tbIMAP";
+            this.tbIMAP.Size = new System.Drawing.Size(163, 20);
+            this.tbIMAP.TabIndex = 11;
+            this.tbIMAP.Text = "imap.gmail.com";
             // 
-            // textBox2
+            // tbSMTP
             // 
-            this.textBox2.Location = new System.Drawing.Point(272, 22);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(163, 20);
-            this.textBox2.TabIndex = 12;
+            this.tbSMTP.Location = new System.Drawing.Point(272, 22);
+            this.tbSMTP.Name = "tbSMTP";
+            this.tbSMTP.Size = new System.Drawing.Size(163, 20);
+            this.tbSMTP.TabIndex = 12;
+            this.tbSMTP.Text = "smtp.gmail.com";
             // 
-            // numericUpDown2
+            // nudPort2
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(272, 48);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(163, 20);
-            this.numericUpDown2.TabIndex = 13;
+            this.nudPort2.Location = new System.Drawing.Point(272, 48);
+            this.nudPort2.Maximum = new decimal(new int[] {
+            65535,
+            0,
+            0,
+            0});
+            this.nudPort2.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.nudPort2.Name = "nudPort2";
+            this.nudPort2.Size = new System.Drawing.Size(163, 20);
+            this.nudPort2.TabIndex = 13;
+            this.nudPort2.Value = new decimal(new int[] {
+            587,
+            0,
+            0,
+            0});
             // 
             // lvMails
             // 
             this.lvMails.HideSelection = false;
-            this.lvMails.Location = new System.Drawing.Point(12, 118);
+            this.lvMails.Location = new System.Drawing.Point(12, 123);
             this.lvMails.Name = "lvMails";
-            this.lvMails.Size = new System.Drawing.Size(695, 320);
+            this.lvMails.Size = new System.Drawing.Size(695, 315);
             this.lvMails.TabIndex = 2;
             this.lvMails.UseCompatibleStateImageBehavior = false;
+            // 
+            // btDangNhap
+            // 
+            this.btDangNhap.Location = new System.Drawing.Point(164, 74);
+            this.btDangNhap.Name = "btDangNhap";
+            this.btDangNhap.Size = new System.Drawing.Size(75, 23);
+            this.btDangNhap.TabIndex = 3;
+            this.btDangNhap.Text = "Đăng nhập";
+            this.btDangNhap.UseVisualStyleBackColor = true;
+            this.btDangNhap.Click += new System.EventHandler(this.btDangNhap_Click);
+            // 
+            // btGuiMail
+            // 
+            this.btGuiMail.Location = new System.Drawing.Point(0, 74);
+            this.btGuiMail.Name = "btGuiMail";
+            this.btGuiMail.Size = new System.Drawing.Size(75, 23);
+            this.btGuiMail.TabIndex = 11;
+            this.btGuiMail.Text = "Gửi mail";
+            this.btGuiMail.UseVisualStyleBackColor = true;
+            this.btGuiMail.Visible = false;
+            // 
+            // btDangXuat
+            // 
+            this.btDangXuat.Location = new System.Drawing.Point(164, 74);
+            this.btDangXuat.Name = "btDangXuat";
+            this.btDangXuat.Size = new System.Drawing.Size(75, 23);
+            this.btDangXuat.TabIndex = 12;
+            this.btDangXuat.Text = "Đăng xuất";
+            this.btDangXuat.UseVisualStyleBackColor = true;
+            // 
+            // btRefresh
+            // 
+            this.btRefresh.Location = new System.Drawing.Point(83, 74);
+            this.btRefresh.Name = "btRefresh";
+            this.btRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btRefresh.TabIndex = 13;
+            this.btRefresh.Text = "Refresh";
+            this.btRefresh.UseVisualStyleBackColor = true;
+            this.btRefresh.Visible = false;
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(272, 74);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(163, 23);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar1.TabIndex = 14;
+            this.progressBar1.Visible = false;
             // 
             // Main
             // 
@@ -200,8 +290,8 @@
             this.gbDangNhap.PerformLayout();
             this.gbCaiDat.ResumeLayout(false);
             this.gbCaiDat.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPort1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nudPort2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -219,11 +309,16 @@
         private System.Windows.Forms.TextBox tbTaiKhoan;
         private System.Windows.Forms.Label lbPort2;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.NumericUpDown numericUpDown2;
+        private System.Windows.Forms.NumericUpDown nudPort1;
+        private System.Windows.Forms.TextBox tbSMTP;
+        private System.Windows.Forms.TextBox tbIMAP;
+        private System.Windows.Forms.NumericUpDown nudPort2;
         private System.Windows.Forms.ListView lvMails;
+        private System.Windows.Forms.Button btDangNhap;
+        private System.Windows.Forms.Button btGuiMail;
+        private System.Windows.Forms.Button btDangXuat;
+        private System.Windows.Forms.Button btRefresh;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 
