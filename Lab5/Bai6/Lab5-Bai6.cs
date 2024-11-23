@@ -27,6 +27,8 @@ namespace Bai6
             lvMails.Columns.Add("From", 150);
             lvMails.Columns.Add("Date", 120);
             this.FormClosing += Bai6_FormClosing;
+            lvMails.MouseDoubleClick += lvMails_DoubleClick;
+            lvMails.FullRowSelect = true;
         }
 
         private void Bai6_FormClosing(object sender, FormClosingEventArgs e)
@@ -150,5 +152,38 @@ namespace Bai6
             send_form.Authenticate(tbTaiKhoan.Text,tbMatKhau.Text,tbSMTP.Text,(int)nudPort2.Value);
             send_form.ShowDialog();
         }
+
+        private void lvMails_DoubleClick(object sender, EventArgs e)
+        {
+            if (lvMails.SelectedItems.Count > 0)
+            {
+                int selectedIndex = lvMails.SelectedItems[0].Index;
+
+                try
+                {
+                    var inbox = client_imap.Inbox;
+                    inbox.Open(FolderAccess.ReadOnly);
+
+                    // Lấy email tương ứng
+                    var message = inbox.GetMessage(inbox.Count - 1 - selectedIndex);
+
+                    // Mở form chi tiết
+                    DisplayEmail detailForm = new DisplayEmail();
+                    detailForm.display_email(
+                        message.From.ToString(),
+                        message.To.ToString(),
+                        message.Subject,
+                        message.HtmlBody ?? message.TextBody // Hiển thị HTML hoặc text
+                    );
+
+                    detailForm.ShowDialog();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Không thể mở email: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
     }
 }
