@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using MailKit.Net.Smtp;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 
 namespace Bai6
 {
@@ -77,6 +78,7 @@ namespace Bai6
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to retrieve emails: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                progressBar1.Visible = false;
             }
         }
         private void btDangXuat_Click(object sender, EventArgs e)
@@ -118,7 +120,30 @@ namespace Bai6
 
         private void btRefresh_Click(object sender, EventArgs e)
         {
+            progressBar1.Visible = true;
+            lvMails.Items.Clear();
 
+            int limit_message = 40;
+            int count = 1;
+
+            var inbox = client_imap.Inbox;
+            inbox.Open(FolderAccess.ReadOnly);
+
+            for (int i = inbox.Count - 1; i >= Math.Max(0, inbox.Count - limit_message); i--)
+            {
+                var message = inbox.GetMessage(i);
+
+                var item = new ListViewItem((count).ToString());
+                item.SubItems.Add(message.Subject);
+                item.SubItems.Add(message.From.ToString());
+                item.SubItems.Add(message.Date.ToString("dd/MM/yyyy HH:mm:ss"));
+
+                lvMails.Items.Add(item);
+                count++;
+            }
+            MessageBox.Show("Refresh thành công!");
+
+            progressBar1.Visible = false;
         }
     }
 }

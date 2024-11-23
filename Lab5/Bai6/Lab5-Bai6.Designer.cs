@@ -80,6 +80,7 @@
             this.btRefresh.Text = "Refresh";
             this.btRefresh.UseVisualStyleBackColor = true;
             this.btRefresh.Visible = false;
+            this.btRefresh.Click += new System.EventHandler(this.btRefresh_Click);
             // 
             // btGuiMail
             // 
