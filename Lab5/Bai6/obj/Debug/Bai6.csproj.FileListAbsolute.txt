@@ -34,3 +34,4 @@ F:\Source\repos\23521744_23521782_23521650\Lab5\Bai6\obj\Debug\Bai6.csproj.CoreC
 F:\Source\repos\23521744_23521782_23521650\Lab5\Bai6\obj\Debug\Bai6.csproj.Up2Date
 F:\Source\repos\23521744_23521782_23521650\Lab5\Bai6\obj\Debug\Bai6.exe
 F:\Source\repos\23521744_23521782_23521650\Lab5\Bai6\obj\Debug\Bai6.pdb
+F:\Source\repos\23521744_23521782_23521650\Lab5\Bai6\obj\Debug\Bai6.DisplayEmail.resources
