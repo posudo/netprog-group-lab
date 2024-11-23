@@ -92,6 +92,12 @@
     <Compile Include="SendEmail.Designer.cs">
       <DependentUpon>SendEmail.cs</DependentUpon>
     </Compile>
+    <Compile Include="DisplayEmail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DisplayEmail.Designer.cs">
+      <DependentUpon>DisplayEmail.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Lab5-Bai6.resx">
       <DependentUpon>Lab5-Bai6.cs</DependentUpon>
     </EmbeddedResource>
@@ -106,6 +112,9 @@
     </Compile>
     <EmbeddedResource Include="SendEmail.resx">
       <DependentUpon>SendEmail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DisplayEmail.resx">
+      <DependentUpon>DisplayEmail.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
