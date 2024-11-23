@@ -27,6 +27,12 @@ namespace Bai6
             lvMails.Columns.Add("Subject", 200);
             lvMails.Columns.Add("From", 150);
             lvMails.Columns.Add("Date", 120);
+            this.FormClosing += Bai6_FormClosing;
+        }
+
+        private void Bai6_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            btDangXuat.PerformClick();
         }
 
         private void btDangNhap_Click(object sender, EventArgs e)
@@ -83,6 +89,7 @@ namespace Bai6
         }
         private void btDangXuat_Click(object sender, EventArgs e)
         {
+            bool kt = false;
             try
             {
                 if (client_imap != null)
@@ -91,6 +98,8 @@ namespace Bai6
                     client_imap.Disconnect(true);
                     client_imap.Dispose();
                     client_imap = null;
+                    kt = true;
+                    
                 }
                 if (client_smtp != null)
                 {
@@ -98,8 +107,9 @@ namespace Bai6
                     client_smtp.Disconnect(true);
                     client_smtp.Dispose();
                     client_smtp = null;
+                    kt = true;
                 }
-                MessageBox.Show("Đăng xuất thành công");
+                if(kt) MessageBox.Show("Đăng xuất thành công");  
             }
             catch (Exception ex)
             {
