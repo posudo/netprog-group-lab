@@ -29,20 +29,20 @@
         private void InitializeComponent()
         {
             this.lbFrom = new System.Windows.Forms.Label();
-            this.lbName = new System.Windows.Forms.Label();
             this.lbSubject = new System.Windows.Forms.Label();
             this.lbTo = new System.Windows.Forms.Label();
             this.lbBody = new System.Windows.Forms.Label();
             this.lbAttachment = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btBrowse = new System.Windows.Forms.Button();
+            this.btSend = new System.Windows.Forms.Button();
             this.tbFrom = new System.Windows.Forms.TextBox();
-            this.tbName = new System.Windows.Forms.TextBox();
             this.tbTo = new System.Windows.Forms.TextBox();
             this.tbSubject = new System.Windows.Forms.TextBox();
             this.tbAttachment = new System.Windows.Forms.TextBox();
             this.cbHTML = new System.Windows.Forms.CheckBox();
             this.rtbBody = new System.Windows.Forms.RichTextBox();
+            this.lbName = new System.Windows.Forms.Label();
+            this.tbName = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // lbFrom
@@ -54,19 +54,10 @@
             this.lbFrom.TabIndex = 0;
             this.lbFrom.Text = "From";
             // 
-            // lbName
-            // 
-            this.lbName.AutoSize = true;
-            this.lbName.Location = new System.Drawing.Point(12, 46);
-            this.lbName.Name = "lbName";
-            this.lbName.Size = new System.Drawing.Size(35, 13);
-            this.lbName.TabIndex = 1;
-            this.lbName.Text = "Name";
-            // 
             // lbSubject
             // 
             this.lbSubject.AutoSize = true;
-            this.lbSubject.Location = new System.Drawing.Point(12, 105);
+            this.lbSubject.Location = new System.Drawing.Point(12, 107);
             this.lbSubject.Name = "lbSubject";
             this.lbSubject.Size = new System.Drawing.Size(43, 13);
             this.lbSubject.TabIndex = 2;
@@ -75,7 +66,7 @@
             // lbTo
             // 
             this.lbTo.AutoSize = true;
-            this.lbTo.Location = new System.Drawing.Point(12, 79);
+            this.lbTo.Location = new System.Drawing.Point(12, 81);
             this.lbTo.Name = "lbTo";
             this.lbTo.Size = new System.Drawing.Size(20, 13);
             this.lbTo.TabIndex = 3;
@@ -84,7 +75,7 @@
             // lbBody
             // 
             this.lbBody.AutoSize = true;
-            this.lbBody.Location = new System.Drawing.Point(12, 136);
+            this.lbBody.Location = new System.Drawing.Point(12, 133);
             this.lbBody.Name = "lbBody";
             this.lbBody.Size = new System.Drawing.Size(31, 13);
             this.lbBody.TabIndex = 4;
@@ -99,23 +90,25 @@
             this.lbAttachment.TabIndex = 5;
             this.lbAttachment.Text = "Attachment";
             // 
-            // button1
+            // btBrowse
             // 
-            this.button1.Location = new System.Drawing.Point(409, 493);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Browse...";
-            this.button1.UseVisualStyleBackColor = true;
+            this.btBrowse.Location = new System.Drawing.Point(409, 493);
+            this.btBrowse.Name = "btBrowse";
+            this.btBrowse.Size = new System.Drawing.Size(75, 23);
+            this.btBrowse.TabIndex = 6;
+            this.btBrowse.Text = "Browse...";
+            this.btBrowse.UseVisualStyleBackColor = true;
+            this.btBrowse.Click += new System.EventHandler(this.btBrowse_Click);
             // 
-            // button2
+            // btSend
             // 
-            this.button2.Location = new System.Drawing.Point(409, 533);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Send";
-            this.button2.UseVisualStyleBackColor = true;
+            this.btSend.Location = new System.Drawing.Point(409, 533);
+            this.btSend.Name = "btSend";
+            this.btSend.Size = new System.Drawing.Size(75, 23);
+            this.btSend.TabIndex = 7;
+            this.btSend.Text = "Send";
+            this.btSend.UseVisualStyleBackColor = true;
+            this.btSend.Click += new System.EventHandler(this.btSend_Click);
             // 
             // tbFrom
             // 
@@ -125,23 +118,16 @@
             this.tbFrom.Size = new System.Drawing.Size(401, 20);
             this.tbFrom.TabIndex = 8;
             // 
-            // tbName
-            // 
-            this.tbName.Location = new System.Drawing.Point(83, 43);
-            this.tbName.Name = "tbName";
-            this.tbName.Size = new System.Drawing.Size(401, 20);
-            this.tbName.TabIndex = 9;
-            // 
             // tbTo
             // 
-            this.tbTo.Location = new System.Drawing.Point(83, 76);
+            this.tbTo.Location = new System.Drawing.Point(83, 78);
             this.tbTo.Name = "tbTo";
             this.tbTo.Size = new System.Drawing.Size(401, 20);
             this.tbTo.TabIndex = 10;
             // 
             // tbSubject
             // 
-            this.tbSubject.Location = new System.Drawing.Point(83, 102);
+            this.tbSubject.Location = new System.Drawing.Point(83, 104);
             this.tbSubject.Name = "tbSubject";
             this.tbSubject.Size = new System.Drawing.Size(401, 20);
             this.tbSubject.TabIndex = 11;
@@ -157,7 +143,7 @@
             // cbHTML
             // 
             this.cbHTML.AutoSize = true;
-            this.cbHTML.Location = new System.Drawing.Point(83, 136);
+            this.cbHTML.Location = new System.Drawing.Point(83, 133);
             this.cbHTML.Name = "cbHTML";
             this.cbHTML.Size = new System.Drawing.Size(56, 17);
             this.cbHTML.TabIndex = 13;
@@ -166,31 +152,47 @@
             // 
             // rtbBody
             // 
-            this.rtbBody.Location = new System.Drawing.Point(83, 159);
+            this.rtbBody.Location = new System.Drawing.Point(83, 156);
             this.rtbBody.Name = "rtbBody";
-            this.rtbBody.Size = new System.Drawing.Size(401, 328);
+            this.rtbBody.Size = new System.Drawing.Size(401, 331);
             this.rtbBody.TabIndex = 14;
             this.rtbBody.Text = "";
+            // 
+            // lbName
+            // 
+            this.lbName.AutoSize = true;
+            this.lbName.Location = new System.Drawing.Point(12, 45);
+            this.lbName.Name = "lbName";
+            this.lbName.Size = new System.Drawing.Size(35, 13);
+            this.lbName.TabIndex = 15;
+            this.lbName.Text = "Name";
+            // 
+            // tbName
+            // 
+            this.tbName.Location = new System.Drawing.Point(83, 42);
+            this.tbName.Name = "tbName";
+            this.tbName.Size = new System.Drawing.Size(401, 20);
+            this.tbName.TabIndex = 16;
             // 
             // SendEmail
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(496, 568);
+            this.Controls.Add(this.tbName);
+            this.Controls.Add(this.lbName);
             this.Controls.Add(this.rtbBody);
             this.Controls.Add(this.cbHTML);
             this.Controls.Add(this.tbAttachment);
             this.Controls.Add(this.tbSubject);
             this.Controls.Add(this.tbTo);
-            this.Controls.Add(this.tbName);
             this.Controls.Add(this.tbFrom);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btSend);
+            this.Controls.Add(this.btBrowse);
             this.Controls.Add(this.lbAttachment);
             this.Controls.Add(this.lbBody);
             this.Controls.Add(this.lbTo);
             this.Controls.Add(this.lbSubject);
-            this.Controls.Add(this.lbName);
             this.Controls.Add(this.lbFrom);
             this.Name = "SendEmail";
             this.Text = "SendEmail";
@@ -202,19 +204,19 @@
         #endregion
 
         private System.Windows.Forms.Label lbFrom;
-        private System.Windows.Forms.Label lbName;
         private System.Windows.Forms.Label lbSubject;
         private System.Windows.Forms.Label lbTo;
         private System.Windows.Forms.Label lbBody;
         private System.Windows.Forms.Label lbAttachment;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btBrowse;
+        private System.Windows.Forms.Button btSend;
         private System.Windows.Forms.TextBox tbFrom;
-        private System.Windows.Forms.TextBox tbName;
         private System.Windows.Forms.TextBox tbTo;
         private System.Windows.Forms.TextBox tbSubject;
         private System.Windows.Forms.TextBox tbAttachment;
         private System.Windows.Forms.CheckBox cbHTML;
         private System.Windows.Forms.RichTextBox rtbBody;
+        private System.Windows.Forms.Label lbName;
+        private System.Windows.Forms.TextBox tbName;
     }
 }

@@ -18,7 +18,6 @@ namespace Bai6
     public partial class Main : Form
     {
         private ImapClient client_imap;
-        private SmtpClient client_smtp;
         public Main()
         {
             InitializeComponent();
@@ -89,7 +88,6 @@ namespace Bai6
         }
         private void btDangXuat_Click(object sender, EventArgs e)
         {
-            bool kt = false;
             try
             {
                 if (client_imap != null)
@@ -98,18 +96,9 @@ namespace Bai6
                     client_imap.Disconnect(true);
                     client_imap.Dispose();
                     client_imap = null;
-                    kt = true;
-                    
-                }
-                if (client_smtp != null)
-                {
 
-                    client_smtp.Disconnect(true);
-                    client_smtp.Dispose();
-                    client_smtp = null;
-                    kt = true;
+                    MessageBox.Show("Đăng xuất thành công");
                 }
-                if(kt) MessageBox.Show("Đăng xuất thành công");  
             }
             catch (Exception ex)
             {
@@ -130,7 +119,6 @@ namespace Bai6
 
         private void btRefresh_Click(object sender, EventArgs e)
         {
-            progressBar1.Visible = true;
             lvMails.Items.Clear();
 
             int limit_message = 40;
@@ -153,7 +141,14 @@ namespace Bai6
             }
             MessageBox.Show("Refresh thành công!");
 
-            progressBar1.Visible = false;
+        }
+
+        private void btGuiMail_Click(object sender, EventArgs e)
+        {
+            SendEmail send_form = new SendEmail();
+
+            send_form.Authenticate(tbTaiKhoan.Text,tbMatKhau.Text,tbSMTP.Text,(int)nudPort2.Value);
+            send_form.ShowDialog();
         }
     }
 }

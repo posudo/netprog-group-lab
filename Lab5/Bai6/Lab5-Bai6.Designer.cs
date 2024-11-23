@@ -91,6 +91,7 @@
             this.btGuiMail.Text = "Gửi mail";
             this.btGuiMail.UseVisualStyleBackColor = true;
             this.btGuiMail.Visible = false;
+            this.btGuiMail.Click += new System.EventHandler(this.btGuiMail_Click);
             // 
             // btDangNhap
             // 
