@@ -18,3 +18,16 @@ F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.Gener
 F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.CoreCompileInputs.cache
 F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.exe
 F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.pdb
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Lab5.exe.config
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Lab5.exe
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Lab5.pdb
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.AssemblyReference.cache
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.Bai1.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.Properties.Resources.resources
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.GenerateResource.cache
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.CoreCompileInputs.cache
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.exe
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.pdb
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Admin\Desktop\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.Up2Date
