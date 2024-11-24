@@ -8,3 +8,13 @@ C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debu
 C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.CoreCompileInputs.cache
 C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.exe
 C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.pdb
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Lab5.exe.config
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Lab5.exe
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Lab5.pdb
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.AssemblyReference.cache
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.Bai1.resources
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.Properties.Resources.resources
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.GenerateResource.cache
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.CoreCompileInputs.cache
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.exe
+F:\Source\repos\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.pdb
