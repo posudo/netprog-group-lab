@@ -23,6 +23,11 @@ using System.Collections.Concurrent;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
+using System.Net.Mail;
+using System.Diagnostics.Eventing.Reader;
+using System.Runtime.InteropServices.ComTypes;
+using static Bai4.Bai4;
 namespace Bai4
 {
     public partial class Bai4 : Form
@@ -32,7 +37,6 @@ namespace Bai4
         public Bai4()
         {
             InitializeComponent();
-            seatSelect_clb.ItemCheck += SeatSelect_clb_ItemCheck;
             LoadMovieData();
         }
         public class Movie
@@ -43,6 +47,7 @@ namespace Bai4
         }
 
         private List<Movie> movies = new List<Movie>();
+        string localPath = "C:\\Users\\tung\\Downloads\\LTMCP";
 
         private async void LoadMovieData()
         {
@@ -76,7 +81,6 @@ namespace Bai4
                 movies.Add(movie);
 
             }
-            string localPath = "C:\\Users\\tung\\Downloads\\LTMCP";
 
             // Load movies into ListBox
             foreach (var movie in movies)
@@ -140,46 +144,53 @@ namespace Bai4
         }
 
 
-        // Event xử lý chọn ghế đã được đặt
-        private void SeatSelect_clb_ItemCheck(object sender, ItemCheckEventArgs e)
+        public class MovieStatistics
         {
-            ////string selectedHall = chonRap_cb.SelectedItem?.ToString();
-            //if (selectedHall == null) return;
-
-            //string seat = seatSelect_clb.Items[e.Index].ToString();
-            ////bool isSeatOccupied = IsSeatOccupiedInDatabase(selectedHall, seat);
-
-            //if (isSeatOccupied)
-            //{
-            //    MessageBox.Show("This ticket has already been purchased.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //    e.NewValue = CheckState.Unchecked; // Cancle thay đổi
-            //}
+            public string MovieName { get; set; } = null;
+            public Dictionary<string, bool> my_seat = new Dictionary<string, bool>()
+            {
+                { "A1", false }, {"A2",false}, {"A3",false}, {"A4",false}, {"A5",false},
+                { "B1", false }, {"B2",false}, {"B3",false}, {"B4",false}, {"B5",false},
+                { "C1", false }, {"C2",false}, {"C3",false}, {"C4",false}, {"C5",false},
+            };
+            public string image { get; set; }
+            public int Revenue { get; set; } = 0;
         }
-
+        private Dictionary<string, MovieStatistics> movieStatistics = new Dictionary<string, MovieStatistics>();
 
         List<string> selectedSeats = new List<string>();
-
         private void datVe_Click(object sender, EventArgs e)
         {
+            string selectedMovie = phimSelection_cb.SelectedItem.ToString();
+
+            string sanitizedTitle = Regex.Replace(phimSelection_cb.SelectedItem.ToString(), @"[^A-Za-z0-9]", "_");
+            string fileName = Path.Combine(localPath, $"posterImage_{sanitizedTitle}.jpg");
+
             if (string.IsNullOrWhiteSpace(yourName.Text))
             {
                 MessageBox.Show("Vui lòng nhập tên của bạn.");
                 return;
             }
 
-            if (string.IsNullOrEmpty(textBox1.Text))
-            {
-                MessageBox.Show("Vui lòng nhập email của bạn.");
-                return;
-            }
             if (phimSelection_cb.SelectedItem == null)
             {
                 MessageBox.Show("Vui lòng chọn một bộ phim.");
                 return;
             }
-
+            if (!movieStatistics.ContainsKey(selectedMovie))
+            {
+                movieStatistics[selectedMovie] = new MovieStatistics
+                {
+                    MovieName = selectedMovie,
+                    image = fileName
+                };
+            }
             selectedSeats.Clear();
-
+            foreach (var item in seatSelect_clb.CheckedItems)
+            {
+                selectedSeats.Add(item.ToString());
+                movieStatistics[phimSelection_cb.SelectedItem.ToString()].my_seat[item.ToString()] = true;
+            }
 
             if (selectedSeats.Count == 0)
             {
@@ -187,10 +198,11 @@ namespace Bai4
                 return;
             }
 
-            string selectedMovie = phimSelection_cb.SelectedItem.ToString();
             int totalPrice = 0;
+            movieStatistics[selectedMovie].Revenue = 0;
 
             // Tính toán giá vé
+            // Giả sử giá vé là 100,000 VND
             foreach (string seat in selectedSeats)
             {
                 if (seat == "A1" || seat == "B1" || seat == "C1" || seat == "A5" || seat == "B5" || seat == "C5")
@@ -206,57 +218,91 @@ namespace Bai4
                     totalPrice += 100000;
                 }
             }
-            //if (!movieStatistics.ContainsKey(selectedMovie))
-            //{
-            //    movieStatistics[selectedMovie] = new MovieStatistics
-            //    {
-            //        MovieName = selectedMovie,
-            //        TotalTickets = 15 * global[phimSelection_cb.SelectedIndex].RapChieu.Replace(" ", "").Split(',').Length
-            //    };
-            //}
 
-            //movieStatistics[selectedMovie].TicketsSold += selectedSeats.Count;
-            //movieStatistics[selectedMovie].Revenue += totalPrice;
+            movieStatistics[selectedMovie].Revenue += totalPrice;
 
             string bookingInfo = $"Xác nhận đặt vé:\n\n" +
                                  $"Tên: {yourName.Text}\n" +
-                                 $"Phim: {selectedMovie}\n" +
+                                 $"Phim: {movieStatistics[selectedMovie].MovieName}\n" +
                                  $"Ghế đã chọn: {string.Join(", ", selectedSeats)}\n" +
                                  $"Tổng tiền: {totalPrice:N0} VND";
-            //Send_datVe();
 
             MessageBox.Show(bookingInfo, "Xác nhận đặt vé", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
         }
 
-        private List<string> strings = new List<string>();
 
-        private async void seatSelect_clb_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void Confirm_Click(object sender, EventArgs e)
         {
             try
             {
-                foreach (var item in seatSelect_clb.Items)
+                // Tạo đối tượng MailMessage
+                MailMessage mail = new MailMessage();
+                mail.From = new MailAddress("23521744@gm.uit.edu.vn");
+                mail.To.Add(textBox1.Text);
+                mail.Subject = "Xác nhận đặt mua vé xem phim";
+
+                // Tạo nội dung email HTML
+                string htmlBody = @"
+                <html>
+                <body>
+                    <h2 style='color:blue;'>Xác nhận đặt mua vé xem phim</h2>
+                    <p>Cảm ơn bạn đã đặt vé! Dưới đây là thông tin chi tiết:</p>";
+
+                foreach (var item in movieStatistics.Values.ToList())
                 {
-                    string seat = item.ToString();
-                    if (seatSelect_clb.CheckedItems.Contains(item))
+                    // Lấy danh sách ghế đã chọn
+                    List<string> seats = new List<string>();
+                    foreach (var seat in item.my_seat)
                     {
-                        if (!strings.Contains(seat))
+                        if (seat.Value)
                         {
-                            strings.Add(seat);
+                            seats.Add(seat.Key);
                         }
                     }
-                    else
-                    {
-                        if (strings.Contains(seat))
-                        {
-                            strings.Remove(seat);
-                        }
-                    }
+
+                    // Thêm thông tin từng bộ phim vào email
+                    htmlBody += $@"
+                    <hr>
+                    <p><b>Tên phim:</b> {item.MovieName}</p>
+                    <p><b>Ghế đã chọn:</b> {string.Join(", ", seats)}</p>
+                    <p><b>Tổng tiền:</b> {item.Revenue:N0} VND</p>";
+
+
+                    // Đính kèm file ảnh
+                    string imagePath = item.image; // Đường dẫn ảnh
+                    Attachment inlineImage = new Attachment(imagePath);
+                    inlineImage.ContentDisposition.Inline = true;
+                    mail.Attachments.Add(inlineImage);
                 }
+
+                // Kết thúc nội dung email
+                htmlBody += @"
+                    <hr>
+                    <p style='color:green;'>Chúc bạn có ngày tốt lành!</p>
+                </body>
+                </html>";
+
+                mail.IsBodyHtml = true;
+                mail.Body = htmlBody;
+
+                // Cấu hình SMTP client
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)
+                {
+                    Credentials = new NetworkCredential("23521744@gm.uit.edu.vn", "dccm vgcu vjfv oips"),
+                    EnableSsl = true
+                };
+
+                // Gửi email
+                smtp.Send(mail);
+
+                // Thông báo thành công
+                MessageBox.Show("Email đã gửi thành công!", "Thành công", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error updating seat selection: {ex.Message}");
+                // Hiển thị lỗi nếu gửi thất bại
+                MessageBox.Show(ex.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

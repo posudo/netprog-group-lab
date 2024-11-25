@@ -49,11 +49,13 @@
             this.seatSelect_clb = new System.Windows.Forms.CheckedListBox();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.label2 = new System.Windows.Forms.Label();
+            this.Confirm = new System.Windows.Forms.Button();
             this.Register.SuspendLayout();
             this.SuspendLayout();
             // 
             // Register
             // 
+            this.Register.Controls.Add(this.Confirm);
             this.Register.Controls.Add(this.textBox1);
             this.Register.Controls.Add(this.label6);
             this.Register.Controls.Add(this.B4);
@@ -203,7 +205,7 @@
             // 
             this.datVe.BackColor = System.Drawing.SystemColors.ControlDark;
             this.datVe.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.datVe.Location = new System.Drawing.Point(315, 494);
+            this.datVe.Location = new System.Drawing.Point(82, 505);
             this.datVe.Name = "datVe";
             this.datVe.Size = new System.Drawing.Size(101, 32);
             this.datVe.TabIndex = 9;
@@ -292,7 +294,6 @@
             this.seatSelect_clb.ScrollAlwaysVisible = true;
             this.seatSelect_clb.Size = new System.Drawing.Size(361, 144);
             this.seatSelect_clb.TabIndex = 17;
-            this.seatSelect_clb.SelectedIndexChanged += new System.EventHandler(this.seatSelect_clb_SelectedIndexChanged);
             // 
             // flowLayoutPanel1
             // 
@@ -312,6 +313,18 @@
             this.label2.Size = new System.Drawing.Size(167, 24);
             this.label2.TabIndex = 11;
             this.label2.Text = "Phim Đang Chiếu";
+            // 
+            // Confirm
+            // 
+            this.Confirm.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.Confirm.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Confirm.Location = new System.Drawing.Point(535, 505);
+            this.Confirm.Name = "Confirm";
+            this.Confirm.Size = new System.Drawing.Size(101, 32);
+            this.Confirm.TabIndex = 31;
+            this.Confirm.Text = "Xác nhận";
+            this.Confirm.UseVisualStyleBackColor = false;
+            this.Confirm.Click += new System.EventHandler(this.Confirm_Click);
             // 
             // Bai4
             // 
@@ -355,5 +368,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button Confirm;
     }
 }
