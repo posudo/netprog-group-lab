@@ -1,0 +1,17 @@
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.csproj.AssemblyReference.cache
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.Bai4.resources
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.Properties.Resources.resources
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.UserControl1.resources
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.csproj.GenerateResource.cache
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.csproj.CoreCompileInputs.cache
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\bin\Debug\Bai4.exe.config
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\bin\Debug\Bai4.exe
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\bin\Debug\Bai4.pdb
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\bin\Debug\HtmlAgilityPack.dll
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\bin\Debug\Newtonsoft.Json.dll
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\bin\Debug\HtmlAgilityPack.xml
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\bin\Debug\Newtonsoft.Json.xml
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.csproj.Up2Date
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.exe
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Bai4\obj\Debug\Bai4.pdb

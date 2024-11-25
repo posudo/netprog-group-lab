@@ -28,8 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.Register = new System.Windows.Forms.GroupBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
             this.B4 = new System.Windows.Forms.Label();
             this.B3 = new System.Windows.Forms.Label();
             this.B2 = new System.Windows.Forms.Label();
@@ -46,26 +47,10 @@
             this.label1 = new System.Windows.Forms.Label();
             this.yourName = new System.Windows.Forms.TextBox();
             this.seatSelect_clb = new System.Windows.Forms.CheckedListBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.MovieTitle = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.groupBox1.SuspendLayout();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label2 = new System.Windows.Forms.Label();
             this.Register.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Controls.Add(this.MovieTitle);
-            this.groupBox1.Controls.Add(this.pictureBox1);
-            this.groupBox1.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox1.Location = new System.Drawing.Point(12, 12);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(365, 619);
-            this.groupBox1.TabIndex = 8;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Thông tin phim";
             // 
             // Register
             // 
@@ -88,12 +73,32 @@
             this.Register.Controls.Add(this.yourName);
             this.Register.Controls.Add(this.seatSelect_clb);
             this.Register.Font = new System.Drawing.Font("Times New Roman", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Register.Location = new System.Drawing.Point(383, 12);
+            this.Register.Location = new System.Drawing.Point(501, 12);
             this.Register.Name = "Register";
-            this.Register.Size = new System.Drawing.Size(803, 619);
+            this.Register.Size = new System.Drawing.Size(685, 619);
             this.Register.TabIndex = 10;
             this.Register.TabStop = false;
             this.Register.Text = "Đăng ký";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox1.Location = new System.Drawing.Point(189, 142);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(266, 27);
+            this.textBox1.TabIndex = 30;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(117, 145);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(54, 19);
+            this.label6.TabIndex = 29;
+            this.label6.Text = "Email:";
             // 
             // B4
             // 
@@ -234,7 +239,7 @@
             this.phimSelection_cb.FormattingEnabled = true;
             this.phimSelection_cb.Location = new System.Drawing.Point(189, 210);
             this.phimSelection_cb.Name = "phimSelection_cb";
-            this.phimSelection_cb.Size = new System.Drawing.Size(121, 27);
+            this.phimSelection_cb.Size = new System.Drawing.Size(166, 27);
             this.phimSelection_cb.TabIndex = 10;
             this.phimSelection_cb.SelectedIndexChanged += new System.EventHandler(this.phimSelection_cb_SelectedIndexChanged);
             // 
@@ -289,44 +294,24 @@
             this.seatSelect_clb.TabIndex = 17;
             this.seatSelect_clb.SelectedIndexChanged += new System.EventHandler(this.seatSelect_clb_SelectedIndexChanged);
             // 
-            // pictureBox1
+            // flowLayoutPanel1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(105, 61);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(165, 193);
-            this.pictureBox1.TabIndex = 4;
-            this.pictureBox1.TabStop = false;
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(3, 53);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(492, 578);
+            this.flowLayoutPanel1.TabIndex = 6;
             // 
-            // MovieTitle
+            // label2
             // 
-            this.MovieTitle.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MovieTitle.ForeColor = System.Drawing.Color.Tomato;
-            this.MovieTitle.Location = new System.Drawing.Point(45, 300);
-            this.MovieTitle.Name = "MovieTitle";
-            this.MovieTitle.Size = new System.Drawing.Size(279, 23);
-            this.MovieTitle.TabIndex = 5;
-            this.MovieTitle.Text = "Movie Title";
-            this.MovieTitle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(117, 145);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(54, 19);
-            this.label6.TabIndex = 29;
-            this.label6.Text = "Email:";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(189, 142);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(266, 27);
-            this.textBox1.TabIndex = 30;
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Times New Roman", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.ForeColor = System.Drawing.Color.DarkOrange;
+            this.label2.Location = new System.Drawing.Point(12, 12);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(167, 24);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Phim Đang Chiếu";
             // 
             // Bai4
             // 
@@ -334,21 +319,19 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 19F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1275, 677);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.flowLayoutPanel1);
             this.Controls.Add(this.Register);
-            this.Controls.Add(this.groupBox1);
             this.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Bai4";
             this.Text = "Bai4";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Bai4_FormClosed);
-            this.groupBox1.ResumeLayout(false);
             this.Register.ResumeLayout(false);
             this.Register.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
-        private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox Register;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox phimSelection_cb;
@@ -368,10 +351,9 @@
         private System.Windows.Forms.Label B2;
 
         #endregion
-
-        private System.Windows.Forms.Label MovieTitle;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
+        private System.Windows.Forms.Label label2;
     }
 }

@@ -8,3 +8,9 @@ C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debu
 C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.CoreCompileInputs.cache
 C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.exe
 C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Lab5.pdb
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\HtmlAgilityPack.dll
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Newtonsoft.Json.dll
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\HtmlAgilityPack.pdb
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\HtmlAgilityPack.xml
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\bin\Debug\Newtonsoft.Json.xml
+C:\Users\tung\Downloads\LTMCP\Nhom\23521744_23521782_23521650\Lab5\Lab5\obj\Debug\Bai1.csproj.Up2Date
