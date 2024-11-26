@@ -1,0 +1,11 @@
+{
+  "IMAPServer": "imap.gmail.com",
+  "IMAPPort": "993",
+  "SMTPServer": "smtp.gmail.com",
+  "SMTPPort": "587",
+  "Username": "quocvietnguyen104@gmail.com",
+  "Nickname": "Việt",
+  "Password": "xzlt tzcv xcou vyop",
+  "UseSSLIMAP": true,
+  "UseSSLSMTP": true
+}
