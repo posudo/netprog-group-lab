@@ -264,6 +264,7 @@ namespace Bai4
                     // Thêm thông tin từng bộ phim vào email
                     htmlBody += $@"
                     <hr>
+                    <p><b>Họ và tên khách hàng: </b> {yourName.Text}</p>
                     <p><b>Tên phim:</b> {item.MovieName}</p>
                     <p><b>Ghế đã chọn:</b> {string.Join(", ", seats)}</p>
                     <p><b>Tổng tiền:</b> {item.Revenue:N0} VND</p>";
@@ -289,7 +290,7 @@ namespace Bai4
                 // Cấu hình SMTP client
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587)
                 {
-                    Credentials = new NetworkCredential("23521744@gm.uit.edu.vn", "dccm vgcu vjfv oips"),
+                    Credentials = new NetworkCredential("23521744@gm.uit.edu.vn", "..."),
                     EnableSsl = true
                 };
 
@@ -304,6 +305,7 @@ namespace Bai4
                 // Hiển thị lỗi nếu gửi thất bại
                 MessageBox.Show(ex.ToString(), "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            Close();
         }
 
     }

@@ -9,6 +9,8 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.LinkLabel;
+using static System.Net.WebRequestMethods;
 
 namespace Lab5
 {
@@ -30,7 +32,9 @@ namespace Lab5
                 mail.From = new MailAddress(from_email.Text);
                 mail.To.Add(to_email.Text);
                 mail.Subject = subject.Text;
-                mail.Body = body.Text;
+                string htmlBody = @"";
+                mail.IsBodyHtml = true;
+                mail.Body = htmlBody;
 
                 // Set up the SMTP client with your email provider's settings
                 SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587); // Change if not using Gmail
