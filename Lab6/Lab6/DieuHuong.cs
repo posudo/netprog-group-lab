@@ -18,11 +18,9 @@ namespace Lab6
             InitializeComponent();
         }
 
-        List<int> quays = new List<int>() {1,2,3};
-
         private void Client_Click(object sender, EventArgs e)
         {
-            PhongVe quay1 = new PhongVe(1);
+            PhongVe quay1 = new PhongVe("1");
             quay1.Show();
         }
 
@@ -34,13 +32,13 @@ namespace Lab6
 
         private void Quay2_Click(object sender, EventArgs e)
         {
-            PhongVe quay2 = new PhongVe(2);
+            PhongVe quay2 = new PhongVe("2");
             quay2.Show();
         }
 
         private void Quay3_Click(object sender, EventArgs e)
         {
-            PhongVe quay3 = new PhongVe(3);
+            PhongVe quay3 = new PhongVe("3");
             quay3.Show();
         }
 

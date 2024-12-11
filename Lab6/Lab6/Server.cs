@@ -16,6 +16,7 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using System.Data.SqlClient;
 using static Lab6.PhongVe;
+using static Lab6.SuperUser;
 
 namespace Lab6
 {
@@ -92,8 +93,21 @@ namespace Lab6
                     {
                         // Deserialize the data to a MovieTicket object to avoid casting exception
                         var ticketInfo = Deserialize(data) as MovieTicket;
+                        var thongtin = Deserialize(data) as ThongTinDongMo;
 
-                        if (ticketInfo != null)
+                        if (thongtin != null)
+                        {
+                            foreach (Socket otherClient in clientList)
+                            {
+                                if (otherClient != client) // Don't send back to the sender
+                                {
+                                    string json = JsonConvert.SerializeObject(thongtin);
+                                    otherClient.Send(Encoding.UTF8.GetBytes(json));
+                                }
+                            }
+                        }
+
+                            if (ticketInfo != null)
                         {
                             if (ticketInfo.Sign == 1)
                             {

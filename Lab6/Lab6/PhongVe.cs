@@ -21,11 +21,15 @@ using Newtonsoft.Json;
 using System.Runtime.Serialization;
 using System.Collections.Concurrent;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using static Lab6.SuperUser;
 
 namespace Lab6
 {
     public partial class PhongVe : Form
     {
+        private string id;
+        Thread rcv_thread;
+
         [Serializable]
         public class MovieTicket
         {
@@ -62,6 +66,71 @@ namespace Lab6
             listen.IsBackground = true;
             listen.Start();
             threads.Add(listen);
+        }
+
+        void HandleServer()
+        {
+            try
+            {
+                while (true)
+                {
+                    byte[] data = new byte[1024];
+                    int receivedBytes = client.Receive(data);
+
+                    if (receivedBytes > 0)
+                    {
+                        var information = Deserialize(data) as ThongTinDongMo;
+                        if (information != null)
+                        {
+                            if (information.ID == id) // Assuming Sign 4 is for ThongTinDongMo
+                            {
+                                if (information.Header == "Dong") // Assuming Name is used as header
+                                {
+                                    // Lock the form
+                                    //this.Invoke((MethodInvoker)delegate
+                                    //{
+                                        this.Enabled = false;
+                                        MessageBox.Show("The form has been locked by the server.", "Locked", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    //});
+                                }
+                                else if (information.Header == "Mo")
+                                {
+                                    // Unlock the form
+                                    //this.Invoke((MethodInvoker)delegate
+                                    //{
+                                        this.Enabled = true;
+                                        MessageBox.Show("The form has been unlocked by the server.", "Unlocked", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                    //});
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch (SocketException ex)
+            {
+                MessageBox.Show($"Socket error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action(() => this.Close()));
+                }
+                else
+                {
+                    this.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if (this.InvokeRequired)
+                {
+                    this.Invoke(new Action(() => this.Close()));
+                }
+                else
+                {
+                    this.Close();
+                }
+            }
         }
         void CloseConnection()
         {
@@ -195,10 +264,12 @@ namespace Lab6
             }
         }
 
-        public PhongVe(int id)
+        public PhongVe(string my_id)
         {
+            id = my_id;
             InitializeComponent();
             ConnectToServer();
+            rcv_thread = new Thread(HandleServer);
             progressBar1.Minimum = 0;
             progressBar1.Maximum = 100;
             progressBar1.Step = 1;
