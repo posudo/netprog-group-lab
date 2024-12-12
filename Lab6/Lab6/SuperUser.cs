@@ -58,8 +58,8 @@ namespace Lab6
                 ID = btn_ID_quay.Text,
                 Header = header
             };
-            string json = JsonConvert.SerializeObject(thongTinDongMo);
-            client.Send(Encoding.UTF8.GetBytes(json));
+            string userData = $"DONGMO;{JsonConvert.SerializeObject(thongTinDongMo)}";
+            client.Send(Encoding.UTF8.GetBytes(userData));
         }
 
 

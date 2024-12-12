@@ -42,13 +42,5 @@ namespace Lab6
             quay3.Show();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if(btn_ID.Text == "admin" && btnPasWord.Text == "123")
-            {
-                SuperUser superUser = new SuperUser();
-                superUser.Show();
-            }
-        }
     }
 }

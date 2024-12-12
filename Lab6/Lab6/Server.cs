@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using System.Data.SqlClient;
 using static Lab6.PhongVe;
 using static Lab6.SuperUser;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrackBar;
 
 namespace Lab6
 {
@@ -87,68 +88,119 @@ namespace Lab6
             {
                 while (!token.IsCancellationRequested)
                 {
-                    byte[] data = new byte[1024 * 5000];
-                    int receivedBytes = client.Receive(data);
-                    if (receivedBytes > 0)
-                    {
-                        // Deserialize the data to a MovieTicket object to avoid casting exception
-                        var ticketInfo = Deserialize(data) as MovieTicket;
-                        var thongtin = Deserialize(data) as ThongTinDongMo;
+                    byte[] buffer = new byte[1024 * 5000];
+                    int receivedBytes = client.Receive(buffer);
+                    string text = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
 
-                        if (thongtin != null)
+                    if (text.StartsWith("DONGMO"))
+                    {
+                        string[] data = text.Split(';');
+                        ThongTinDongMo thongtin = JsonConvert.DeserializeObject<ThongTinDongMo>(data[1]);
+                        foreach (Socket otherClient in clientList)
                         {
-                            foreach (Socket otherClient in clientList)
+                            if (otherClient != client) // Don't send back to the sender
                             {
-                                if (otherClient != client) // Don't send back to the sender
-                                {
-                                    string json = JsonConvert.SerializeObject(thongtin);
-                                    otherClient.Send(Encoding.UTF8.GetBytes(json));
-                                }
+                                string json = JsonConvert.SerializeObject(thongtin);
+                                otherClient.Send(Encoding.UTF8.GetBytes(json));
                             }
                         }
 
-                            if (ticketInfo != null)
+                    }
+
+                    if(text.StartsWith("1"))
+                    {
+                        string[] data = text.Split(';');
+                        MovieTicket ticket = JsonConvert.DeserializeObject<MovieTicket>(data[1]);
+                        if (!IsHallInDatabase(ticket))
                         {
-                            if (ticketInfo.Sign == 1)
-                            {
-                                if (!IsHallInDatabase(ticketInfo))
-                                    InsertSeatAvailability(ticketInfo);
-                            }
-
-                            if (ticketInfo.Sign == 2)
-                            {
-                                UpdateSeatAvailability(ticketInfo);
-
-                                string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|" +
-                                    $"{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
-                                // Create a ListViewItem for the ListView control
-                                ListViewItem item = new ListViewItem(message.Split('|'));
-
-                                // Update the ListView on the UI thread
-                                screen.Invoke((MethodInvoker)(() =>
-                                {
-                                    screen.Items.Add(item);
-                                }));
-                            }
-
-                            if (ticketInfo.Sign == 3)
-                            {
-                                if (ticketInfo.Sign == 3) // Sign 3 means seat selection update
-                                {
-                                    // Broadcast the seat selection to all clients except the sender
-                                    foreach (Socket otherClient in clientList)
-                                    {
-                                        if (otherClient != client) // Don't send back to the sender
-                                        {
-                                            string json = JsonConvert.SerializeObject(ticketInfo);
-                                            otherClient.Send(Encoding.UTF8.GetBytes(json));
-                                        }
-                                    }
-                                }
-                            }
-
+                            InsertSeatAvailability(ticket);
                         }
                     }
+
+                    if (text.StartsWith("2"))
+                    {
+                        string[] data = text.Split(';');
+                        MovieTicket ticket = JsonConvert.DeserializeObject<MovieTicket>(data[1]);
+                        UpdateSeatAvailability(ticket);
+                        string message = $"{ticket.Name}|{ticket.Movie}|{ticket.Hall}|" +
+                            $"{string.Join(", ", ticket.Seats)}|{ticket.TotalPrice}";
+                        ListViewItem item = new ListViewItem(message.Split('|'));
+                        screen.Invoke((MethodInvoker)(() =>
+                        {
+                            screen.Items.Add(item);
+                        }));
+                    }
+
+                    if (text.StartsWith("3"))
+                    {
+                        string[] data = text.Split(';');
+                        MovieTicket ticket = JsonConvert.DeserializeObject<MovieTicket>(data[1]);
+                        foreach (Socket otherClient in clientList)
+                        {
+                            if (otherClient != client) // Don't send back to the sender
+                            {
+                                string json = JsonConvert.SerializeObject(ticket);
+                                otherClient.Send(Encoding.UTF8.GetBytes(json));
+                            }
+                        }
+                    }
+                    //if (receivedBytes > 0)
+                    //{
+                    //    // Deserialize the data to a MovieTicket object to avoid casting exception
+                    //    var ticketInfo = Deserialize(data) as MovieTicket;
+                    //    var thongtin = Deserialize(data) as ThongTinDongMo;
+
+                    //    if (thongtin != null)
+                    //    {
+                    //        foreach (Socket otherClient in clientList)
+                    //        {
+                    //            if (otherClient != client) // Don't send back to the sender
+                    //            {
+                    //                string json = JsonConvert.SerializeObject(thongtin);
+                    //                otherClient.Send(Encoding.UTF8.GetBytes(json));
+                    //            }
+                    //        }
+                    //    }
+
+                    //        if (ticketInfo != null)
+                    //        {
+                    //        if (ticketInfo.Sign == 1)
+                    //        {
+                    //            if (!IsHallInDatabase(ticketInfo))
+                    //                InsertSeatAvailability(ticketInfo);
+                    //        }
+
+                    //        if (ticketInfo.Sign == 2)
+                    //        {
+                    //            UpdateSeatAvailability(ticketInfo);
+
+                    //            string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|" +
+                    //                $"{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
+                    //            // Create a ListViewItem for the ListView control
+                    //            ListViewItem item = new ListViewItem(message.Split('|'));
+
+                    //            // Update the ListView on the UI thread
+                    //            screen.Invoke((MethodInvoker)(() =>
+                    //            {
+                    //                screen.Items.Add(item);
+                    //            }));
+                    //        }
+
+                    //        if (ticketInfo.Sign == 3) // Sign 3 means seat selection update
+                    //        {
+                    //            // Broadcast the seat selection to all clients except the sender
+                    //            foreach (Socket otherClient in clientList)
+                    //            {
+                    //                if (otherClient != client) // Don't send back to the sender
+                    //                {
+                    //                    string json = JsonConvert.SerializeObject(ticketInfo);
+                    //                    otherClient.Send(Encoding.UTF8.GetBytes(json));
+                    //                }
+                    //            }
+                    //        }
+
+                    //        }
+                    //}
                 }
             }
             catch (Exception ex)

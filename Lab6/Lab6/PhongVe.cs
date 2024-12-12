@@ -82,7 +82,7 @@ namespace Lab6
                         var information = Deserialize(data) as ThongTinDongMo;
                         if (information != null)
                         {
-                            if (information.ID == id) // Assuming Sign 4 is for ThongTinDongMo
+                            if (information.ID == id)
                             {
                                 if (information.Header == "Dong") // Assuming Name is used as header
                                 {
@@ -149,14 +149,15 @@ namespace Lab6
                 {
                     Name = "null",
                     Movie = "null",
-                    Hall = chonRap_cb.SelectedItem.ToString(),
+                    Hall = chonRap_cb.SelectedItem?.ToString(),
                     Seats = new List<string> { "A1", "A2", "A3", "A4", "A5", "B1", "B2",
                         "B3", "B4", "B5", "C1", "C2", "C3", "C4", "C5" },
                     Sign = 1,
                     TotalPrice = 0
                 };
-                string json = JsonConvert.SerializeObject(AddInfo);
-                client.Send(Encoding.UTF8.GetBytes(json));
+                string userData = $"1;{JsonConvert.SerializeObject(AddInfo)}";
+                byte[] dataToSend = Encoding.UTF8.GetBytes(userData);
+                client.Send(dataToSend);
             }
         }
 
@@ -181,9 +182,9 @@ namespace Lab6
                 })
             };
 
-
-            string json = JsonConvert.SerializeObject(bookingInfo);
-            client.Send(Encoding.UTF8.GetBytes(json));
+            string userData = $"2;{JsonConvert.SerializeObject(bookingInfo)}";
+            byte[] dataToSend = Encoding.UTF8.GetBytes(userData);
+            client.Send(dataToSend);
         }
 
         object Deserialize(byte[] data)
@@ -728,12 +729,12 @@ namespace Lab6
                     TotalPrice = 0
                 };
 
-                string json = JsonConvert.SerializeObject(ticketInfo);
-                byte[] data = Encoding.UTF8.GetBytes(json);
+                string userData = $"3;{JsonConvert.SerializeObject(ticketInfo)}";
+                byte[] dataToSend = Encoding.UTF8.GetBytes(userData);
 
                 await Task.Run(() =>
                 {
-                    client.Send(data);
+                    client.Send(dataToSend);
                 });
 
             }
