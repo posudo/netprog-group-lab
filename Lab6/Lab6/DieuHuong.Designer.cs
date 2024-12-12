@@ -32,6 +32,7 @@
             this.server = new System.Windows.Forms.Button();
             this.Quay2 = new System.Windows.Forms.Button();
             this.Quay3 = new System.Windows.Forms.Button();
+            this.Login = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // Client
@@ -82,11 +83,24 @@
             this.Quay3.UseVisualStyleBackColor = true;
             this.Quay3.Click += new System.EventHandler(this.Quay3_Click);
             // 
+            // Login
+            // 
+            this.Login.AutoSize = true;
+            this.Login.Font = new System.Drawing.Font("Times New Roman", 12.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Login.Location = new System.Drawing.Point(323, 240);
+            this.Login.Name = "Login";
+            this.Login.Size = new System.Drawing.Size(155, 19);
+            this.Login.TabIndex = 4;
+            this.Login.TabStop = true;
+            this.Login.Text = "Đăng nhập SuperUser";
+            this.Login.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Login_LinkClicked);
+            // 
             // DieuHuong
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(600, 366);
+            this.Controls.Add(this.Login);
             this.Controls.Add(this.Quay3);
             this.Controls.Add(this.Quay2);
             this.Controls.Add(this.server);
@@ -95,6 +109,7 @@
             this.Name = "DieuHuong";
             this.Text = "DieuHuong_Bai4";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -104,5 +119,6 @@
         private System.Windows.Forms.Button server;
         private System.Windows.Forms.Button Quay2;
         private System.Windows.Forms.Button Quay3;
+        private System.Windows.Forms.LinkLabel Login;
     }
 }

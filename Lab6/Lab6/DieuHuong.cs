@@ -42,5 +42,10 @@ namespace Lab6
             quay3.Show();
         }
 
+        private void Login_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            DangNhap dangNhap = new DangNhap();
+            dangNhap.Show();
+        }
     }
 }

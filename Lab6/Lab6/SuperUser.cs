@@ -51,7 +51,7 @@ namespace Lab6
             public string Header { get; set; }
         }
 
-        void SendToSV(string header)
+        async void SendToSV(string header)
         {
             var thongTinDongMo = new ThongTinDongMo
             {
@@ -63,7 +63,7 @@ namespace Lab6
         }
 
 
-        private void SuperUser_Load(object sender, EventArgs e)
+        private async void SuperUser_Load(object sender, EventArgs e)
         {
             Thread connect = new Thread(ConnectToServer);
             connect.Start();

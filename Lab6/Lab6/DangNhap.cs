@@ -19,8 +19,7 @@ namespace Lab6
 
         private void NotAdmin_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            DieuHuong dieuHuong = new DieuHuong();
-            dieuHuong.ShowDialog();
+            Close();
         }
 
         private void Login_Click(object sender, EventArgs e)
@@ -28,7 +27,7 @@ namespace Lab6
             if (txtUsername.Text == "admin" && txtPassword.Text == "123")
             {
                 SuperUser superUser = new SuperUser();
-                superUser.ShowDialog();
+                superUser.Show();
             }
             else
             {

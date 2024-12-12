@@ -87,20 +87,20 @@ namespace Lab6
                                 if (information.Header == "Dong") // Assuming Name is used as header
                                 {
                                     // Lock the form
-                                    //this.Invoke((MethodInvoker)delegate
-                                    //{
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
                                         this.Enabled = false;
-                                        MessageBox.Show("The form has been locked by the server.", "Locked", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                    //});
+                                    MessageBox.Show("The form has been locked by the server.", "Locked", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                    });
                                 }
                                 else if (information.Header == "Mo")
                                 {
                                     // Unlock the form
-                                    //this.Invoke((MethodInvoker)delegate
-                                    //{
+                                    this.Invoke((MethodInvoker)delegate
+                                    {
                                         this.Enabled = true;
                                         MessageBox.Show("The form has been unlocked by the server.", "Unlocked", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                                    //});
+                                    });
                                 }
                             }
                         }
