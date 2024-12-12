@@ -209,31 +209,57 @@ namespace Lab6
                 {
                     byte[] data = new byte[1024];
                     int receivedBytes = client.Receive(data);
+                    string text = Encoding.UTF8.GetString(data, 0, receivedBytes);
 
-                    if (receivedBytes > 0)
+                    if (text.StartsWith("3"))
                     {
-                        var information = Deserialize(data) as MovieTicket;
-                        if (information != null && information.Sign == 3)
+                        string[] data_text = text.Split(';');
+                        MovieTicket ticket = JsonConvert.DeserializeObject<MovieTicket>(data_text[1]);
+                        // Need to use Invoke since we're updating UI from a different thread
+                        this.Invoke((MethodInvoker)delegate
                         {
-                            // Need to use Invoke since we're updating UI from a different thread
-                            this.Invoke((MethodInvoker)delegate
+                            foreach (var seat in ticket.Seats)
                             {
-                                foreach (var seat in information.Seats)
+                                int index = seatSelect_clb.Items.IndexOf(seat);
+                                if (index != -1)  // Make sure the seat exists in the list
                                 {
-                                    int index = seatSelect_clb.Items.IndexOf(seat);
-                                    if (index != -1)  // Make sure the seat exists in the list
+                                    if (seatSelect_clb.CheckedItems.Contains(seat))
                                     {
-                                        if (seatSelect_clb.CheckedItems.Contains(seat))
-                                        {
-                                            seatSelect_clb.SetItemChecked(index, false);
-                                            // Uncheck the seat if it was selected by current client
-                                            MessageBox.Show($"Ghế {seat} đã được đặt bởi người khác.",
-                                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                        }
-
+                                        seatSelect_clb.SetItemChecked(index, false);
+                                        // Uncheck the seat if it was selected by current client
+                                        MessageBox.Show($"Ghế {seat} đã được đặt bởi người khác.",
+                                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                                     }
+
                                 }
-                            });
+                            }
+                        });
+                    }
+
+                    if (text.StartsWith("DONGMO"))
+                    {
+                        string[] data_text = text.Split(';');
+                        ThongTinDongMo thongTinDongMo = JsonConvert.DeserializeObject<ThongTinDongMo>(data_text[1]);
+                        if (thongTinDongMo.ID == id)
+                        {
+                            if (thongTinDongMo.Header == "DONG")
+                            {
+                                // Lock the form
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    this.Enabled = false;
+                                    MessageBox.Show("The form has been locked by the server.", "Locked", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                                });
+                            }
+                            else if (thongTinDongMo.Header == "MO")
+                            {
+                                // Unlock the form
+                                this.Invoke((MethodInvoker)delegate
+                                {
+                                    this.Enabled = true;
+                                    MessageBox.Show("The form has been unlocked by the server.", "Unlocked", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                                });
+                            }
                         }
                     }
                 }
@@ -267,10 +293,10 @@ namespace Lab6
 
         public PhongVe(string my_id)
         {
-            id = my_id;
             InitializeComponent();
+            id = my_id;
+            Text = $"Phòng vé {id}";
             ConnectToServer();
-            rcv_thread = new Thread(HandleServer);
             progressBar1.Minimum = 0;
             progressBar1.Maximum = 100;
             progressBar1.Step = 1;
@@ -707,7 +733,7 @@ namespace Lab6
                         }
                     }
                 }
-                SendCheckedSeats();
+                //SendCheckedSeats();
             }
             catch (Exception ex)
             {

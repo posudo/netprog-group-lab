@@ -101,7 +101,8 @@ namespace Lab6
                             if (otherClient != client) // Don't send back to the sender
                             {
                                 string json = JsonConvert.SerializeObject(thongtin);
-                                otherClient.Send(Encoding.UTF8.GetBytes(json));
+                                string userData = $"DONGMO;{json}";
+                                otherClient.Send(Encoding.UTF8.GetBytes(userData));
                             }
                         }
 
@@ -140,67 +141,12 @@ namespace Lab6
                             if (otherClient != client) // Don't send back to the sender
                             {
                                 string json = JsonConvert.SerializeObject(ticket);
-                                otherClient.Send(Encoding.UTF8.GetBytes(json));
+                                string userData = $"3;{json}";
+                                otherClient.Send(Encoding.UTF8.GetBytes(userData));
                             }
                         }
                     }
-                    //if (receivedBytes > 0)
-                    //{
-                    //    // Deserialize the data to a MovieTicket object to avoid casting exception
-                    //    var ticketInfo = Deserialize(data) as MovieTicket;
-                    //    var thongtin = Deserialize(data) as ThongTinDongMo;
-
-                    //    if (thongtin != null)
-                    //    {
-                    //        foreach (Socket otherClient in clientList)
-                    //        {
-                    //            if (otherClient != client) // Don't send back to the sender
-                    //            {
-                    //                string json = JsonConvert.SerializeObject(thongtin);
-                    //                otherClient.Send(Encoding.UTF8.GetBytes(json));
-                    //            }
-                    //        }
-                    //    }
-
-                    //        if (ticketInfo != null)
-                    //        {
-                    //        if (ticketInfo.Sign == 1)
-                    //        {
-                    //            if (!IsHallInDatabase(ticketInfo))
-                    //                InsertSeatAvailability(ticketInfo);
-                    //        }
-
-                    //        if (ticketInfo.Sign == 2)
-                    //        {
-                    //            UpdateSeatAvailability(ticketInfo);
-
-                    //            string message = $"{ticketInfo.Name}|{ticketInfo.Movie}|{ticketInfo.Hall}|" +
-                    //                $"{string.Join(", ", ticketInfo.Seats)}|{ticketInfo.TotalPrice}";
-                    //            // Create a ListViewItem for the ListView control
-                    //            ListViewItem item = new ListViewItem(message.Split('|'));
-
-                    //            // Update the ListView on the UI thread
-                    //            screen.Invoke((MethodInvoker)(() =>
-                    //            {
-                    //                screen.Items.Add(item);
-                    //            }));
-                    //        }
-
-                    //        if (ticketInfo.Sign == 3) // Sign 3 means seat selection update
-                    //        {
-                    //            // Broadcast the seat selection to all clients except the sender
-                    //            foreach (Socket otherClient in clientList)
-                    //            {
-                    //                if (otherClient != client) // Don't send back to the sender
-                    //                {
-                    //                    string json = JsonConvert.SerializeObject(ticketInfo);
-                    //                    otherClient.Send(Encoding.UTF8.GetBytes(json));
-                    //                }
-                    //            }
-                    //        }
-
-                    //        }
-                    //}
+                    
                 }
             }
             catch (Exception ex)
