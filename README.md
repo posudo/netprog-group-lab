@@ -14,4 +14,3 @@
 
 ## Lab 6 - Contest
 - [Lab Report](https://github.com/posudo/netprog-group-lab/blob/main/NT106.P13.1-Lab06_2351744_23521782_23521650.docx)
-- [Description](https://github.com/posudo/netprog-solo-lab/blob/main/Lab%202%20-%20File%20and%20Stream%20IO%20in%20C%23.pdf)
